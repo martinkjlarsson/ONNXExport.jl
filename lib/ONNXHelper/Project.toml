@@ -1,0 +1,30 @@
+name = "ONNXHelper"
+uuid = "247b1699-bceb-4ca5-85a5-b7ceb92526c3"
+version = "0.1.1"
+authors = ["Martin Larsson"]
+
+[deps]
+ProtoBuf = "3349acd9-ac6a-5e09-bcdb-63829b23a429"
+SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+
+[weakdeps]
+BFloat16s = "ab4f0b2a-ad5b-11e8-123f-65d77653426b"
+Microfloats = "31c70f10-a750-4521-b13c-797315ae2933"
+
+[extensions]
+BFloat16sExt = ["BFloat16s"]
+MicrofloatsExt = ["Microfloats"]
+
+[compat]
+BFloat16s = "0.5.0"
+Microfloats = "0.1.0"
+ProtoBuf = "1.0.0"
+SparseArrays = "1.9"
+Test = "1.9"
+julia = "1.9"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

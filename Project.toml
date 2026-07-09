@@ -1,7 +1,13 @@
 name = "ONNXExport"
 uuid = "9d33f818-c02d-4e4e-80e5-95f98363e87e"
-authors = ["Martin Larsson <martinkjlarsson@gmail.com>"]
 version = "1.0.0-DEV"
+authors = ["Martin Larsson <martinkjlarsson@gmail.com>"]
+
+[deps]
+ONNXHelper = "247b1699-bceb-4ca5-85a5-b7ceb92526c3"
+
+[sources]
+ONNXHelper = { path = "lib/ONNXHelper" }
 
 [compat]
 julia = "1.10.10"
