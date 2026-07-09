@@ -15,6 +15,13 @@ include("utils.jl")
         include("base.jl")
         include("linearalgebra.jl")
     end
+    @testset "Lux" begin
+        include("lux/linear.jl")
+        include("lux/normalization.jl")
+        include("lux/attention.jl")
+        include("lux/conv.jl")
+        include("lux/pooling.jl")
+    end
     @testset "NNlib" begin
         include("nnlib/activation.jl")
         include("nnlib/functions.jl")
