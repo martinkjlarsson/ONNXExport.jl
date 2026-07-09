@@ -23,9 +23,10 @@ include("array.jl")
 include("optimize.jl")
 
 export export_model, create_model
-export ProbeArray, ProbeMatrix, ProbeVector, ProbeScalar, ProbeNumber
-export name, probe, probes, create_input
-export matmul_onnx
+export ProbeArray, ProbeMatrix, ProbeVector, ProbeScalar, ProbeNumber, AbstractProbeNumber, BroadcastProbe
+export name, raw_size, probe, probes, create_input
+export matmul_onnx, onnx_op, value_info
+export mul_dim, div_dim, add_dim
 export savemodel # Reexport from ONNXHelper.
 
 end

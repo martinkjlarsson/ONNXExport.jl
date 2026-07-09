@@ -8,11 +8,18 @@ LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 ONNXHelper = "247b1699-bceb-4ca5-85a5-b7ceb92526c3"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
+[weakdeps]
+NNlib = "872c559c-99b0-510c-b3b7-b6c96a88d5cd"
+
 [sources]
-ONNXHelper = { path = "lib/ONNXHelper" }
+ONNXHelper = {path = "lib/ONNXHelper"}
+
+[extensions]
+NNlibExt = ["NNlib"]
 
 [compat]
 LinearAlgebra = "1.10"
+NNlib = "0.9.21"
 Statistics = "1.10"
 julia = "1.10"
 

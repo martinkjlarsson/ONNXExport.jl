@@ -15,4 +15,8 @@ include("utils.jl")
         include("base.jl")
         include("linearalgebra.jl")
     end
+    @testset "NNlib" begin
+        include("nnlib/activation.jl")
+        include("nnlib/functions.jl")
+    end
 end
