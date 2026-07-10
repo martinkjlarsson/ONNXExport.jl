@@ -1,0 +1,316 @@
+# Supported ONNX operators
+The following ONNX operators are supported in some capacity:
+- [x] Abs
+- [x] Acos
+- [x] Acosh
+- [x] Add
+- [ ] AffineGrid
+- [x] And
+- [x] ArgMax
+- [x] ArgMin
+- [x] Asin
+- [x] Asinh
+- [x] Atan
+- [x] Atanh
+- [ ] Attention
+- [ ] AveragePool
+- [ ] BatchNormalization
+- [ ] Bernoulli
+- [x] BitShift
+- [x] BitwiseAnd
+- [x] BitwiseNot
+- [x] BitwiseOr
+- [x] BitwiseXor
+- [ ] BlackmanWindow
+- [x] Cast
+- [ ] CastLike
+- [x] Ceil
+- [x] Celu
+- [ ] CenterCropPad
+- [x] Clip
+- [ ] Col2Im
+- [x] Compress
+- [x] Concat
+- [ ] ConcatFromSequence
+- [ ] Constant
+- [x] ConstantOfShape
+- [x] Conv
+- [ ] ConvInteger
+- [ ] ConvTranspose
+- [x] Cos
+- [x] Cosh
+- [ ] CumProd
+- [x] CumSum
+- [ ] DFT
+- [ ] DeformConv
+- [ ] DepthToSpace
+- [ ] DequantizeLinear
+- [x] Det
+- [x] Div
+- [ ] Dropout
+- [ ] DynamicQuantizeLinear
+- [ ] Einsum
+- [x] Elu
+- [x] Equal
+- [ ] Erf
+- [x] Exp
+- [x] Expand
+- [x] EyeLike
+- [ ] Flatten
+- [x] Floor
+- [ ] GRU
+- [x] Gather
+- [ ] GatherElements
+- [ ] GatherND
+- [x] Gelu
+- [x] Gemm
+- [x] GlobalAveragePool
+- [x] GlobalLpPool
+- [x] GlobalMaxPool
+- [x] Greater
+- [x] GreaterOrEqual
+- [ ] GridSample
+- [ ] GroupNormalization
+- [ ] HammingWindow
+- [ ] HannWindow
+- [x] HardSigmoid
+- [x] HardSwish
+- [ ] Hardmax
+- [x] Identity
+- [ ] If
+- [ ] ImageDecoder
+- [ ] InstanceNormalization
+- [x] IsInf
+- [x] IsNaN
+- [ ] LRN
+- [ ] LSTM
+- [ ] LayerNormalization
+- [x] LeakyRelu
+- [x] Less
+- [x] LessOrEqual
+- [x] Log
+- [x] LogSoftmax
+- [ ] Loop
+- [x] LpNormalization
+- [ ] LpPool
+- [x] MatMul
+- [ ] MatMulInteger
+- [x] Max
+- [ ] MaxPool
+- [ ] MaxRoiPool
+- [ ] MaxUnpool
+- [x] Mean
+- [ ] MeanVarianceNormalization
+- [ ] MelWeightMatrix
+- [x] Min
+- [x] Mish
+- [x] Mod
+- [x] Mul
+- [ ] Multinomial
+- [x] Neg
+- [ ] NegativeLogLikelihoodLoss
+- [ ] NonMaxSuppression
+- [ ] NonZero
+- [x] Not
+- [ ] OneHot
+- [ ] Optional
+- [ ] OptionalGetElement
+- [ ] OptionalHasElement
+- [x] Or
+- [ ] PRelu
+- [ ] Pad
+- [x] Pow
+- [ ] QLinearConv
+- [ ] QLinearMatMul
+- [ ] QuantizeLinear
+- [ ] RMSNormalization
+- [ ] RNN
+- [ ] RandomNormal
+- [ ] RandomNormalLike
+- [ ] RandomUniform
+- [ ] RandomUniformLike
+- [ ] Range
+- [x] Reciprocal
+- [x] ReduceL1
+- [x] ReduceL2
+- [ ] ReduceLogSum
+- [x] ReduceLogSumExp
+- [x] ReduceMax
+- [x] ReduceMean
+- [x] ReduceMin
+- [x] ReduceProd
+- [x] ReduceSum
+- [x] ReduceSumSquare
+- [ ] RegexFullMatch
+- [x] Relu
+- [x] Reshape
+- [ ] Resize
+- [ ] ReverseSequence
+- [ ] RoiAlign
+- [ ] RotaryEmbedding
+- [x] Round
+- [ ] STFT
+- [x] Scan
+- [ ] Scatter
+- [ ] ScatterElements
+- [ ] ScatterND
+- [x] Selu
+- [ ] SequenceAt
+- [ ] SequenceConstruct
+- [ ] SequenceEmpty
+- [ ] SequenceErase
+- [ ] SequenceInsert
+- [ ] SequenceLength
+- [ ] SequenceMap
+- [x] Shape
+- [x] Shrink
+- [x] Sigmoid
+- [x] Sign
+- [x] Sin
+- [x] Sinh
+- [x] Size
+- [x] Slice
+- [x] Softmax
+- [ ] SoftmaxCrossEntropyLoss
+- [x] Softplus
+- [x] Softsign
+- [ ] SpaceToDepth
+- [ ] Split
+- [ ] SplitToSequence
+- [x] Sqrt
+- [x] Squeeze
+- [ ] StringConcat
+- [ ] StringNormalizer
+- [ ] StringSplit
+- [x] Sub
+- [x] Sum
+- [x] Swish
+- [x] Tan
+- [X] Tanh
+- [ ] TensorScatter
+- [ ] TfIdfVectorizer
+- [x] ThresholdedRelu
+- [x] Tile
+- [x] TopK
+- [x] Transpose
+- [x] Trilu
+- [x] Unique
+- [x] Unsqueeze
+- [ ] Upsample
+- [x] Where
+- [x] Xor
+
+# Supported ONNX operators from com.microsoft
+- [ ] Attention
+- [ ] AttnLSTM
+- [ ] BeamSearch
+- [ ] BiasAdd
+- [ ] BiasDropout
+- [ ] BiasGelu
+- [ ] BiasSoftmax
+- [ ] BiasSplitGelu
+- [ ] BifurcationDetector
+- [ ] BitmaskBiasDropout
+- [ ] BitmaskDropout
+- [ ] CDist
+- [ ] ComplexMul
+- [ ] ComplexMulConj
+- [ ] ConvTransposeWithDynamicPads
+- [ ] CropAndResize
+- [ ] DecoderAttention
+- [ ] DecoderMaskedMultiHeadAttention
+- [ ] DecoderMaskedSelfAttention
+- [ ] DequantizeBFP
+- [ ] DequantizeLinear
+- [ ] DequantizeWithOrder
+- [ ] DynamicQuantizeLSTM
+- [ ] DynamicQuantizeMatMul
+- [ ] DynamicTimeWarping
+- [ ] EPContext
+- [ ] EmbedLayerNormalization
+- [ ] ExpandDims
+- [ ] FastGelu
+- [ ] FusedConv
+- [ ] FusedGemm
+- [ ] FusedMatMul
+- [ ] FusedMatMulActivation
+- [ ] GatedRelativePositionBias
+- [ ] GatherBlockQuantized
+- [ ] GatherND
+- [ ] Gelu
+- [ ] GemmFastGelu
+- [ ] GemmFloat8
+- [ ] GemmaRotaryEmbedding
+- [ ] GreedySearch
+- [ ] GridSample
+- [ ] GroupNorm
+- [ ] GroupQueryAttention
+- [x] Inverse
+- [ ] Irfft
+- [ ] LongformerAttention
+- [ ] MatMulBnb4
+- [ ] MatMulFpQ4
+- [ ] MatMulInteger16
+- [ ] MatMulIntegerToFloat
+- [ ] MatMulNBits
+- [ ] MaxpoolWithMask
+- [ ] MoE
+- [ ] MulInteger
+- [ ] MultiHeadAttention
+- [ ] MurmurHash3
+- [ ] NGramRepeatBlock
+- [ ] NhwcConv
+- [ ] NhwcFusedConv
+- [ ] NhwcMaxPool
+- [ ] PackedAttention
+- [ ] PackedMultiHeadAttention
+- [ ] Pad
+- [ ] PagedAttention
+- [ ] QAttention
+- [ ] QGemm
+- [ ] QLinearAdd
+- [ ] QLinearAveragePool
+- [ ] QLinearConcat
+- [ ] QLinearConv
+- [ ] QLinearGlobalAveragePool
+- [ ] QLinearLeakyRelu
+- [ ] QLinearMul
+- [ ] QLinearReduceMean
+- [ ] QLinearSigmoid
+- [ ] QLinearSoftmax
+- [ ] QLinearWhere
+- [ ] QMoE
+- [ ] QOrderedAttention
+- [ ] QOrderedGelu
+- [ ] QOrderedLayerNormalization
+- [ ] QOrderedLongformerAttention
+- [ ] QOrderedMatMul
+- [ ] QuantizeBFP
+- [ ] QuantizeLinear
+- [ ] QuantizeWithOrder
+- [ ] QuickGelu
+- [ ] Range
+- [ ] ReduceSumInteger
+- [ ] RelativePositionBias
+- [ ] RemovePadding
+- [ ] RestorePadding
+- [ ] Rfft
+- [ ] RotaryEmbedding
+- [ ] SampleOp
+- [ ] Sampling
+- [ ] SkipGroupNorm
+- [ ] SkipLayerNormalization
+- [ ] SkipSimplifiedLayerNormalization
+- [ ] Snpe
+- [ ] SparseAttention
+- [ ] SparseToDenseMatMul
+- [ ] Tokenizer
+- [ ] TorchEmbedding
+- [ ] TransposeMatMul
+- [ ] Trilu
+- [ ] UnfoldTensor
+- [ ] Unique
+- [ ] WhisperBeamSearch
+- [ ] WordConvEmbedding
+- [ ] (experimental) IsAllFinite
+- [ ] (experimental) QEmbedLayerNormalization
