@@ -1,8 +1,10 @@
-# ONNXExport
+# ONNXExport.jl
 
 [![Build Status](https://github.com/martinkjlarsson/ONNXExport.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/martinkjlarsson/ONNXExport.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
 **This package is under development and is not registered. Support is limited and likely unstable. Feel free to file issues.**
+
+---
 
 ONNXExport traces Julia functions and exports them as ONNX models. The package cannot import or run models.
 
@@ -40,7 +42,7 @@ ONNXExport works by defining a custom `AbstractArray` subtype `ProbeArray` and `
 Broadcasting is also supported through the `BroadcastProbe <: Number` type. It wraps a `ProbeArray` such that the array can be passed to functions accepting `Number`s, and any operation performed is replaced with elementwise ONNX operators.
 
 # Support
-The focus of the package has been to export models from [Lux.jl](https://lux.csail.mit.edu/stable/), but much more work is needed to support all types of layers. See [Julia functions](supported_functions.md), [ONNX operators](supported_operators.md), and [Lux layers](supported_layers.md) for details. There are also several limitations listed below, some of which might be solved in future versions.
+The focus of the package has been to export models from [Lux.jl](https://lux.csail.mit.edu/stable/), but much more work is needed to support all types of layers. See [Julia functions](docs/supported_functions.md), [ONNX operators](docs/supported_operators.md), and [Lux layers](docs/supported_layers.md) for details. There are also several limitations listed below, some of which might be solved in future versions.
 
 ## Limitations
 ONNXExport cannot convert any arbitrary Julia function into ONNX, partly because of limitations in ONNXExport, but also due to limitations in ONNX itself.
@@ -49,7 +51,7 @@ ONNXExport cannot convert any arbitrary Julia function into ONNX, partly because
 In principle, ONNXExport supports dynamic/symbolic dimensions, but this has not been fully tested and will likely fail for certain functions.
 
 ### Control flow
-Due to the way ONNXExport traces Julia functions, it is not possible to capture certain control flow statements such as `if`, `for`, and `while`. These will likely result in the error `TypeError: non-boolean (ProbeNumber{Float32}) used in boolean context`. Try instead to use array operations or `ifelse`.
+Due to the way ONNXExport traces Julia functions, it is not possible to capture certain control flow statements such as `if`, `for`, and `while`. These will likely result in the error `TypeError: non-boolean (ProbeNumber{Bool}) used in boolean context`. Try instead to use array operations or `ifelse`.
 
 ### Random
 Random numbers from `rand` and `randn` will be treated as constants in the ONNX graph. The corresponding ONNX operators `RandomUniform` and `RandomNormal` are currently not supported.
