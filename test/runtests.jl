@@ -21,6 +21,7 @@ include("utils.jl")
         include("lux/attention.jl")
         include("lux/conv.jl")
         include("lux/pooling.jl")
+        include("lux/dropout.jl")
     end
     @testset "NNlib" begin
         include("nnlib/activation.jl")

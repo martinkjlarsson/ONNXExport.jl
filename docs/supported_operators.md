@@ -47,7 +47,7 @@ The following ONNX operators are supported in some capacity:
 - [ ] DequantizeLinear
 - [x] Det
 - [x] Div
-- [ ] Dropout
+- [x] Dropout
 - [ ] DynamicQuantizeLinear
 - [ ] Einsum
 - [x] Elu

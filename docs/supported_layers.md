@@ -14,7 +14,7 @@ The following is a list of the supported and tested Lux layers. Several untested
     - [ ] ConvTranspose
 * Dropout Layers
     - [ ] AlphaDropout
-    - [ ] Dropout
+    - [x] Dropout
     - [ ] VariationalHiddenDropout
 * Pooling Layers
     - [ ] AdaptiveLPPool
