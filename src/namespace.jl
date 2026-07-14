@@ -1,4 +1,8 @@
-using Base.ScopedValues
+if VERSION < v"1.11"
+    using ScopedValues
+else
+    using Base.ScopedValues
+end
 
 """
 Represents an ONNX namespace, storing all used names for values, nodes, graphs, and
