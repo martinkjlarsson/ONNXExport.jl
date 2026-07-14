@@ -23,13 +23,6 @@ function Base.fill(v::Number, dims::AtLeastOne{ProbeNumber{<:Integer},Integer})
 end
 Base.fill(v::ProbeNumber, ::Tuple{}) = ProbeArray(v)
 
-# TODO: Should we mark the ProbeArray as uninitialized somehow?
-function Base.similar(
-    A::ProbeArray, element_type::Type, dims::NTuple{N,Int} where {N}=size(A)
-)
-    return ProbeArray{element_type}("uninitialized", dims)
-end
-
 function Base.reshape(
     A::ProbeArray, dims::NTuple{N,Union{Colon,Integer,ProbeNumber{<:Integer}}}
 ) where {N}

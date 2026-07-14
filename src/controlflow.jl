@@ -52,7 +52,7 @@ function scan_onnx(
         A = scan_inputs[i]
         return ProbeArray{eltype(A)}("", _selectdimsize(raw_size(A), scan_input_axes[i]))
     end
-    graph, outputs = graph_function(f, initial_state..., scan_input_elts...)
+    graph, outputs = trace_sub_function(f, initial_state..., scan_input_elts...)
 
     @assert length(outputs) >= N "f must have at least N=$N outputs; got $(length(outputs))"
 

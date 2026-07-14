@@ -65,23 +65,11 @@ function probe(scalar::Number, name::String="data")
     @assert !isprobe(scalar) "Probe types should implement no-op probe methods"
 
     ctx = GRAPH_CONTEXT[]
-    fn = value_name(name)
+    fn = get_value_name(name)
     tensor = TensorProto(scalar; name=fn)
     push!(ctx.inits, tensor)
 
     return ProbeNumber{typeof(scalar)}(fn)
-end
-
-function create_input(A::Union{Number,AbstractString})
-    return create_input(ProbeNumber{typeof(A)}(""))
-end
-function create_input(A::ProbeNumber{T}) where {T}
-    ctx = GRAPH_CONTEXT[]
-    fn = isempty(name(A)) || has_value(name(A)) ? value_name("input") : name(A)
-    vi = TensorValueInfoProto(fn, T, reverse(raw_size(A)))
-    push!(ctx.values, vi)
-
-    return ProbeNumber{T}(fn)
 end
 
 function to_value_info(A::ProbeNumber)

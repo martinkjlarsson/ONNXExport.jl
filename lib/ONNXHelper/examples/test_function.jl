@@ -43,4 +43,4 @@ graph = GraphProto(
 
 model = ModelProto(graph; opset_import=opset_imports, functions=[linear_regression])
 
-savemodel("models/function.onnx", model)
+save_model("models/function.onnx", model)

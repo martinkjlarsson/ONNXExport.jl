@@ -30,7 +30,7 @@ function onnx_op(
     domain="",
 )
     ctx = GRAPH_CONTEXT[]
-    nn = node_name(op_type)
+    nn = get_node_name(op_type)
     output = value_info(outtype, outdims, output_name(op_type))
     n = NodeProto(op_type, [name.(inputs)...], [name(output)], attr; name=nn, domain=domain)
     push!(ctx.nodes, n)
@@ -70,7 +70,7 @@ function onnx_op(
 ) where {Nin,Nout}
     ctx = GRAPH_CONTEXT[]
 
-    nn = node_name(op_type)
+    nn = get_node_name(op_type)
     n = NodeProto(
         op_type, [name.(inputs)...], [name.(outputs)...], attr; name=nn, domain=domain
     )

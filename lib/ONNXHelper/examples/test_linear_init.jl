@@ -13,4 +13,4 @@ graph = GraphProto("main_graph", [node1, node2], [X], [Y], [A, C])
 
 model = ModelProto(graph)
 
-savemodel("models/linear.onnx", model)
+save_model("models/linear.onnx", model)

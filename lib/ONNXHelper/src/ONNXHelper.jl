@@ -15,7 +15,7 @@ include("model.jl")
 include("io.jl")
 include("rename.jl")
 
-export loadmodel, savemodel
+export load_model, save_model
 export tensor_type, julia_type, to_array, to_sparse_array, attr_type
 export rename_value, rename_value!
 export Dimension,

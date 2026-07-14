@@ -27,4 +27,4 @@ if_node = NodeProto("If", ["cond"], ["Y"], (then_branch=then_body, else_branch=e
 graph = GraphProto("main_graph", [rsum, cond, if_node], [X], [Y], [zero])
 model = ModelProto(graph)
 
-savemodel("models/if.onnx", model)
+save_model("models/if.onnx", model)

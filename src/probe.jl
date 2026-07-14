@@ -157,7 +157,7 @@ function probe(array::AbstractArray, name::String="data")
     #       We do not want to store large weights multiple times.
 
     ctx = GRAPH_CONTEXT[]
-    fn = value_name(name)
+    fn = get_value_name(name)
     tensor = TensorProto(array; name=fn)
     push!(ctx.inits, tensor)
 
@@ -168,23 +168,11 @@ function value_info(::Type{T}, dims::ProbeDims, name::String="data") where {T}
     check_probe(T)
 
     ctx = GRAPH_CONTEXT[]
-    fn = value_name(name)
+    fn = get_value_name(name)
     vi = TensorValueInfoProto(fn, T, reverse(dims))
     push!(ctx.values, vi)
 
     return ProbeArray{T}(fn, dims...)
-end
-
-function create_input(A::AbstractArray)
-    return create_input(ProbeArray{eltype(A)}("", size(A)))
-end
-function create_input(A::ProbeArray{T}) where {T}
-    ctx = GRAPH_CONTEXT[]
-    fn = isempty(name(A)) || has_value(name(A)) ? value_name("input") : name(A)
-    vi = TensorValueInfoProto(fn, T, reverse(raw_size(A)))
-    push!(ctx.values, vi)
-
-    return ProbeArray{T}(fn, raw_size(A))
 end
 
 # TODO: Remove?

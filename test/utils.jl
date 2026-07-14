@@ -21,7 +21,7 @@ function test_function(f::Function, x...)
     # Save function to ONNX.
     file_name = tempname() * ".onnx"
     onnx_model = create_model(f, x...)
-    savemodel(file_name, onnx_model)
+    save_model(file_name, onnx_model)
     @info "Saved model for $f at $file_name"
 
     # Evaluate ONNX function.
@@ -60,7 +60,7 @@ function test_model(rng, model, x; test=false)
         f = x -> first(Lux.apply(model, x, ps, st))
     end
     onnx_model = create_model(f, input...)
-    savemodel(file_name, onnx_model)
+    save_model(file_name, onnx_model)
     @info "Saved model at $file_name"
 
     # Evaluate ONNX model.

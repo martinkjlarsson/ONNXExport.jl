@@ -299,4 +299,4 @@ model = ModelProto(
     doc_string="",
 )
 
-savemodel("models/scan.onnx", model)
+save_model("models/scan.onnx", model)

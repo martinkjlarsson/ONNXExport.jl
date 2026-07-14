@@ -9,4 +9,4 @@ graph = GraphProto("main_graph", [node], [], [y])
 
 model = ModelProto(graph)
 
-savemodel("models/minimal.onnx", model)
+save_model("models/minimal.onnx", model)

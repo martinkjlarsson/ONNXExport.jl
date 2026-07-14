@@ -14,4 +14,4 @@ graph = GraphProto("main_graph", [node_transpose, node1, node2], [X, A, B], [Y])
 
 model = ModelProto(graph)
 
-savemodel("models/attribute.onnx", model)
+save_model("models/attribute.onnx", model)

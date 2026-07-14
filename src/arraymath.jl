@@ -62,7 +62,7 @@ function matmul_onnx(A::ProbeArray{T}, B::ProbeArray{T}) where {T}
     ctx = GRAPH_CONTEXT[]
 
     op_type = "MatMul"
-    nn = node_name(op_type)
+    nn = get_node_name(op_type)
 
     output_size = matmul_shape(raw_size(A), raw_size(B))
     output = value_info(eltype(A), output_size, output_name(nn))
@@ -196,7 +196,7 @@ function gemm(
     ctx = GRAPH_CONTEXT[]
 
     op_type = "Gemm"
-    nn = node_name(op_type)
+    nn = get_node_name(op_type)
 
     new_dims = (raw_size(A, 1 + transA), raw_size(B, 2 - transB))
     # Switch A and B due to row-major order.

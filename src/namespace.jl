@@ -15,9 +15,13 @@ Namespace() = Namespace("", Set{String}(), Set{Symbol}())
 
 const NAMESPACE = ScopedValue(Namespace())
 
-value_name(name::String) = get_name(name)
-node_name(name::String) = get_name(name)
-graph_name(name::String) = get_name(name)
+get_value_name(name::String) = get_name(name)
+get_node_name(name::String) = get_name(name)
+get_graph_name(name::String) = get_name(name)
+
+add_value(name::String) = add_name(name)
+add_node(name::String) = add_name(name)
+add_graph(name::String) = add_name(name)
 
 has_value(name::String) = has_name(name)
 has_node(name::String) = has_name(name)
@@ -39,7 +43,7 @@ end
 
 function with_prefix(f, prefix::String)
     ns = NAMESPACE[]
-    new_ns = Namespace(get_name(prefix) * '/', ns.names, ns.dimensions)
+    new_ns = Namespace(get_name(prefix) * '/', ns.names, ns.dimensions) # TODO: Should not ns.prefix be here as well?
     return with(f, NAMESPACE => new_ns)
 end
 
@@ -56,6 +60,16 @@ function get_name(name::String)
 
     push!(ns.names, fullname)
     return fullname
+end
+
+function add_name(name::String)
+    ns = NAMESPACE[]
+    if name ∈ ns.names
+        error("\"$name\" already exist in the namespace.")
+    end
+    push!(ns.names, name)
+
+    return nothing
 end
 
 function has_name(name::String)
