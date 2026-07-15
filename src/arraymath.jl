@@ -179,10 +179,10 @@ function Base.inv(A::ProbeMatrix)
 end
 
 function gemm(A::AbstractMatrix, B::AbstractMatrix; kwargs...)
-    return gemm(promote(A, B)...; kwargs)
+    return gemm(promote(A, B)...; kwargs...)
 end
 function gemm(A::AbstractMatrix, B::AbstractMatrix, C::AbstractArray; kwargs...)
-    return gemm(promote(A, B, C)...; kwargs)
+    return gemm(promote(A, B, C)...; kwargs...)
 end
 function gemm(
     A::ProbeMatrix{T},
