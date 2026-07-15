@@ -1,14 +1,14 @@
 # Supported Lux layers
-The following is a list of the supported and tested Lux layers. Several untested layers may work, especially containers and helper layers. Tested layers may still break when using symbolic dimensions.
+The following is a list of the supported and tested Lux layers. Several untested layers may work, and tested layers may still break when using symbolic dimensions.
 
 * Containers
-    - [ ] BranchLayer
+    - [x] BranchLayer
     - [x] Chain
-    - [ ] PairwiseFusion
-    - [ ] Parallel
+    - [x] PairwiseFusion
+    - [x] Parallel
     - [x] SkipConnection
-    - [ ] RepeatedLayer
-    - [ ] AlternatePrecision
+    - [x] RepeatedLayer
+    - [x] AlternatePrecision
 * Convolutional Layers
     - [x] Conv
     - [ ] ConvTranspose
