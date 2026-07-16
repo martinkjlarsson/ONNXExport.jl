@@ -3,6 +3,9 @@ uuid = "9d33f818-c02d-4e4e-80e5-95f98363e87e"
 version = "0.0.2"
 authors = ["Martin Larsson <martinkjlarsson@gmail.com>"]
 
+[workspace]
+projects = ["test"]
+
 [deps]
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 ONNXHelper = "247b1699-bceb-4ca5-85a5-b7ceb92526c3"
@@ -26,13 +29,8 @@ NNlibExt = ["NNlib"]
 LinearAlgebra = "1.10"
 Lux = "1.0.0"
 NNlib = "0.9.21"
+ONNXHelper = "0.1.1"
 Random = "1.10"
 Static = "1.1.1"
 Statistics = "1.10"
 julia = "1.10"
-
-[extras]
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-
-[targets]
-test = ["Test"]
