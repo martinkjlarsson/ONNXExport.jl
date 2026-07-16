@@ -20,7 +20,7 @@ macro overload(f, forward, first_type, second_type, N)
     N = eval(N)
     methods = Expr[]
 
-    for mask in 1:(2^N - 1)
+    for mask in 1:(2 ^ N - 1)
         arglist = []
         callargs = []
 
@@ -34,10 +34,9 @@ macro overload(f, forward, first_type, second_type, N)
         end
 
         push!(
-            methods,
-            quote
+            methods, quote
                 $f($(arglist...); kwargs...) = $forward($(callargs...); kwargs...)
-            end,
+            end
         )
     end
 
@@ -66,7 +65,7 @@ macro overload_splat(f, forward, first_type, second_type, N, first_arg=nothing)
     N = eval(N)
     methods = Expr[]
 
-    for mask in 1:(2^N - 1)
+    for mask in 1:(2 ^ N - 1)
         n = 64 - leading_zeros(Int64(mask))
 
         arglist = []
@@ -90,10 +89,9 @@ macro overload_splat(f, forward, first_type, second_type, N, first_arg=nothing)
         push!(callargs, :(Arest...))
 
         push!(
-            methods,
-            quote
+            methods, quote
                 $f($(arglist...); kwargs...) = $forward($(callargs...); kwargs...)
-            end,
+            end
         )
     end
 

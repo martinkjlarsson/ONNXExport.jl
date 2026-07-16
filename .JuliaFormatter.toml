@@ -1,1 +1,4 @@
 style = "blue"
+always_use_return = true
+
+ignore = ["onnx3_pb.jl"]

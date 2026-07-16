@@ -1,6 +1,6 @@
 function load_model(file_name::String)
     return open(file_name, "r") do io
-        load_model(io)
+        return load_model(io)
     end
 end
 
@@ -10,7 +10,7 @@ end
 
 function save_model(file_name::String, model::ModelProto)
     return open(file_name, "w") do io
-        save_model(io, model)
+        return save_model(io, model)
     end
 end
 

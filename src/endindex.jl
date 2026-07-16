@@ -62,6 +62,7 @@ Base.:~(a::EndIndex) = ~a.i
 for f in
     (:+, :-, :*, :/, :÷, :\, :^, :%, :&, :|, :⊻, :⊼, :⊽, :>>>, :>>, :<<) ∪
     (:(==), :!=, :<, :<=, :>, :>=)
+
     @eval Base.$f(a::EndIndex, b::EndIndex) = $f(a.i, b.i)
 end
 

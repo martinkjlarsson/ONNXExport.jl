@@ -11,7 +11,7 @@ template_to_probe(A::AbstractArray) = ProbeArray{eltype(A)}("", size(A))
 template_to_probe(x::ProbeNumber) = x
 template_to_probe(x::Number) = ProbeNumber{typeof(x)}("")
 function template_to_probe(::T) where {T}
-    error("Input argument of type $T cannot be converted to an ONNX tensor.")
+    return error("Input argument of type $T cannot be converted to an ONNX tensor.")
 end
 
 function add_input_value(A::Union{ProbeArray{T},ProbeNumber{T}}) where {T}

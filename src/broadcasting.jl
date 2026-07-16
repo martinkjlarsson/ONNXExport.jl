@@ -86,7 +86,7 @@ function broadcast_shape(a::ProbeDims, b::ProbeDims, cs::ProbeDims...)
 end
 function broadcast_shape(a::ProbeDims, b::ProbeDims)
     return ntuple(max(length(a), length(b))) do i
-        merge_dim(i <= length(a) ? a[i] : 1, i <= length(b) ? b[i] : 1)
+        return merge_dim(i <= length(a) ? a[i] : 1, i <= length(b) ? b[i] : 1)
     end
 end
 broadcast_shape(a::ProbeDims) = a
@@ -95,7 +95,7 @@ function merge_dim(a::Int, b::Int)
     a == 1 && return b
     b == 1 && return a
     a == b && return a
-    throw(
+    return throw(
         DimensionMismatch(
             LazyString(
                 "arrays could not be broadcast to a common size; got a dimension with lengths ",

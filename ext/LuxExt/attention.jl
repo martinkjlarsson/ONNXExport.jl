@@ -5,13 +5,41 @@
 
 # TODO: The @overload macro caused issues with incremental compilation.
 # @overload LuxLib.scaled_dot_product_attention _attention ProbeArray AbstractArray 3
-LuxLib.scaled_dot_product_attention(q::ProbeArray,k::ProbeArray,v::ProbeArray; kwargs...) = _attention(q,k,v; kwargs...)
-LuxLib.scaled_dot_product_attention(q::ProbeArray,k::ProbeArray,v::AbstractArray; kwargs...) = _attention(q,k,v; kwargs...)
-LuxLib.scaled_dot_product_attention(q::ProbeArray,k::AbstractArray,v::ProbeArray; kwargs...) = _attention(q,k,v; kwargs...)
-LuxLib.scaled_dot_product_attention(q::ProbeArray,k::AbstractArray,v::AbstractArray; kwargs...) = _attention(q,k,v; kwargs...)
-LuxLib.scaled_dot_product_attention(q::AbstractArray,k::ProbeArray,v::ProbeArray; kwargs...) = _attention(q,k,v; kwargs...)
-LuxLib.scaled_dot_product_attention(q::AbstractArray,k::ProbeArray,v::AbstractArray; kwargs...) = _attention(q,k,v; kwargs...)
-LuxLib.scaled_dot_product_attention(q::AbstractArray,k::AbstractArray,v::ProbeArray; kwargs...) = _attention(q,k,v; kwargs...)
+function LuxLib.scaled_dot_product_attention(
+    q::ProbeArray, k::ProbeArray, v::ProbeArray; kwargs...
+)
+    return _attention(q, k, v; kwargs...)
+end
+function LuxLib.scaled_dot_product_attention(
+    q::ProbeArray, k::ProbeArray, v::AbstractArray; kwargs...
+)
+    return _attention(q, k, v; kwargs...)
+end
+function LuxLib.scaled_dot_product_attention(
+    q::ProbeArray, k::AbstractArray, v::ProbeArray; kwargs...
+)
+    return _attention(q, k, v; kwargs...)
+end
+function LuxLib.scaled_dot_product_attention(
+    q::ProbeArray, k::AbstractArray, v::AbstractArray; kwargs...
+)
+    return _attention(q, k, v; kwargs...)
+end
+function LuxLib.scaled_dot_product_attention(
+    q::AbstractArray, k::ProbeArray, v::ProbeArray; kwargs...
+)
+    return _attention(q, k, v; kwargs...)
+end
+function LuxLib.scaled_dot_product_attention(
+    q::AbstractArray, k::ProbeArray, v::AbstractArray; kwargs...
+)
+    return _attention(q, k, v; kwargs...)
+end
+function LuxLib.scaled_dot_product_attention(
+    q::AbstractArray, k::AbstractArray, v::ProbeArray; kwargs...
+)
+    return _attention(q, k, v; kwargs...)
+end
 
 function _attention(
     q::AbstractArray{TQ,N},

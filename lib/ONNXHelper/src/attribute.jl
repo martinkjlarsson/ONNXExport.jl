@@ -1,6 +1,6 @@
 attr_type(x) = attr_type(typeof(x))
 function attr_type(::Type{T}) where {T}
-    throw(ArgumentError("$T does not map to an ONNX attribute type."))
+    return throw(ArgumentError("$T does not map to an ONNX attribute type."))
 end
 attr_type(::Type{Float32}) = var"AttributeProto.AttributeType".FLOAT
 attr_type(::Type{<:Integer}) = var"AttributeProto.AttributeType".INT

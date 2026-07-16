@@ -114,7 +114,7 @@ function _stackdimsize(sz::ProbeDims, dim, count)
     if dim <= length(sz) + 1
         return (sz[1:(dim - 1)]..., count, sz[dim:end]...)
     end
-    throw(
+    return throw(
         ArgumentError(
             "cannot stack scan ouput slices A, where ndims(A) = $(length(sz)) along dimension $dim",
         ),
