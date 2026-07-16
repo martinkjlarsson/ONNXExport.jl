@@ -47,13 +47,13 @@ The following is a list of the supported and tested Lux layers. Several untested
     - [ ] apply_rotary_embedding
     - [ ] compute_rotary_embedding_params
 * Misc. Helper Layers
-    - [ ] FlattenLayer
-    - [ ] Maxout
-    - [ ] NoOpLayer
-    - [ ] ReshapeLayer
-    - [ ] SelectDim
-    - [ ] WrappedFunction
-    - [ ] ReverseSequence
+    - [x] FlattenLayer
+    - [x] Maxout
+    - [x] NoOpLayer
+    - [x] ReshapeLayer
+    - [x] SelectDim
+    - [x] WrappedFunction
+    - [x] ReverseSequence
 * Normalization Layers
     - [ ] BatchNorm
     - [ ] GroupNorm
