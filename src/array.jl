@@ -384,3 +384,21 @@ function Base.partialsort(
     k == 1 && return reshape(values)
     return values[k]
 end
+
+Base.reverse(A::ProbeArray; dims=:) = _reverse(A, dims)
+_reverse(A, ::Colon) = _reverse(A, ntuple(identity, ndims(A)))
+_reverse(A, dims::Integer) = _reverse(A, (Int(dims),))
+_reverse(A, dims::NTuple{N,Integer}) where {N} = _reverse(A, Int.(dims))
+function _reverse(A, dims::Dims)
+    nd = length(dims)
+    starts = fill(typemax(Int), nd)
+    ends = fill(typemin(Int), nd)
+    axes = collect(ndims(A) .- dims)
+    steps = fill(-1, nd)
+
+    starts = probe(starts, "starts")
+    ends = probe(ends, "ends")
+    axes = probe(axes, "axes")
+    steps = probe(steps, "steps")
+    return onnx_op("Slice", raw_size(A), A, starts, ends, axes, steps)
+end

@@ -1,7 +1,7 @@
 # Supported Julia functions
 The following Julia functions are supported in some capacity:
 
-* Array operations: fill, reshape, vec, transpose, adjoint, permutedims, repeat, cat, hcat, vcat, hvcat, accumulate, cumprod, cumsum, dropdims, partialsort
+* Array operations: fill, reshape, vec, transpose, adjoint, permutedims, repeat, cat, hcat, vcat, hvcat, accumulate, cumprod, cumsum, dropdims, partialsort, reverse
 * Array math: +, -, *, inv
 * Control flow: ifelse
 * Indexing: getindex, selectdim
