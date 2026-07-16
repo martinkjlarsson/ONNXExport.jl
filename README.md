@@ -8,13 +8,13 @@
 
 ONNXExport traces Julia functions and exports them as ONNX models. The package cannot import or run models.
 
-A Julia function `f(inputs...)` can be exported to ONNX using
+Install using
 ```julia
-export_model("model.onnx", f, inputs...)
+] add https://github.com/martinkjlarsson/ONNXExport.jl.git:lib/ONNXHelper
+] add https://github.com/martinkjlarsson/ONNXExport.jl.git
 ```
-where `inputs...` are example arguments from which types and sizes will be inferred.
 
-## Examples
+# Examples
 The exported models can be inspected using [netron](https://netron.app/).
 
 ```julia
