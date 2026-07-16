@@ -7,7 +7,7 @@ macro probe_getindex(first_type, N)
     N = eval(N)
     methods = Expr[]
 
-    for mask in 1:(2^N - 1)
+    for mask in 1:(2 ^ N - 1)
         n = 64 - leading_zeros(Int64(mask))
 
         arglist = []
@@ -46,6 +46,16 @@ Base.getindex(A::ProbeArray, Irest...) = _getindex(A, Irest...)
 
 Base.getindex(x::ProbeNumber) = x
 Base.getindex(A::ProbeScalar) = ProbeNumber(A)
+
+Base.setindex!(::ProbeArray, Irest...) = unsupported(setindex!)
+
+Base.selectdim(A::ProbeArray, d::Integer, i) = index_dimension(A, Int(d), i)
+function Base.selectdim(A::AbstractArray, d::Integer, i::Union{ProbeArray,ProbeNumber})
+    return index_dimension(probe(A), Int(d), i)
+end
+function Base.selectdim(A::ProbeArray, d::Integer, i::Union{ProbeArray,ProbeNumber})
+    return index_dimension(A, Int(d), i)
+end
 
 # Indexing with a single bool array.
 _getindex(A::ProbeArray{T,N}, I::AbstractArray{Bool,N}) where {T,N} = compress(A, vec(I))

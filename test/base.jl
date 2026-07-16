@@ -146,7 +146,7 @@ end
     y, y_onnx = test_function(f6, inds)
     @test y_onnx ≈ y
 
-    f7(A, ind) = (B = A[ind]; return B[size(B, 1)])
+    f7(A, ind) = (B=A[ind]; return B[size(B, 1)])
     A = rand(Float32, 2, 3)
     ind = [true false true; false false true]
 
@@ -157,6 +157,13 @@ end
     A = Float32[1, 2, 3, 4, 5, 6]
 
     y, y_onnx = test_function(f8, A)
+    @test y_onnx ≈ y
+
+    f9(A, i) = selectdim(A, 2, 2) + selectdim([7 8 9; 10 11 12], 2, i)
+    A = Float32[1 2 3; 4 5 6]
+    i = 3
+
+    y, y_onnx = test_function(f9, A, i)
     @test y_onnx ≈ y
 end
 
