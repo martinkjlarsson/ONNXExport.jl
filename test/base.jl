@@ -131,10 +131,10 @@ end
 
     f5(A, I1, I2, I3, I4) = A[I1, I2, I3, I4]
     A = rand(rng, Float32, 3, 4, 5, 6)
-    I1 = [1, 3, 2, 2]
+    I1 = Int32[1, 3, 2, 2]
     I2 = 3
     I3 = 5:-2:2
-    I4 = Int32[0x2, 0x4, 0x3] # ONNX Runtime does not support Sub for UInt8.
+    I4 = [true, true, false, false, true, false]
 
     y, y_onnx = test_function(f5, A, I1, I2, I3, I4)
     @test y_onnx ≈ y

@@ -25,12 +25,11 @@ macro probe_getindex(first_type, N)
         push!(arglist, :(Irest...))
         push!(callargs, :(Irest...))
 
-        push!(
-            methods,
-            quote
-                Base.getindex(A::$first_type, $(arglist...)) = _getindex(A, $(callargs...))
-            end,
-        )
+        push!(methods, quote
+            function Base.getindex(A::$first_type, $(arglist...))
+                return probe_getindex(A, $(callargs...))
+            end
+        end)
     end
 
     return Expr(:block, methods...)
@@ -40,7 +39,7 @@ Base.IndexStyle(::ProbeArray) = IndexLinear()
 
 # Create methods up to arity 4. This means that the array A and the 3 first indices can be
 # non-ProbeArray constants, and we will still detect the forth being a ProbeArray.
-Base.getindex(A::ProbeArray, Irest...) = _getindex(A, Irest...)
+Base.getindex(A::ProbeArray, Irest...) = probe_getindex(A, Irest...)
 @probe_getindex ProbeArray 4
 @probe_getindex AbstractArray 4
 
@@ -49,7 +48,9 @@ Base.getindex(A::ProbeScalar) = ProbeNumber(A)
 
 Base.setindex!(::ProbeArray, Irest...) = unsupported(setindex!)
 
-Base.selectdim(A::ProbeArray, d::Integer, i) = index_dimension(A, Int(d), i)
+function Base.selectdim(A::ProbeArray, d::Integer, i)
+    return index_dimension(A, Int(d), Base.to_index(A, i))
+end
 function Base.selectdim(A::AbstractArray, d::Integer, i::Union{ProbeArray,ProbeNumber})
     return index_dimension(probe(A), Int(d), i)
 end
@@ -57,16 +58,31 @@ function Base.selectdim(A::ProbeArray, d::Integer, i::Union{ProbeArray,ProbeNumb
     return index_dimension(A, Int(d), i)
 end
 
+function probe_getindex(A, I::Vararg{Any,N}) where {N}
+    # We cannot call to_indices as this will convert Colon to a range, which would fail for
+    # symbolic dimensions.
+    J = ntuple(N) do i
+        if isprobe(I[i]) || I[i] === (:)
+            return I[i]
+        else
+            # Note: this may fail if A has symbolic dimensions.
+            return Base.to_index(A, I[i])
+        end
+    end
+
+    return _getindex(A, J...)
+end
+
 # Indexing with a single bool array.
-_getindex(A::ProbeArray{T,N}, I::AbstractArray{Bool,N}) where {T,N} = compress(A, vec(I))
 _getindex(A::ProbeArray{T,N}, I::ProbeArray{Bool,N}) where {T,N} = compress(A, vec(I))
 _getindex(A::ProbeArray, I::ProbeVector{Bool}) = compress(A, I)
 _getindex(A::ProbeVector, I::ProbeVector{Bool}) = compress(A, I)
-_getindex(A::ProbeVector, I::AbstractVector{Bool}) = compress(A, I)
+_getindex(A::ProbeArray{T}, I::Base.LogicalIndex) where {T} = compress(A, I)
+_getindex(A::ProbeVector{T}, I::Base.LogicalIndex) where {T} = compress(A, I)
 
-function compress(A::ProbeArray, I::AbstractVector{Bool})
-    condition = probe(I, "condition")
-    return onnx_op("Compress", (count(I),), A, condition)
+function compress(A::ProbeArray, I::Base.LogicalIndex)
+    condition = probe(I.mask, "condition")
+    return onnx_op("Compress", (I.sum,), A, condition)
 end
 function compress(A::ProbeArray, I::ProbeVector{Bool})
     new_dim = dimension_name()
@@ -75,10 +91,8 @@ end
 
 # General indexing.
 _getindex(A, I) = _getindex(vec(A), I)
-function _getindex(A::AbstractArray{T,N}, I::Vararg{Any,N}) where {T,N}
-    A = probe(A, "array")
-    return _getindex(A, I...)
-end
+_getindex(A::AbstractArray{T,N}, I::Vararg{Any,N}) where {T,N} = _getindex(probe(A), I...)
+
 function _getindex(A::ProbeArray{T,N}, I::Vararg{Any,N}) where {T,N}
     A, I = try_slicing(A, I)
 
@@ -91,9 +105,9 @@ function _getindex(A::ProbeArray{T,N}, I::Vararg{Any,N}) where {T,N}
 end
 
 index_dimension(A::ProbeArray, ::Int, ::Colon) = A
-function index_dimension(A::ProbeArray{T,N}, dim::Int, I::AbstractVector{Bool}) where {T,N}
-    condition = probe(I, "condition")
-    dims = (raw_size(A)[1:(dim - 1)]..., count(I), raw_size(A)[(dim + 1):N]...)
+function index_dimension(A::ProbeArray{T,N}, dim::Int, I::Base.LogicalIndex) where {T,N}
+    condition = probe(I.mask, "condition")
+    dims = (raw_size(A)[1:(dim - 1)]..., I.sum, raw_size(A)[(dim + 1):N]...)
     return onnx_op("Compress", dims, A, condition; attr=(axis=N - dim,))
 end
 function index_dimension(A::ProbeArray{T,N}, dim::Int, I::ProbeVector{Bool}) where {T,N}
@@ -119,7 +133,7 @@ function index_dimension(
     return onnx_op("Gather", dims, A, I0; attr=(axis=N - dim,))
 end
 function index_dimension(
-    A::ProbeArray{T,N}, dim::Int, I::Union{ProbeNumber{<:Integer},Integer}
+    A::ProbeArray{T,N}, dim::Int, I::Union{ProbeNumber{<:Integer},Int}
 ) where {T,N}
     I0 = I - one(eltype(I)) # Convert to zero-based indices.
     I0 = probe(I0)
@@ -175,7 +189,7 @@ try_to_range(::ProbeNumber) = (:)
 try_to_range(i::Integer) = i:i
 try_to_range(i::OrdinalRange{<:Integer}) = i
 try_to_range(i::AbstractVector) = isempty(i) ? (2:1) : (:)
-try_to_range(i::AbstractVector{Bool}) = try_to_range(findall(i))
+try_to_range(i::Base.LogicalIndex) = try_to_range(findall(i.mask))
 function try_to_range(i::AbstractVector{T}) where {T<:Integer}
     isempty(i) && return T(2):T(1) # Empty range.
     length(i) == 1 && return first(i):first(i)
