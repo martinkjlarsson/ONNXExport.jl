@@ -272,8 +272,8 @@ end
     Random.seed!(rng, 0)
 
     f1(A) =
-        sum(A) .+ sum(A; dims=1) .+ sum(abs, A; dims=2) .+ sum(abs2, A; dims=(1, 2)) .+
-        count(>(0.5), A; dims=1)
+        sum(A) .+ sum(A; dims=1) .+ sum(abs, A; dims=[2]) .+ sum(abs2, A; dims=(1, 2)) .+
+        count(>(0.5), A; dims=1:1)
     A = rand(rng, 3, 4)
 
     y, y_onnx = test_function(f1, A)

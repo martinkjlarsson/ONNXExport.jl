@@ -61,7 +61,7 @@ _reduce(op_type::String, A::ProbeArray, dims::Integer) = _reduce(op_type, A, (di
 function _reduce(op_type::String, A::ProbeArray, ::Colon)
     return onnx_op(op_type, (), A; attr=(keepdims=0,))
 end
-function _reduce(op_type::String, A::ProbeArray, dims::Tuple)
+function _reduce(op_type::String, A::ProbeArray, dims)
     new_dims = ntuple(i -> i ∈ dims ? 1 : raw_size(A, i), ndims(A))
     axes = probe(collect(ndims(A) .- dims), "axes")
     return onnx_op(op_type, new_dims, A, axes)
