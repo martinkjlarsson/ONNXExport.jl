@@ -55,12 +55,12 @@ The following is a list of the supported and tested Lux layers. Several untested
     - [x] WrappedFunction
     - [x] ReverseSequence
 * Normalization Layers
-    - [ ] BatchNorm
-    - [ ] GroupNorm
-    - [ ] InstanceNorm
+    - [x] BatchNorm
+    - [x] GroupNorm
+    - [x] InstanceNorm
     - [x] LayerNorm
-    - [ ] WeightNorm
-    - [ ] RMSNorm
+    - [x] WeightNorm
+    - [x] RMSNorm
 * Upsampling
     - [ ] PixelShuffle
     - [ ] Upsample

@@ -14,7 +14,7 @@ The following ONNX operators are supported in some capacity:
 - [x] Atanh
 - [ ] Attention
 - [ ] AveragePool
-- [ ] BatchNormalization
+- [x] BatchNormalization
 - [ ] Bernoulli
 - [x] BitShift
 - [x] BitwiseAnd
@@ -56,7 +56,7 @@ The following ONNX operators are supported in some capacity:
 - [x] Exp
 - [x] Expand
 - [x] EyeLike
-- [ ] Flatten
+- [x] Flatten
 - [x] Floor
 - [ ] GRU
 - [x] Gather
@@ -70,7 +70,7 @@ The following ONNX operators are supported in some capacity:
 - [x] Greater
 - [x] GreaterOrEqual
 - [ ] GridSample
-- [ ] GroupNormalization
+- [x] GroupNormalization
 - [ ] HammingWindow
 - [ ] HannWindow
 - [x] HardSigmoid
@@ -79,12 +79,12 @@ The following ONNX operators are supported in some capacity:
 - [x] Identity
 - [ ] If
 - [ ] ImageDecoder
-- [ ] InstanceNormalization
+- [x] InstanceNormalization
 - [x] IsInf
 - [x] IsNaN
 - [ ] LRN
 - [ ] LSTM
-- [ ] LayerNormalization
+- [x] LayerNormalization
 - [x] LeakyRelu
 - [x] Less
 - [x] LessOrEqual

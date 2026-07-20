@@ -1,6 +1,6 @@
 module LuxExt
 
-using Lux, ONNXExport, Random, Static
+using Lux, ONNXExport, Random, Static, Statistics
 
 include("attention.jl")
 include("conv.jl")

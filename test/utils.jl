@@ -67,8 +67,7 @@ function test_model(rng, model, x; test=false)
     input_names = [vi.name for vi in onnx_model.graph.input]
     input_dict = Dict(zip(input_names, prepare_input.(input)))
 
-    path = ONNXRunTime.testdatapath(file_name)
-    model = load_inference(path)
+    model = load_inference(file_name)
     output_dict = model(input_dict)
 
     if y isa Tuple
