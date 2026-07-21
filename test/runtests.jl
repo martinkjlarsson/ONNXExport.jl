@@ -5,6 +5,7 @@ using NNlib
 using ONNXExport
 using ONNXRunTime
 using Random
+using SpecialFunctions
 using Statistics
 using Test
 
@@ -28,5 +29,8 @@ include("utils.jl")
     @testset "NNlib" begin
         include("nnlib/activation.jl")
         include("nnlib/functions.jl")
+    end
+    @testset "SpecialFunctions" begin
+        include("special_functions/erf.jl")
     end
 end

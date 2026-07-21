@@ -7,7 +7,6 @@ for (f, op_type) in [
     (:atanh, "Atanh")
     (:cos, "Cos")
     (:cosh, "Cosh")
-    # (:erf, "Erf") # TODO: Extension for SpecialFunctions.jl?
     (:exp, "Exp")
     (:log, "Log")
     (:inv, "Reciprocal")

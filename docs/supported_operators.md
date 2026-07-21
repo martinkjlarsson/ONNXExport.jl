@@ -52,7 +52,7 @@ The following ONNX operators are supported in some capacity:
 - [ ] Einsum
 - [x] Elu
 - [x] Equal
-- [ ] Erf
+- [x] Erf
 - [x] Exp
 - [x] Expand
 - [x] EyeLike
