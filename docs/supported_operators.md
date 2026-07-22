@@ -16,6 +16,7 @@ The following ONNX operators are supported in some capacity:
 - [ ] AveragePool
 - [x] BatchNormalization
 - [ ] Bernoulli
+- [ ] BitCast
 - [x] BitShift
 - [x] BitwiseAnd
 - [x] BitwiseNot
@@ -24,6 +25,7 @@ The following ONNX operators are supported in some capacity:
 - [ ] BlackmanWindow
 - [x] Cast
 - [ ] CastLike
+- [ ] CausalConvWithState
 - [x] Ceil
 - [x] Celu
 - [ ] CenterCropPad
@@ -88,6 +90,7 @@ The following ONNX operators are supported in some capacity:
 - [x] LeakyRelu
 - [x] Less
 - [x] LessOrEqual
+- [ ] LinearAttention
 - [x] Log
 - [x] LogSoftmax
 - [ ] Loop
@@ -184,6 +187,7 @@ The following ONNX operators are supported in some capacity:
 - [ ] StringSplit
 - [x] Sub
 - [x] Sum
+- [ ] SwiGLU
 - [x] Swish
 - [x] Tan
 - [X] Tanh
