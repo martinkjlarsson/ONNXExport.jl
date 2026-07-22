@@ -10,7 +10,6 @@ ONNXExport traces Julia functions and exports them as ONNX models. The package c
 
 Install using
 ```julia
-] add https://github.com/martinkjlarsson/ONNXExport.jl.git:lib/ONNXHelper
 ] add https://github.com/martinkjlarsson/ONNXExport.jl.git
 ```
 
@@ -31,6 +30,7 @@ model = Chain(Dense(16 => 8, relu), Dense(8 => 2))
 
 rng = Random.default_rng()
 ps, st = Lux.setup(rng, model)
+st = Lux.testmode(st)
 
 f(x) = first(Lux.apply(model, x, ps, st))
 export_model("model.onnx", f, ProbeArray{Float32}("input1", 16, :N))
