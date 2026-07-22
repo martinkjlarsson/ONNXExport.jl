@@ -1,4 +1,4 @@
-using ONNXHelper
+using ONNXExport.ONNXHelper
 
 # Subgraph.
 initializers = TensorProto[]
@@ -299,4 +299,4 @@ model = ModelProto(
     doc_string="",
 )
 
-save_model("models/scan.onnx", model)
+ONNXHelper.save("scan.onnx", model)

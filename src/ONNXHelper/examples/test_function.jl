@@ -1,4 +1,4 @@
-using ONNXHelper
+using ONNXExport.ONNXHelper
 
 new_domain = "custom"
 opset_imports = [OperatorSetIdProto("", 14), OperatorSetIdProto(new_domain, 1)]
@@ -43,4 +43,4 @@ graph = GraphProto(
 
 model = ModelProto(graph; opset_import=opset_imports, functions=[linear_regression])
 
-save_model("models/function.onnx", model)
+ONNXHelper.save("function.onnx", model)

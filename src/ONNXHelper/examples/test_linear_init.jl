@@ -1,4 +1,4 @@
-using ONNXHelper
+using ONNXExport.ONNXHelper
 
 X = TensorValueInfoProto("X", Float32, (nothing, nothing))
 A = TensorProto([0.5f0, -0.6f0]; name="A")
@@ -13,4 +13,4 @@ graph = GraphProto("main_graph", [node1, node2], [X], [Y], [A, C])
 
 model = ModelProto(graph)
 
-save_model("models/linear.onnx", model)
+ONNXHelper.save("linear.onnx", model)

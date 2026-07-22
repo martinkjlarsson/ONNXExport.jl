@@ -118,9 +118,9 @@ function trace_common(f::Function, inputs::Union{ProbeArray,ProbeNumber}...; gra
 end
 
 """
-    create_model(f::Function, inputs...; kwargs...)
+    trace(f::Function, inputs...; kwargs...)
 
-Create an ONNX model from the function `f` called with the arguments `inputs...`.
+Trace the function `f` called with the arguments `inputs...` and create an ONNX model.
 
 The input arguments can be any `AbstractArray{<:Number}` or `Number`, provided the element
 type has a corresponding ONNX tensor data type. This is true for most Julia `Number`s. The
@@ -142,8 +142,17 @@ description of the arguments.
 - `metadata_props::Vector{StringStringEntryProto}=[]`
 - `training_info::Vector{TrainingInfoProto}=[]`
 - `configuration::Vector{DeviceConfigurationProto}=[]`
+
+# Examples
+```julia
+using ONNXExport
+
+f(x, y) = x .+ y .- 3
+model = ONNXExport.trace(f, rand(Float32, 3, 4), rand(Float32, 3))
+ONNXExport.save("model.onnx", model)
+```
 """
-function create_model(
+function trace(
     f::Function,
     inputs::Union{AbstractArray{<:Number},Number}...;
     ir_version=10,
@@ -159,21 +168,38 @@ function create_model(
 end
 
 """
-    export_model(file, f::Function, inputs...; kwargs...)
+    save(file_name::String, f::Function, inputs...; kwargs...)
+    save(io::IO, f::Function, inputs...; kwargs...)
 
-Trace and export a Julia function as an ONNX model.
+Trace and save a Julia function as an ONNX model.
 
 Create an ONNX model from the function `f` called with the arguments `inputs...`, and save
-it to the provide `IO` or `String` file name. See [`create_model`](@ref) for details.
+it to the provide `IO` or `String` file name. See [`trace`](@ref) for details.
 
-See also [`create_model`](@ref), [`trace_function`](@ref).
+See also [`trace`](@ref).
 """
-function export_model(file_name::String, f::Function, inputs...; kwargs...)
-    onnx_model = create_model(f, inputs...; kwargs...)
-    return save_model(file_name, onnx_model)
+function save(file_name::String, f::Function, inputs...; kwargs...)
+    onnx_model = trace(f, inputs...; kwargs...)
+    return save(file_name, onnx_model)
 end
 
-function export_model(io::IO, f::Function, inputs...; kwargs...)
-    onnx_model = create_model(f, inputs...; kwargs...)
-    return save_model(io, onnx_model)
+function save(io::IO, f::Function, inputs...; kwargs...)
+    onnx_model = trace(f, inputs...; kwargs...)
+    return save(io, onnx_model)
+end
+
+"""
+    save(file_name::String, model::ModelProto)
+    save(io::IO, model::ModelProto)
+
+Save a traced ONNX model to file or IO.
+
+See also [`trace`](@ref).
+"""
+function save(file_name::String, model::ModelProto)
+    return ONNXHelper.save(file_name, model)
+end
+
+function save(io::IO, model::ModelProto)
+    return ONNXHelper.save(io, model)
 end

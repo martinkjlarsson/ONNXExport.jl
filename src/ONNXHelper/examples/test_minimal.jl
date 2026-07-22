@@ -1,4 +1,4 @@
-using ONNXHelper
+using ONNXExport.ONNXHelper
 
 tensor = TensorProto([1.0f0])
 
@@ -9,4 +9,4 @@ graph = GraphProto("main_graph", [node], [], [y])
 
 model = ModelProto(graph)
 
-save_model("models/minimal.onnx", model)
+ONNXHelper.save("minimal.onnx", model)

@@ -1,4 +1,4 @@
-using ONNXHelper
+using ONNXExport.ONNXHelper
 
 zero = TensorProto([0]; name="zero")
 
@@ -27,4 +27,4 @@ if_node = NodeProto("If", ["cond"], ["Y"], (then_branch=then_body, else_branch=e
 graph = GraphProto("main_graph", [rsum, cond, if_node], [X], [Y], [zero])
 model = ModelProto(graph)
 
-save_model("models/if.onnx", model)
+ONNXHelper.save("if.onnx", model)

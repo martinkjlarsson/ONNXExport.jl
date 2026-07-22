@@ -1,7 +1,14 @@
 module ONNXExport
 
 using LinearAlgebra
+using SciMLPublic
 using Statistics
+
+if VERSION < v"1.11"
+    using ScopedValues
+else
+    using Base.ScopedValues
+end
 
 include("ONNXHelper/src/ONNXHelper.jl")
 using .ONNXHelper
@@ -23,12 +30,11 @@ include("operators.jl")
 include("controlflow.jl")
 include("array.jl")
 
-export export_model, create_model
+@public save, trace
 export ProbeArray,
     ProbeMatrix, ProbeVector, ProbeScalar, ProbeNumber, AbstractProbeNumber, BroadcastProbe
 export name, raw_size, probe, probes, create_input
 export matmul_onnx, gemm, onnx_op, value_info, with_prefix, @overload # TODO: Look over which exports to keep.
 export mul_dim, div_dim, add_dim
-export save_model # Reexport from ONNXHelper.
 
 end

@@ -1,19 +1,19 @@
-function load_model(file_name::String)
+function load(file_name::String)
     return open(file_name, "r") do io
-        return load_model(io)
+        return load(io)
     end
 end
 
-function load_model(io::IO)
+function load(io::IO)
     return decode(ProtoDecoder(io), ModelProto)
 end
 
-function save_model(file_name::String, model::ModelProto)
+function save(file_name::String, model::ModelProto)
     return open(file_name, "w") do io
-        return save_model(io, model)
+        return save(io, model)
     end
 end
 
-function save_model(io::IO, model::ModelProto)
+function save(io::IO, model::ModelProto)
     return encode(ProtoEncoder(io), model)
 end

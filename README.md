@@ -20,7 +20,7 @@ The exported models can be inspected using [netron](https://netron.app/).
 using ONNXExport
 
 f(x, y) = x .+ y .- 3
-export_model("model.onnx", f, rand(Float32, 3, 4), rand(Float32, 3))
+ONNXExport.save("model.onnx", f, rand(Float32, 3, 4), rand(Float32, 3))
 ```
 
 ```julia
@@ -33,7 +33,7 @@ ps, st = Lux.setup(rng, model)
 st = Lux.testmode(st)
 
 f(x) = first(Lux.apply(model, x, ps, st))
-export_model("model.onnx", f, ProbeArray{Float32}("input1", 16, :N))
+ONNXExport.save("model.onnx", f, ProbeArray{Float32}("input1", 16, :N))
 ```
 
 # Design
@@ -57,7 +57,7 @@ Due to the way ONNXExport traces Julia functions, it is not possible to capture 
 Random numbers from `rand` and `randn` will be treated as constants in the ONNX graph. The corresponding ONNX operators `RandomUniform` and `RandomNormal` are currently not supported.
 
 ### Broadcasting
-Broadcasting support is limited to elementwise operations, e.g., `sin.(A)` and `relu.(Wx .+ b)`. Nested broadcasting or broadcasting over slices will likely fail.
+Broadcasting support is limited to element-wise operations, e.g., `sin.(A)` and `relu.(Wx .+ b)`. Nested broadcasting or broadcasting over slices will likely fail.
 
 ### Immutability
 ONNX tensors are immutable. Consequently, ONNXExport does not support mutating functions such as `setindex!`.

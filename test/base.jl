@@ -14,7 +14,7 @@
         A = rand(T, 3, 3)
         B = rand(T, 3, 3)
 
-        create_model(f2, A, B)
+        ONNXExport.trace(f2, A, B)
     end
 end
 
