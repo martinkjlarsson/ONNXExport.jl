@@ -1,6 +1,6 @@
 module MicrofloatsExt
 
-using ONNXHelper, Microfloats
+using ONNXExport.ONNXHelper, Microfloats
 
 ONNXHelper.tensor_type(::Type{MX_E4M3}) = var"TensorProto.DataType".FLOAT8E4M3FN
 ONNXHelper.julia_type(::Val{var"TensorProto.DataType".FLOAT8E4M3FN}) = MX_E4M3

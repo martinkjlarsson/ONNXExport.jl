@@ -1,6 +1,8 @@
+using BFloat16s
 using LinearAlgebra
 using Logging
 using Lux
+using Microfloats
 using NNlib
 using ONNXExport
 using ONNXRunTime

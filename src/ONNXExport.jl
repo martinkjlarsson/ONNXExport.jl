@@ -23,7 +23,6 @@ include("operators.jl")
 include("controlflow.jl")
 include("array.jl")
 
-
 export export_model, create_model
 export ProbeArray,
     ProbeMatrix, ProbeVector, ProbeScalar, ProbeNumber, AbstractProbeNumber, BroadcastProbe

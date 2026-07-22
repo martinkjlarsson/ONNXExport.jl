@@ -1,6 +1,6 @@
 module BFloat16sExt
 
-using ONNXHelper, BFloat16s
+using ONNXExport.ONNXHelper, BFloat16s
 
 ONNXHelper.tensor_type(::Type{BFloat16}) = var"TensorProto.DataType".BFLOAT16
 ONNXHelper.julia_type(::Val{var"TensorProto.DataType".BFLOAT16}) = BFloat16
