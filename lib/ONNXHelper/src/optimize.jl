@@ -64,7 +64,8 @@ function dead_ops!(names, nodes, outputs, inits, sparse_inits, values)
         # Remove nodes.
         to_remove = Int[]
         for (i, node) in enumerate(nodes)
-            if all(∈(names), node.output) # Non of the node ouputs have been used elsewhere.
+            # Remove node if none of its outputs have been used elsewhere.
+            if all(∈(names), node.output)
                 push!(to_remove, i)
             end
         end

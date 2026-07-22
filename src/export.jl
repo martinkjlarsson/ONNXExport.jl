@@ -153,7 +153,7 @@ function create_model(
     graph, _ = trace_function(f, inputs...)
     model = ModelProto(graph; ir_version=ir_version, opset_import=opset_import, kwargs...)
 
-    optimize_dead_ops!(model)
+    ONNXHelper.optimize_dead_ops!(model)
 
     return model
 end

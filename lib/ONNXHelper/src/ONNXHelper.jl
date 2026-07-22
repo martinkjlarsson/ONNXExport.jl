@@ -14,6 +14,7 @@ include("graph.jl")
 include("model.jl")
 include("io.jl")
 include("rename.jl")
+include("optimize.jl")
 
 export load_model, save_model
 export tensor_type, julia_type, to_array, to_sparse_array, attr_type

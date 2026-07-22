@@ -20,7 +20,6 @@ include("reduce.jl")
 include("operators.jl")
 include("controlflow.jl")
 include("array.jl")
-include("optimize.jl")
 
 export export_model, create_model
 export ProbeArray,
