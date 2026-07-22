@@ -1,8 +1,10 @@
 module ONNXExport
 
 using LinearAlgebra
-using ONNXHelper
 using Statistics
+
+include("ONNXHelper/src/ONNXHelper.jl")
+using .ONNXHelper
 
 include("macros.jl")
 include("namespace.jl")
@@ -20,6 +22,7 @@ include("reduce.jl")
 include("operators.jl")
 include("controlflow.jl")
 include("array.jl")
+
 
 export export_model, create_model
 export ProbeArray,

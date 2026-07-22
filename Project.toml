@@ -8,31 +8,37 @@ projects = ["test"]
 
 [deps]
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
-ONNXHelper = "247b1699-bceb-4ca5-85a5-b7ceb92526c3"
+ProtoBuf = "3349acd9-ac6a-5e09-bcdb-63829b23a429"
 ScopedValues = "7e506255-f358-4e82-b7e4-beb19740aa63"
+SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [weakdeps]
+BFloat16s = "ab4f0b2a-ad5b-11e8-123f-65d77653426b"
 Lux = "b2108857-7c20-44ae-9111-449ecde12c47"
+Microfloats = "31c70f10-a750-4521-b13c-797315ae2933"
 NNlib = "872c559c-99b0-510c-b3b7-b6c96a88d5cd"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
 Static = "aedffcd0-7271-4cad-89d0-dc628f76c6d3"
 
-[sources]
-ONNXHelper = {path = "lib/ONNXHelper"}
-
 [extensions]
+BFloat16sExt = ["BFloat16s"]
 LuxExt = ["Lux", "Random", "Static"]
+MicrofloatsExt = ["Microfloats"]
 NNlibExt = ["NNlib"]
 SpecialFunctionsExt = ["SpecialFunctions"]
 
 [compat]
+BFloat16s = "0.5.0"
 LinearAlgebra = "1.10"
 Lux = "1.0.0"
+Microfloats = "0.1.0"
 NNlib = "0.9.21"
-ONNXHelper = "0.1.1"
+ProtoBuf = "1.0.0"
 Random = "1.10"
+ScopedValues = "1.0"
+SparseArrays = "1.9"
 SpecialFunctions = "2.0.0"
 Static = "1.1.1"
 Statistics = "1.10"
