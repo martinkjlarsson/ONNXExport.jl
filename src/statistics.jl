@@ -7,7 +7,7 @@ end
 
 # Statistics.jl defines mean(itr) = mean(identity, itr).
 Statistics.mean(f, itr::AbstractVector{<:ProbeArray}) = _mean(f.(itr))
-Statistics.mean(f, itr::ProbeTuple) = _mean(f.(itr))
+Statistics.mean(f, itr::ExactlyOne{ProbeArray,Any}) = _mean(f.(itr))
 function _mean(itr)
     isempty(itr) && error("Cannot reduce over empty collection")
     itr = probe(itr)

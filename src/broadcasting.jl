@@ -43,8 +43,7 @@ Base.eltype(::BroadcastProbe{T}) where {T} = T
 
 name(A::BroadcastProbe) = name(A.probe)
 raw_size(A::BroadcastProbe) = raw_size(A.probe)
-
-isprobe(::Type{T}) where {T<:BroadcastProbe} = true
+isprobe(::Type{<:BroadcastProbe}) = true
 
 unwrap_broadcast(x) = x
 unwrap_broadcast(A::BroadcastProbe) = A.probe

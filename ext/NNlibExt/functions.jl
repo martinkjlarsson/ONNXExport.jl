@@ -8,7 +8,9 @@ end
 NNlib.logsumexp(x::ProbeArray; dims=:) = ONNXExport._reduce("ReduceLogSumExp", x, dims)
 
 function NNlib.glu(x::ProbeArray, dim::Integer=1)
-    new_dims = ntuple(i -> i == dim ? div_dim(raw_size(x, i), 2) : raw_size(x, i), ndims(x))
+    new_dims = ntuple(
+        i -> i == dim ? ONNXExport.div_dim(raw_size(x, i), 2) : raw_size(x, i), ndims(x)
+    )
     a = value_info(eltype(x), new_dims, "a")
     b = value_info(eltype(x), new_dims, "b")
     onnx_op("Split", x, (a, b); attr=(axis=ndims(x) - dim, num_outputs=2))

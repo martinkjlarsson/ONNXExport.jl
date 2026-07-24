@@ -48,13 +48,8 @@ function Base.promote_rule(::Type{ProbeNumber{S}}, ::Type{ProbeNumber{T}}) where
 end
 
 name(p::ProbeNumber) = p.name
-
 raw_size(::ProbeNumber) = ()
-function raw_size(::ProbeNumber, dim)
-    return dim < 1 ? throw(BoundsError()) : 1
-end
-
-isprobe(::Type{T}) where {T<:ProbeNumber} = true
+isprobe(::Type{<:ProbeNumber}) = true
 
 # TODO: Is it an issue that we do not return ProbeNumber{T}?
 Base.eltype(::ProbeNumber{T}) where {T} = T

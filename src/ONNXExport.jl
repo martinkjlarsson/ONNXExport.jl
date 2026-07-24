@@ -17,7 +17,8 @@ include("macros.jl")
 include("namespace.jl")
 include("graph.jl")
 include("probe.jl")
-include("scalars.jl")
+include("probearray.jl")
+include("probenumber.jl")
 include("export.jl")
 include("broadcasting.jl")
 include("math.jl")
@@ -33,8 +34,7 @@ include("array.jl")
 @public save, trace
 export ProbeArray,
     ProbeMatrix, ProbeVector, ProbeScalar, ProbeNumber, AbstractProbeNumber, BroadcastProbe
-export name, raw_size, probe, probes, create_input
+export name, raw_size, isprobe, probe, create_input
 export matmul_onnx, gemm, onnx_op, value_info, with_prefix, @overload # TODO: Look over which exports to keep.
-export mul_dim, div_dim, add_dim
 
 end
