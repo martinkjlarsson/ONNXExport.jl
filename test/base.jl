@@ -240,6 +240,13 @@ end
 
     y, y_onnx = test_function(f7, x)
     @test y_onnx ≈ y
+
+    f8(a, b) = a ÷ b + a / b
+    a = 11
+    b = 3
+
+    y, y_onnx = test_function(f8, a, b)
+    @test y_onnx ≈ y
 end
 
 @testset "Broadcasting" begin

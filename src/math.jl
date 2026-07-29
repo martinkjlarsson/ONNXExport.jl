@@ -83,7 +83,7 @@ end
 # Binary operators.
 for (f, op_type) in [
     (:+, "Add")
-    (:/, "Div")
+    (:div, "Div")
     (:*, "Mul")
     (:-, "Sub")
 ]
@@ -92,6 +92,10 @@ for (f, op_type) in [
             return onnx_op($op_type, A, B)
         end
     end
+end
+
+function Base.:/(A::AbstractProbeNumber{T}, B::AbstractProbeNumber{T}) where {T}
+    return onnx_op("Div", float(A), float(B))
 end
 
 for (f, op_type) in [
