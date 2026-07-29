@@ -110,12 +110,12 @@ end
 merge_dim(a::Int, b::Symbol) = merge_dim(b, a)
 function merge_dim(a::Symbol, b::Int)
     b == 1 && return a
-    @warn "Dimensions do not match, assuming dynamic dimension $a=$b"
+    @warn "Dimensions do not match, assuming symbolic dimension $a=$b"
     return b
 end
 function merge_dim(a::Symbol, b::Symbol)
     if a != b
-        @warn "Dimensions do not match, assuming dynamic dimensions $a and $b are equal"
+        @warn "Dimensions do not match, assuming symbolic dimensions $a and $b are equal"
     end
     return a
 end

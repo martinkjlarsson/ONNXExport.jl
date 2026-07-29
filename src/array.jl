@@ -229,12 +229,12 @@ function _cat_dims(a::Int, b::Int)
 end
 _cat_dims(a::Int, b::Symbol) = _cat_dims(b, a)
 function _cat_dims(a::Symbol, b::Int)
-    @warn "Dimensions do not match, assuming dynamic dimension $a=$b"
+    @warn "Dimensions do not match, assuming symbolic dimension $a=$b"
     return b
 end
 function _cat_dims(a::Symbol, b::Symbol)
     if a != b
-        @warn "Dimensions do not match, assuming dynamic dimensions $a and $b are equal"
+        @warn "Dimensions do not match, assuming symbolic dimensions $a and $b are equal"
     end
     return a
 end

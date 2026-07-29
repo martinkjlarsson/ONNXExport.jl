@@ -47,8 +47,8 @@ The focus of the package has been to export models from [Lux.jl](https://lux.csa
 ## Limitations
 ONNXExport cannot convert any arbitrary Julia function into ONNX, partly because of limitations in ONNXExport, but also due to limitations in ONNX itself.
 
-### Dynamic dimensions
-In principle, ONNXExport supports dynamic/symbolic dimensions, but this has not been fully tested and will likely fail for certain functions.
+### Symbolic dimensions
+ONNXExport supports symbolic dimensions, dimensions with unknown size at export, but this has not been fully tested and will likely fail for many functions.
 
 ### Control flow
 Due to the way ONNXExport traces Julia functions, it is not possible to capture certain control flow statements such as `if`, `for`, and `while`. These will likely result in the error `TypeError: non-boolean (ProbeNumber{Bool}) used in boolean context`. Try instead to use array operations or `ifelse`.

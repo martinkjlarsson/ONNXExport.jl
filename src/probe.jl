@@ -11,7 +11,7 @@ function name end
 Return the dimensions of the underlying ONNX tensor `x` represents.
 
 Return a tuple of `Union{Int,Symbol}`, where a `Symbol` indicates the name of a
-symbolic/dynamic dimension. Note that `size(x)` will likely return a tuple of
+symbolic dimension. Note that `size(x)` will likely return a tuple of
 `Union{Int,ProbeNumber{Int}}` correspondingly. Optionally you can specify a dimension to
 just get the length/symbol of that dimension.
 """
