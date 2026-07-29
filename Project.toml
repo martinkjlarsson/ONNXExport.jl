@@ -1,7 +1,7 @@
 name = "ONNXExport"
 uuid = "9d33f818-c02d-4e4e-80e5-95f98363e87e"
 authors = ["Martin Larsson <martinkjlarsson@gmail.com>"]
-version = "0.0.3"
+version = "0.0.4"
 
 [deps]
 BFloat16s = "ab4f0b2a-ad5b-11e8-123f-65d77653426b"
