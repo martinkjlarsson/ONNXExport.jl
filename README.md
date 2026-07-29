@@ -42,15 +42,15 @@ ONNXExport works by defining a custom `AbstractArray` subtype `ProbeArray` and `
 Broadcasting is also supported through the `BroadcastProbe <: Number` type. It wraps a `ProbeArray` such that the array can be passed to functions accepting `Number`s, and any operation performed is replaced with elementwise ONNX operators.
 
 # Support
-The focus of the package has been to export models from [Lux.jl](https://lux.csail.mit.edu/stable/), but much more work is needed to support all types of layers. See [Julia functions](docs/supported_functions.md), [ONNX operators](docs/supported_operators.md), and [Lux layers](docs/supported_layers.md) for details. There are also several limitations listed below, some of which might be solved in future versions.
+The focus of the package has been to export models from [Lux.jl](https://lux.csail.mit.edu/stable/), but much more work is needed to support all types of layers. See [Julia functions](docs/supported_functions.md), [ONNX operators](docs/supported_operators.md), and [Lux layers](docs/supported_layers.md) for details. The internal and external APIs are not yet stable. There are also several limitations listed below, some of which might be solved in future versions.
 
 ## Limitations
 ONNXExport cannot convert any arbitrary Julia function into ONNX, partly because of limitations in ONNXExport, but also due to limitations in ONNX itself.
 
-### Symbolic dimensions
+### Symbolic Dimensions
 ONNXExport supports symbolic dimensions, dimensions with unknown size at export, but this has not been fully tested and will likely fail for many functions.
 
-### Control flow
+### Control Flow
 Due to the way ONNXExport traces Julia functions, it is not possible to capture certain control flow statements such as `if`, `for`, and `while`. These will likely result in the error `TypeError: non-boolean (ProbeNumber{Bool}) used in boolean context`. Try instead to use array operations or `ifelse`.
 
 ### Random
@@ -62,18 +62,26 @@ Broadcasting support is limited to element-wise operations, e.g., `sin.(A)` and 
 ### Immutability
 ONNX tensors are immutable. Consequently, ONNXExport does not support mutating functions such as `setindex!`.
 
-### Varargs functions
+### Varargs Functions
 The tracing works by overloading commonly used functions with methods taking `ProbeArray` arguments instead of `AbstractArray`s. This poses problems for functions such as `cat`, which can accept an arbitrary number of arguments. The tracing might fail if none of the first few arguments are of type `ProbeArray`.
 
-### Small integers and ONNX Runtime
-The [ONNX documentation](https://onnx.ai/onnx/index.html) specifies that many operators, such as [Add](https://onnx.ai/onnx/operators/onnx__Add.html), support all real tensor data types, e.g., `int8` and `uint16`. However, this does not mean the various ONNX runtimes do (see [this issue](https://github.com/microsoft/onnxruntime/issues/19231)). `Float32`, `Int32`, and `Int64` are typically safe to use.
+### Small Integers and ONNX Runtime
+The [ONNX documentation](https://onnx.ai/onnx/index.html) specifies that many operators, such as [Add](https://onnx.ai/onnx/operators/onnx__Add.html), support all real tensor data types, e.g., `int8` and `uint16`. However, this does not mean the various ONNX runtimes do (see [this issue](https://github.com/microsoft/onnxruntime/issues/19231)). A successful export does not guarantee a runnable model. `Float32`, `Int32`, and `Int64` are typically safe types to use.
 
-### Complex numbers
+### Complex Numbers
 Complex numbers are currently not supported. Although the ONNX specification defines the `complex64` and `complex128` tensor data types, corresponding to the Julia types `ComplexF32` and `ComplexF64`, respectively, there are no operators that support them. The existing operators that use complex numbers, e.g., [DFT](https://onnx.ai/onnx/operators/onnx__DFT.html) and [ComplexMul](https://github.com/microsoft/onnxruntime/blob/main/docs/ContribOperators.md#commicrosoftcomplexmul), use an interleaved representation, where the fastest changing dimension have size 2, corresponding to the real and imaginary parts. Conversion between complex Julia types and this array representation can be done with [reinterpret](https://docs.julialang.org/en/v1/base/arrays/#Base.reinterpret):
 ```julia
 julia> size(reinterpret(reshape, Float32, rand(ComplexF32, 3, 4)))
 (2, 3, 4)
 ```
+
+### Strings
+ONNX supports UTF-8 encoded strings with some operator support ([RegexFullMatch](https://onnx.ai/onnx/operators/onnx__RegexFullMatch.html), [StringConcat](https://onnx.ai/onnx/operators/onnx__StringConcat.html), [StringNormalizer](https://onnx.ai/onnx/operators/onnx__StringNormalizer.html), etc). However, ONNXExport does currently not support strings.
+
+
+### Large Models and External Data
+ONNX protobuf files are limited to 2GB in size. Larger models need to store tensor data externally alongside the ONNX file. This is currently not supported, and consequently, exported models are limited to 2GB.
+
 
 # Indexing in Julia and ONNX
 Julia uses [column-major order](https://en.wikipedia.org/wiki/Row-_and_column-major_order) (like Fortran and MATLAB), while ONNX uses row-major order (like C and Python/NumPy). In Julia, the leftmost index varies fastest, while in ONNX, the rightmost index varies fastest. To solve this discrepancy, we reverse the dimensions when writing Julia arrays as ONNX tensors. A Julia array of size `(row, column, batch)` is written to ONNX as a tensor of shape `(batch, column, row)`. Note that the data remains unchanged, e.g., `row` is the fastest varying dimension in both cases.
