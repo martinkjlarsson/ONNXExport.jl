@@ -36,8 +36,10 @@ end
 function Base.convert(::Type{BroadcastProbe{T}}, A::BroadcastProbe) where {T}
     return A isa BroadcastProbe{T} ? A : BroadcastProbe{T}(A)::BroadcastProbe{T}
 end
+
 # Allow Int(x) to produce a BroadcastProbe{Int}.
 (::Type{T})(x::BroadcastProbe) where {T<:Number} = convert(BroadcastProbe{T}, x)
+Base.AbstractFloat(x::BroadcastProbe{T}) where {T} = convert(BroadcastProbe{float(T)}, x)
 
 Base.eltype(::BroadcastProbe{T}) where {T} = T
 

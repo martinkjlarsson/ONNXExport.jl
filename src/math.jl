@@ -18,10 +18,7 @@ for (f, op_type) in [
 ]
     @eval begin
         function Base.$f(A::AbstractProbeNumber)
-            return onnx_op($op_type, float(eltype(A))(A))
-        end
-        function Base.$f(A::AbstractProbeNumber{<:AbstractFloat})
-            return onnx_op($op_type, A)
+            return onnx_op($op_type, float(A))
         end
     end
 end
@@ -70,9 +67,6 @@ for (f, op_type) in [
 ]
     @eval begin
         function Base.$f(A::AbstractProbeNumber{<:AbstractFloat})
-            return onnx_op($op_type, Bool, A)
-        end
-        function Base.$f(A::AbstractProbeNumber{<:Complex{<:AbstractFloat}})
             return onnx_op($op_type, Bool, A)
         end
         function Base.$f(A::AbstractProbeNumber)

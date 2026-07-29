@@ -78,8 +78,7 @@ function _reshape(
     end
 
     if isempty(sym_dims)
-        # new_dims and reshape_dims are already fully assigned.
-        # NOTE: If A has a single symbolic dimension, we can infer it here.
+        # new_dims and reshape_dims are already fully assigned. Do nothing.
     elseif isempty(sym_A) && length(sym_dims) == 1
         # We can infer the symbolic dimension in dims from A.
         i = only(sym_dims)

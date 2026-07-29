@@ -1,8 +1,5 @@
-function act_fun(op_type, x::AbstractProbeNumber{T}; attr...) where {T<:AbstractFloat}
-    return onnx_op(op_type, x; attr=attr)
-end
 function act_fun(op_type, x::AbstractProbeNumber{T}; attr...) where {T}
-    return onnx_op(op_type, float(T)(x); attr=attr)
+    return onnx_op(op_type, float(x); attr=attr)
 end
 
 NNlib.celu(x::AbstractProbeNumber, α=1) = act_fun("Celu", x; alpha=Float32(α))
@@ -41,9 +38,8 @@ NNlib.relu(x::AbstractProbeNumber) = act_fun("Relu", x)
 
 NNlib.relu6(x::AbstractProbeNumber) = clamp(x, 0, 6)
 
-# TODO: Implement for other scalar types as well?
-function NNlib.rrelu(x::BroadcastProbe, lo=1 / 8, hi=1 / 3)
-    x = convert(BroadcastProbe{float(eltype(x))}, x)
+function NNlib.rrelu(x::AbstractProbeNumber, lo=1 / 8, hi=1 / 3)
+    x = float(x)
     a = onnx_op("RandomUniformLike", x; attr=(low=Float32(lo), high=Float32(hi)))
     return onnx_op("PRelu", x, a)
 end

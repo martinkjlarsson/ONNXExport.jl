@@ -36,6 +36,7 @@ end
 
 # Allow Int(x) to produce a ProbeNumber{Int}.
 (::Type{T})(x::ProbeNumber) where {T<:Number} = convert(ProbeNumber{T}, x)
+Base.AbstractFloat(x::ProbeNumber{T}) where {T} = convert(ProbeNumber{float(T)}, x)
 
 function Base.promote_rule(::Type{ProbeNumber{S}}, ::Type{T}) where {S,T<:Number}
     # This promotion rule does not apply if T is a probe, return Base.Bottom.

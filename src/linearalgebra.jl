@@ -3,11 +3,8 @@ Base.:*(x::ProbeNumber, D::Diagonal) = x * probe(D)
 Base.:*(D::Diagonal, x::ProbeNumber) = probe(D) * x
 
 # TODO: Implement version for mapslices with dims=(1,2).
-function LinearAlgebra.det(A::ProbeMatrix{T}) where {T<:Real}
-    return det(convert(ProbeMatrix{float(T)}, A))
-end
-function LinearAlgebra.det(A::ProbeMatrix{T}) where {T<:AbstractFloat}
-    return onnx_op("Det", (), A)
+function LinearAlgebra.det(A::ProbeMatrix)
+    return onnx_op("Det", (), float(A))
 end
 LinearAlgebra.logdet(A::ProbeMatrix) = log(det(A)) # TODO: Is it better to not define these?
 function LinearAlgebra.logabsdet(A::ProbeMatrix)
@@ -72,7 +69,7 @@ function _trilu(M, k::ProbeNumber, lower)
 end
 
 function LinearAlgebra.norm(A::ProbeArray, p::Real=2)
-    A = convert(ProbeArray{float(eltype(A))}, A)
+    A = float(A)
     if p == 2
         return _reduce("ReduceL2", A, :)
     elseif p == 1
@@ -89,7 +86,7 @@ function LinearAlgebra.norm(A::ProbeArray, p::Real=2)
 end
 
 function LinearAlgebra.opnorm(A::ProbeMatrix, p::Real=2)
-    A = convert(ProbeArray{float(eltype(A))}, A)
+    A = float(A)
     if p == 2
         error("opnorm with p=2 is not supported for ONNX export")
     elseif p == 1
@@ -103,7 +100,7 @@ end
 
 LinearAlgebra.normalize(A::ProbeArray, p::Real=2) = A ./ norm(A, p)
 function LinearAlgebra.normalize(A::ProbeVector, p::Real=2)
-    A = convert(ProbeArray{float(eltype(A))}, A)
+    A = float(A)
     if p == 2
         return onnx_op("LpNormalization", A)
     elseif p == 1
