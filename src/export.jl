@@ -91,7 +91,7 @@ function trace_common(f::Function, inputs::Union{ProbeArray,ProbeNumber}...; gra
 
         # An output with the same name as an input or other output may cause issues on
         # runtime. Insert Identity operator as needed.
-        used_names = Set(name(A) for A in inputs)
+        used_names = Set{String}(name(A) for A in inputs)
         outputs = map(outputs) do output
             if name(output) ∈ used_names
                 return onnx_op("Identity", output)

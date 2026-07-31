@@ -1,6 +1,7 @@
 module ONNXExport
 
 using LinearAlgebra
+using Random
 using SciMLPublic
 using Statistics
 
@@ -30,10 +31,17 @@ include("reduce.jl")
 include("operators.jl")
 include("controlflow.jl")
 include("array.jl")
+include("random.jl")
 
 @public save, trace
 export ProbeArray,
-    ProbeMatrix, ProbeVector, ProbeScalar, ProbeNumber, AbstractProbeNumber, BroadcastProbe
+    ProbeMatrix,
+    ProbeVector,
+    ProbeScalar,
+    ProbeNumber,
+    AbstractProbeNumber,
+    BroadcastProbe,
+    ProbeRNG
 export name, raw_size, isprobe, probe, create_input
 export matmul_onnx, gemm, onnx_op, value_info, with_prefix, @overload # TODO: Look over which exports to keep.
 

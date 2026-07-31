@@ -54,7 +54,15 @@ ONNXExport supports symbolic dimensions, dimensions with unknown size at export,
 Due to the way ONNXExport traces Julia functions, it is not possible to capture certain control flow statements such as `if`, `for`, and `while`. These will likely result in the error `TypeError: non-boolean (ProbeNumber{Bool}) used in boolean context`. Try instead to use array operations or `ifelse`.
 
 ### Random
-Random numbers from `rand` and `randn` will be treated as constants in the ONNX graph. The corresponding ONNX operators `RandomUniform` and `RandomNormal` are currently not supported.
+Random numbers from `rand`, `randn`, `randexp`, and `bitrand` are supported if the `ProbeRNG` generator is used.
+```julia
+using ONNXExport
+
+rng = ProbeRNG()
+
+f(x) = x * rand(rng, Float32, 4)
+ONNXExport.save("model.onnx", f, rand(Float32, 3, 4))
+```
 
 ### Broadcasting
 Broadcasting support is limited to element-wise operations, e.g., `sin.(A)` and `relu.(Wx .+ b)`. Nested broadcasting or broadcasting over slices will likely fail.
@@ -78,10 +86,8 @@ julia> size(reinterpret(reshape, Float32, rand(ComplexF32, 3, 4)))
 ### Strings
 ONNX supports UTF-8 encoded strings with some operator support ([RegexFullMatch](https://onnx.ai/onnx/operators/onnx__RegexFullMatch.html), [StringConcat](https://onnx.ai/onnx/operators/onnx__StringConcat.html), [StringNormalizer](https://onnx.ai/onnx/operators/onnx__StringNormalizer.html), etc). However, ONNXExport does currently not support strings.
 
-
 ### Large Models and External Data
 ONNX protobuf files are limited to 2GB in size. Larger models need to store tensor data externally alongside the ONNX file. This is currently not supported, and consequently, exported models are limited to 2GB.
-
 
 # Indexing in Julia and ONNX
 Julia uses [column-major order](https://en.wikipedia.org/wiki/Row-_and_column-major_order) (like Fortran and MATLAB), while ONNX uses row-major order (like C and Python/NumPy). In Julia, the leftmost index varies fastest, while in ONNX, the rightmost index varies fastest. To solve this discrepancy, we reverse the dimensions when writing Julia arrays as ONNX tensors. A Julia array of size `(row, column, batch)` is written to ONNX as a tensor of shape `(batch, column, row)`. Note that the data remains unchanged, e.g., `row` is the fastest varying dimension in both cases.

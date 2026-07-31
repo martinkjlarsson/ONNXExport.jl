@@ -331,3 +331,36 @@ end
     y, y_onnx = test_function(f7, A)
     @test y_onnx ≈ y
 end
+
+@testset "Random" begin
+    @info "Random"
+
+    rng = Random.default_rng()
+    Random.seed!(rng, 0)
+
+    prng = ProbeRNG()
+
+    # We cannot test bitrand as random boolean tensors are not supported.
+
+    f1(a) =
+        rand(prng, Float32, 3, 4) +
+        randn(prng, Float32, 3, 4) +
+        randexp(prng, Float32, 3, 4)
+
+    y, y_onnx = test_function(f1, 0)
+    # @test y_onnx ≈ y # We cannot compare random outputs.
+
+    f2(a) =
+        rand(prng, Float32, 3, a) +
+        randn(prng, Float32, 3, a) +
+        randexp(prng, Float32, 3, a)
+    a = 4
+
+    y, y_onnx = test_function(f2, a)
+    # @test y_onnx ≈ y # We cannot compare random outputs.
+
+    f3(a) = rand(prng, Float32) + randn(prng, Float32) + randexp(prng, Float32)
+
+    y, y_onnx = test_function(f3, 0)
+    # @test y_onnx ≈ y # We cannot compare random outputs.
+end

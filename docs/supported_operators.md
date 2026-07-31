@@ -128,10 +128,10 @@ The following ONNX operators are supported in some capacity:
 - [ ] QuantizeLinear
 - [ ] RMSNormalization
 - [ ] RNN
-- [ ] RandomNormal
-- [ ] RandomNormalLike
-- [ ] RandomUniform
-- [ ] RandomUniformLike
+- [x] RandomNormal
+- [x] RandomNormalLike
+- [x] RandomUniform
+- [x] RandomUniformLike
 - [ ] Range
 - [x] Reciprocal
 - [x] ReduceL1
