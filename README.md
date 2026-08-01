@@ -42,7 +42,7 @@ ONNXExport works by defining a custom `AbstractArray` subtype `ProbeArray` and `
 Broadcasting is also supported through the `BroadcastProbe <: Number` type. It wraps a `ProbeArray` such that the array can be passed to functions accepting `Number`s, and any operation performed is replaced with elementwise ONNX operators.
 
 # Support
-The focus of the package has been to export models from [Lux.jl](https://lux.csail.mit.edu/stable/), but much more work is needed to support all types of layers. See [Julia functions](docs/supported_functions.md), [ONNX operators](docs/supported_operators.md), and [Lux layers](docs/supported_layers.md) for details. The internal and external APIs are not yet stable. There are also several limitations listed below, some of which might be solved in future versions.
+The focus of the package has been to export models from [Lux.jl](https://lux.csail.mit.edu/stable/), but much more work is needed to support all types of layers. See [Julia functions](docs/support_julia.md), [ONNX operators](docs/support_onnx.md), and [Lux layers](docs/support_lux.md) for details. The internal and external APIs are not yet stable. There are also several limitations listed below, some of which might be solved in future versions.
 
 ## Limitations
 ONNXExport cannot convert any arbitrary Julia function into ONNX, partly because of limitations in ONNXExport, but also due to limitations in ONNX itself.
