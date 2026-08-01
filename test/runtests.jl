@@ -2,6 +2,7 @@ using BFloat16s
 using LinearAlgebra
 using Logging
 using Lux
+using MLUtils
 using Microfloats
 using NNlib
 using ONNXExport
@@ -27,6 +28,9 @@ include("utils.jl")
         include("lux/linear.jl")
         include("lux/normalization.jl")
         include("lux/pooling.jl")
+    end
+    @testset "MLUtils" begin
+        include("mlutils/array_constructors.jl")
     end
     @testset "NNlib" begin
         include("nnlib/activation.jl")

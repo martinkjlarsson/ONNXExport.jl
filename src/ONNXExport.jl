@@ -41,7 +41,9 @@ export ProbeArray,
     ProbeNumber,
     AbstractProbeNumber,
     BroadcastProbe,
-    ProbeRNG
+    ProbeRNG,
+    ProbeInteger,
+    ProbeIntegers
 export name, raw_size, isprobe, probe, create_input
 export matmul_onnx, gemm, onnx_op, value_info, with_prefix, @overload # TODO: Look over which exports to keep.
 

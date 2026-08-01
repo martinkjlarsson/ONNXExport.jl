@@ -42,7 +42,13 @@ ONNXExport works by defining a custom `AbstractArray` subtype `ProbeArray` and `
 Broadcasting is also supported through the `BroadcastProbe <: Number` type. It wraps a `ProbeArray` such that the array can be passed to functions accepting `Number`s, and any operation performed is replaced with elementwise ONNX operators.
 
 # Support
-The focus of the package has been to export models from [Lux.jl](https://lux.csail.mit.edu/stable/), but much more work is needed to support all types of layers. See [Julia functions](docs/support_julia.md), [ONNX operators](docs/support_onnx.md), and [Lux layers](docs/support_lux.md) for details. The internal and external APIs are not yet stable. There are also several limitations listed below, some of which might be solved in future versions.
+The focus of the package has been to export models from [Lux.jl](https://lux.csail.mit.edu/stable/), but much more work is needed to support all types of layers. See the following lists for which functions are supported for ONNX export:
+* [Julia](docs/support_julia.md)
+* [Lux](docs/support_lux.md)
+* [MLUtils](docs/support_mlutils.md)
+* [ONNX operators](docs/support_onnx.md)
+
+The internal and external APIs are not yet stable. There are also several limitations listed below, some of which might be solved in future versions.
 
 ## Limitations
 ONNXExport cannot convert any arbitrary Julia function into ONNX, partly because of limitations in ONNXExport, but also due to limitations in ONNX itself.
@@ -54,14 +60,16 @@ ONNXExport supports symbolic dimensions, dimensions with unknown size at export,
 Due to the way ONNXExport traces Julia functions, it is not possible to capture certain control flow statements such as `if`, `for`, and `while`. These will likely result in the error `TypeError: non-boolean (ProbeNumber{Bool}) used in boolean context`. Try instead to use array operations or `ifelse`.
 
 ### Random
-Random numbers from `rand`, `randn`, `randexp`, and `bitrand` are supported if the `ProbeRNG` generator is used.
+Random numbers are supported using the functions `rand_like` and `randn_like` from `MLUtils`. Alternatively, `rand`, `randn`, `randexp`, and `bitrand` are supported if the `ProbeRNG` generator is used.
 ```julia
-using ONNXExport
+using ONNXExport, MLUtils
+
+f(x) = x * rand_like(x, 4)
+ONNXExport.save("model1.onnx", f, rand(Float32, 3, 4))
 
 rng = ProbeRNG()
-
-f(x) = x * rand(rng, Float32, 4)
-ONNXExport.save("model.onnx", f, rand(Float32, 3, 4))
+g(x) = x * rand(rng, Float32, 4)
+ONNXExport.save("model2.onnx", g, rand(Float32, 3, 4))
 ```
 
 ### Broadcasting
