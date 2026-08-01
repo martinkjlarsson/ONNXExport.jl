@@ -17,15 +17,15 @@ The following is a list of the supported and tested Lux layers. Several untested
     - [x] Dropout
     - [ ] VariationalHiddenDropout
 * Pooling Layers
-    - [ ] AdaptiveLPPool
-    - [ ] AdaptiveMaxPool
-    - [ ] AdaptiveMeanPool
+    - [x] AdaptiveLPPool
+    - [x] AdaptiveMaxPool
+    - [x] AdaptiveMeanPool
     - [x] GlobalLPPool
     - [x] GlobalMaxPool
     - [x] GlobalMeanPool
-    - [ ] LPPool
-    - [ ] MaxPool
-    - [ ] MeanPool
+    - [x] LPPool
+    - [x] MaxPool
+    - [x] MeanPool
 * Recurrent Layers
     - [ ] GRUCell
     - [ ] LSTMCell

@@ -13,7 +13,7 @@ The following ONNX operators are supported in some capacity:
 - [x] Atan
 - [x] Atanh
 - [ ] Attention
-- [ ] AveragePool
+- [x] AveragePool
 - [x] BatchNormalization
 - [ ] Bernoulli
 - [ ] BitCast
@@ -95,11 +95,11 @@ The following ONNX operators are supported in some capacity:
 - [x] LogSoftmax
 - [ ] Loop
 - [x] LpNormalization
-- [ ] LpPool
+- [x] LpPool
 - [x] MatMul
 - [ ] MatMulInteger
 - [x] Max
-- [ ] MaxPool
+- [x] MaxPool
 - [ ] MaxRoiPool
 - [ ] MaxUnpool
 - [x] Mean
