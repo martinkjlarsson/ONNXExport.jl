@@ -37,11 +37,14 @@ Base.:*(A::ProbeNumber, B::AbstractArray) = A .* B
 Base.:*(A::ProbeArray, B::ProbeNumber) = A .* B
 Base.:*(A::ProbeNumber, B::ProbeArray) = A .* B
 
-# Matrix-matrix and matrix-vector.
+# Matrix-matrix multiplication.
 Base.:*(A::AbstractMatrix{T}, B::ProbeMatrix{T}) where {T} = *(probe(A), B)
 Base.:*(A::ProbeMatrix{T}, B::AbstractMatrix{T}) where {T} = *(A, probe(B))
-
 Base.:*(A::ProbeMatrix{T}, B::ProbeMatrix{T}) where {T} = matmul_onnx(A, B)
+
+# Mmatrix-vector multiplication.
+Base.:*(A::AbstractMatrix{T}, B::ProbeVector{T}) where {T} = *(probe(A), B)
+Base.:*(A::ProbeMatrix{T}, B::AbstractVector{T}) where {T} = *(A, probe(B))
 Base.:*(A::ProbeMatrix{T}, B::ProbeVector{T}) where {T} = matmul_onnx(A, B)
 
 """
