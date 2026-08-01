@@ -330,8 +330,12 @@ function _dropdims(A::ProbeArray, dims::Dims{N}) where {N}
     return onnx_op("Squeeze", new_size, A, axes)
 end
 
+if VERSION >= v"1.12"
+    Base.insertdims(A::ProbeArray; dims) = unsqueeze(A, dims)
+end
+
 unsqueeze(x::Number, dims) = unsqueeze(fill(x), dims)
-unsqueeze(A::AbstractArray, dims::Int) = unsqueeze(A, (dims,))
+unsqueeze(A::AbstractArray, dims::Integer) = unsqueeze(A, (Int(dims),))
 unsqueeze(A::AbstractArray, dims::AbstractVector{Int}) = unsqueeze(A, Tuple(dims))
 function unsqueeze(A::AbstractArray, dims::Dims{N}) where {N}
     M = ndims(A) + N
