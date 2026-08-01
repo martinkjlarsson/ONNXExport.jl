@@ -46,6 +46,7 @@ The focus of the package has been to export models from [Lux.jl](https://lux.csa
 * [Julia](docs/support_julia.md)
 * [Lux](docs/support_lux.md)
 * [MLUtils](docs/support_mlutils.md)
+* [NNlib](docs/support_nnlib.md)
 * [ONNX operators](docs/support_onnx.md)
 
 The internal and external APIs are not yet stable. There are also several limitations listed below, some of which might be solved in future versions.

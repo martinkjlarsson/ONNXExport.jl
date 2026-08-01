@@ -16,7 +16,7 @@
         mish,
         relu,
         relu6,
-        # rrelu, # Random, cannot be tested.
+        # rrelu, # Tested below.
         selu,
         sigmoid,
         softplus,
@@ -32,4 +32,10 @@
 
     y, y_onnx = test_function(f1, x)
     @test y_onnx ≈ y
+
+    f2(x) = rrelu.(x)
+    x = range(-10.0f0, 10.0f0, 21)
+
+    y, y_onnx = test_function(f2, x)
+    # @test y_onnx ≈ y # We cannot compare random outputs.
 end
