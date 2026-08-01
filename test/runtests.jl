@@ -31,6 +31,7 @@ include("utils.jl")
     end
     @testset "MLUtils" begin
         include("mlutils/array_constructors.jl")
+        include("mlutils/operations.jl")
     end
     @testset "NNlib" begin
         include("nnlib/activation.jl")

@@ -48,16 +48,16 @@
 ## Operations
 - [ ] MLUtils.batched_searchsortedfirst
 - [ ] MLUtils.batched_searchsortedlast
-- [ ] MLUtils.chunk
-- [ ] MLUtils.flatten
+- [x] MLUtils.chunk
+- [x] MLUtils.flatten
 - [ ] MLUtils.group_counts
 - [ ] MLUtils.group_indices
-- [ ] MLUtils.normalise
-- [ ] MLUtils.rescale
+- [x] MLUtils.normalise
+- [x] MLUtils.rescale
 - [ ] MLUtils.rpad_constant
-- [ ] MLUtils.topk
+- [x] MLUtils.topk
 - [ ] MLUtils.unbatch
-- [ ] MLUtils.unsqueeze
+- [x] MLUtils.unsqueeze
 - [ ] MLUtils.unstack
 
 ## Datasets

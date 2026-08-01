@@ -103,7 +103,7 @@ The following ONNX operators are supported in some capacity:
 - [ ] MaxRoiPool
 - [ ] MaxUnpool
 - [x] Mean
-- [ ] MeanVarianceNormalization
+- [x] MeanVarianceNormalization
 - [ ] MelWeightMatrix
 - [x] Min
 - [x] Mish
@@ -178,7 +178,7 @@ The following ONNX operators are supported in some capacity:
 - [x] Softplus
 - [x] Softsign
 - [ ] SpaceToDepth
-- [ ] Split
+- [x] Split
 - [ ] SplitToSequence
 - [x] Sqrt
 - [x] Squeeze

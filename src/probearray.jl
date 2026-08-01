@@ -74,6 +74,7 @@ end
 name(A::ProbeArray) = A.name
 raw_size(A::ProbeArray) = A.size
 isprobe(::Type{<:ProbeArray}) = true
+isprobe(::Type{<:SubArray{T,N,P}}) where {T,N,P} = isprobe(P)
 
 function Base.size(A::ProbeArray)
     return ntuple(dim -> size(A, dim), ndims(A))
@@ -105,6 +106,7 @@ function Base.show(io::IO, A::ProbeArray{T,N}) where {T,N}
 end
 Base.show(io::IO, ::MIME"text/plain", A::ProbeArray) = show(io, A)
 Base.iterate(::ProbeArray) = unsupported(iterate)
+Base.view(::ProbeArray, ::Vararg{Any,M}) where {M} = unsupported(view)
 
 probe(A::ProbeArray) = A
 function probe(array::AbstractArray, name::String="data")
