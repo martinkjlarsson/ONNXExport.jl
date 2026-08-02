@@ -35,6 +35,11 @@ for (f, op_type) in [
     end
 end
 
+# We add this explicitly since AbstractProbeNumber is a Number and not a Real.
+function Base.abs2(A::AbstractProbeNumber{<:Real})
+    return onnx_op("Mul", A, A)
+end
+
 function Base.:~(A::AbstractProbeNumber{<:Integer})
     return onnx_op("BitwiseNot", A)
 end
