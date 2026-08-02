@@ -53,4 +53,10 @@
 
     y, y_onnx = test_function(f8, x)
     @test y_onnx ≈ y
+
+    f9(x) = pixel_shuffle(x, 3)
+    x = rand(rng, Float32, 2, 3, 18, 2)
+
+    y, y_onnx = test_function(f9, x)
+    @test y_onnx ≈ y
 end

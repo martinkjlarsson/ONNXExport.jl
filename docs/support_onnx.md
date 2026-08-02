@@ -45,7 +45,7 @@ The following ONNX operators are supported in some capacity:
 - [x] CumSum
 - [ ] DFT
 - [ ] DeformConv
-- [ ] DepthToSpace
+- [x] DepthToSpace
 - [ ] DequantizeLinear
 - [x] Det
 - [x] Div

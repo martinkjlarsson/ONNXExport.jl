@@ -64,7 +64,7 @@
 - [x] NNlib.upsample_linear
 - [x] NNlib.upsample_bilinear
 - [x] NNlib.upsample_trilinear
-- [ ] NNlib.pixel_shuffle
+- [x] NNlib.pixel_shuffle
 
 ## Rotation
 - [ ] NNlib.imrotate

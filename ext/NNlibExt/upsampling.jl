@@ -58,3 +58,17 @@ function NNlib.upsample_linear(
 
     return onnx_op("Resize", new_dims, x, roi, scales, sizes_probe; attr=attr)
 end
+
+NNlib.pixel_shuffle(x::ProbeArray, r::Integer) = pixel_shuffle(x, Int(r))
+function NNlib.pixel_shuffle(x::ProbeArray, r::Int)
+    if ndims(x) != 4
+        error("ONNX export of pixel_shuffle currently only supports 4D arrays.")
+    end
+    new_dims = (
+        ONNXExport.mul_dim(raw_size(x, 1), r),
+        ONNXExport.mul_dim(raw_size(x, 2), r),
+        ONNXExport.div_dim(raw_size(x, 3), r*r),
+        raw_size(x, 4),
+    )
+    return onnx_op("DepthToSpace", new_dims, x; attr=(blocksize=r, mode="CRD"))
+end
