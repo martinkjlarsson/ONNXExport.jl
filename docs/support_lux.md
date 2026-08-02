@@ -62,5 +62,5 @@ The following is a list of the supported and tested Lux layers. Several untested
     - [x] WeightNorm
     - [x] RMSNorm
 * Upsampling
-    - [ ] PixelShuffle
-    - [ ] Upsample
+    - [x] PixelShuffle
+    - [x] Upsample

@@ -28,6 +28,7 @@ include("utils.jl")
         include("lux/linear.jl")
         include("lux/normalization.jl")
         include("lux/pooling.jl")
+        include("lux/upsampling.jl")
     end
     @testset "MLUtils" begin
         include("mlutils/array_constructors.jl")
