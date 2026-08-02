@@ -86,8 +86,8 @@ end
 function _unique(f, A::ProbeArray)
     new_dims = dimension_name()
     values = value_info(eltype(A), (new_dims,), "unique_values")
-    indices = value_info(eltype(A), (new_dims,), "unique_indices")
+    indices = value_info(Int64, (new_dims,), "unique_indices")
     onnx_op("Unique", (f.(A),), (values, indices); attr=(sorted=0,))
 
-    return A[indices .+ Int64(1)]
+    return A[indices .+ 1]
 end
