@@ -64,8 +64,8 @@ function add_dim(a::ProbeDim, b::ProbeDim)
     return dimension_name()
 end
 
-mul_dim(a::Int, b::Int) = a * b
-function mul_dim(a::ProbeDim, b::ProbeDim)
+mul_dim(a::Real, b::Real) = a * b
+function mul_dim(a::Union{Real,Symbol}, b::Union{Real,Symbol})
     a == 0 && return 0
     b == 0 && return 0
     a == 1 && return b

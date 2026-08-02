@@ -147,7 +147,7 @@ The following ONNX operators are supported in some capacity:
 - [ ] RegexFullMatch
 - [x] Relu
 - [x] Reshape
-- [ ] Resize
+- [x] Resize
 - [ ] ReverseSequence
 - [ ] RoiAlign
 - [ ] RotaryEmbedding
@@ -200,7 +200,7 @@ The following ONNX operators are supported in some capacity:
 - [x] Trilu
 - [x] Unique
 - [x] Unsqueeze
-- [ ] Upsample
+- [ ] Upsample *(deprecated and replaced with Resize)*
 - [x] Where
 - [x] Xor
 

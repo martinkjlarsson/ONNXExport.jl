@@ -60,10 +60,10 @@
 - [ ] NNlib.fold
 
 ## Upsampling
-- [ ] NNlib.upsample_nearest
-- [ ] NNlib.upsample_linear
-- [ ] NNlib.upsample_bilinear
-- [ ] NNlib.upsample_trilinear
+- [x] NNlib.upsample_nearest
+- [x] NNlib.upsample_linear
+- [x] NNlib.upsample_bilinear
+- [x] NNlib.upsample_trilinear
 - [ ] NNlib.pixel_shuffle
 
 ## Rotation
