@@ -46,12 +46,12 @@
 - [x] NNlib.lpnormpool
 
 ## Padding
-- [ ] NNlib.pad_reflect
-- [ ] NNlib.pad_symmetric
-- [ ] NNlib.pad_circular
-- [ ] NNlib.pad_repeat
-- [ ] NNlib.pad_constant
-- [ ] NNlib.pad_zeros
+- [x] NNlib.pad_reflect
+- [x] NNlib.pad_symmetric
+- [x] NNlib.pad_circular
+- [x] NNlib.pad_repeat
+- [x] NNlib.pad_constant
+- [x] NNlib.pad_zeros
 
 ## Convolution
 - [ ] NNlib.conv

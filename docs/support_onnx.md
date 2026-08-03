@@ -121,7 +121,7 @@ The following ONNX operators are supported in some capacity:
 - [ ] OptionalHasElement
 - [x] Or
 - [ ] PRelu
-- [ ] Pad
+- [x] Pad
 - [x] Pow
 - [ ] QLinearConv
 - [ ] QLinearMatMul

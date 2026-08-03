@@ -37,6 +37,7 @@ include("utils.jl")
     @testset "NNlib" begin
         include("nnlib/activation.jl")
         include("nnlib/functions.jl")
+        include("nnlib/padding.jl")
         include("nnlib/upsampling.jl")
     end
     @testset "SpecialFunctions" begin
