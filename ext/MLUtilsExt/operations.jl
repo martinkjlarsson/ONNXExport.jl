@@ -3,7 +3,7 @@
 # function MLUtils.batched_searchsortedlast() end
 
 function MLUtils.chunk(x::ProbeArray, n::Int; dims::Int=ndims(x))
-    return with_prefix("chunk") do
+    return ONNXExport.with_prefix("chunk") do
         split_dim_size = raw_size(x, dims)
         if split_dim_size isa Int
             size_first = cld(split_dim_size, n)
@@ -46,7 +46,7 @@ function MLUtils.chunk(x::ProbeArray; size, dims::Int=ndims(x))
 
     @assert sum(size) == split_dim_size
 
-    return with_prefix("chunk") do
+    return ONNXExport.with_prefix("chunk") do
         split = probe(collect(Int64, size), "split")
 
         outputs = ntuple(length(size)) do j

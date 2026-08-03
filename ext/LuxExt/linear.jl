@@ -1,13 +1,13 @@
 function (d::Dense)(x::ProbeArray, ps, st::NamedTuple)
-    return with_prefix("Dense") do
+    return ONNXExport.with_prefix("Dense") do
         weight = probe(ps.weight, "weight")
 
         if ndims(x) == 2
             if dynamic(d.use_bias)
                 bias = probe(ps.bias, "bias")
-                y = d.activation(gemm(weight, x, bias))
+                y = d.activation(ONNXExport.gemm(weight, x, bias))
             else
-                y = d.activation(gemm(weight, x))
+                y = d.activation(ONNXExport.gemm(weight, x))
             end
         else
             if dynamic(d.use_bias)

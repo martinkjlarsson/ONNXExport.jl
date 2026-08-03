@@ -116,7 +116,7 @@ function (IN::InstanceNorm)(x::ProbeArray, ps, st::NamedTuple)
 end
 
 function (l::LayerNorm)(x::ProbeArray, ps, st::NamedTuple)
-    return with_prefix("LayerNorm") do
+    return ONNXExport.with_prefix("LayerNorm") do
         last_dim = layernorm_dim(l.dims, ndims(x))
         attr = (axis=ndims(x) - last_dim, epsilon=l.epsilon)
 

@@ -45,7 +45,7 @@ export NullProbe,
     ProbeRNG,
     ProbeInteger,
     ProbeIntegers
-export name, raw_size, isprobe, probe, create_input
-export matmul_onnx, gemm, onnx_op, value_info, with_prefix, @overload # TODO: Look over which exports to keep.
+export raw_size, isprobe, probe
+export matmul_onnx, onnx_op, value_info
 
 end

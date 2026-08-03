@@ -1,5 +1,5 @@
 function (c::Conv)(x::ProbeArray, ps, st::NamedTuple)
-    return with_prefix("Conv") do
+    return ONNXExport.with_prefix("Conv") do
         # ONNX padding has the format (begin2, begin1, end2, end1) while Lux uses
         # (begin1, end1, begin2, end2), where dimension 1 is the fastest changing
         # dimension. The padding is not affected by c.cross_correlation.
