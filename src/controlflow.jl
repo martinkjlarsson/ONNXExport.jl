@@ -48,11 +48,14 @@ function scan_onnx(
     seq_len = seq_lens[1]
 
     # Trace f as a subgraph.
+    init_state_elts = ntuple(N) do i
+        return TypeInfo("state", eltype(initial_state[i]), raw_size(initial_state[i]))
+    end
     scan_input_elts = ntuple(M) do i
         A = scan_inputs[i]
-        return ProbeArray{eltype(A)}("", _selectdimsize(raw_size(A), scan_input_axes[i]))
+        return TypeInfo("input", eltype(A), _selectdimsize(raw_size(A), scan_input_axes[i]))
     end
-    graph, outputs = trace_sub_function(f, initial_state..., scan_input_elts...)
+    graph, outputs = trace_sub_function(f, init_state_elts..., scan_input_elts...)
 
     @assert length(outputs) >= N "f must have at least N=$N outputs; got $(length(outputs))"
 

@@ -6,7 +6,7 @@
 
 ---
 
-ONNXExport traces Julia functions and exports them as ONNX models. The package cannot import or run models.
+ONNXExport traces Julia functions and exports them as [ONNX](https://onnx.ai/) models. The package cannot import or run models.
 
 Install using
 ```julia
@@ -22,7 +22,7 @@ using ONNXExport
 f(x, y) = x .+ y .- 3
 ONNXExport.save("model.onnx", f, rand(Float32, 3, 4), rand(Float32, 3))
 ```
-
+All inputs to and outputs from the function `f` must be `AbstractArray`s or `Number`s. To export Lux models, we wrap `Lux.apply` in a function respecting this.
 ```julia
 using ONNXExport, Lux, Random
 
@@ -33,13 +33,14 @@ ps, st = Lux.setup(rng, model)
 st = Lux.testmode(st)
 
 f(x) = first(Lux.apply(model, x, ps, st))
-ONNXExport.save("model.onnx", f, ProbeArray{Float32}("input1", 16, :N))
+ONNXExport.save("model.onnx", f, TypeInfo(16, :N))
 ```
+The last arguments to `ONNXExport.save` can be example inputs from which types and sizes are inferred. Alternatively, this information can be provided explicitly using `TypeInfo`.
 
 # Design
-ONNXExport works by defining a custom `AbstractArray` subtype `ProbeArray` and `Number` subtype `ProbeNumber`. These can be passed to many functions that normally accept `AbstractArray`s or `Number`s, e.g., arithmetic and linear algebra operations, neural networks, and array manipulations. Instead of performing the operations, the `Probe*` types write operators to an ONNX graph, which can later be saved to file. This enables the tracing of a Julia function with export to ONNX.
+ONNXExport works by defining a custom `AbstractArray` subtype `ProbeArray` and a `Number` subtype `ProbeNumber`. These can be passed to many functions that normally accept `AbstractArray`s or `Number`s, e.g., arithmetic and linear algebra operations, neural networks, and array manipulations. Instead of performing the operations, the `Probe*` types write operators to an ONNX graph, which can later be saved to file. This enables the tracing of a Julia function with export to ONNX.
 
-Broadcasting is also supported through the `BroadcastProbe <: Number` type. It wraps a `ProbeArray` such that the array can be passed to functions accepting `Number`s, and any operation performed is replaced with elementwise ONNX operators.
+Broadcasting is also supported through the `BroadcastProbe <: Number` type. It wraps a `ProbeArray` such that the array can be passed to functions accepting `Number`s, and any operation performed is replaced with an elementwise ONNX operator.
 
 # Support
 The focus of the package has been to export models from [Lux.jl](https://lux.csail.mit.edu/stable/), but much more work is needed to support all types of layers. See the following lists for which functions are supported for ONNX export:

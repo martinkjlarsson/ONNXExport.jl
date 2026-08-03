@@ -1,4 +1,4 @@
-# TODO: Should fullname! be used instead to guarantee uniqueness?
+# TODO: This does not guarantee a unique name.
 function output_name(node_name)
     return node_name * "_output"
 end
@@ -6,16 +6,17 @@ end
 astuple(x::Tuple) = x
 astuple(x) = (x,)
 
-template_to_probe(A::ProbeArray) = A
-template_to_probe(A::AbstractArray) = ProbeArray{eltype(A)}("", size(A))
-template_to_probe(x::ProbeNumber) = x
-template_to_probe(x::Number) = ProbeNumber{typeof(x)}("")
-function template_to_probe(::T) where {T}
-    return error("Input argument of type $T cannot be converted to an ONNX tensor.")
+function create_probe(ti::TypeInfo)
+    full_name = add_input_value(ti::TypeInfo)
+    if isscalar(ti)
+        return ProbeNumber{eltype(ti)}(full_name)
+    else
+        return ProbeArray{eltype(ti)}(full_name, raw_size(ti))
+    end
 end
 
-function add_input_value(A::Union{ProbeArray{T},ProbeNumber{T}}) where {T}
-    fn = name(A)
+function add_input_value(ti::TypeInfo)
+    fn = name(ti)
     if isempty(fn) || has_value(fn)
         fn = get_value_name("input")
     else
@@ -23,29 +24,16 @@ function add_input_value(A::Union{ProbeArray{T},ProbeNumber{T}}) where {T}
     end
 
     ctx = GRAPH_CONTEXT[]
-    vi = TensorValueInfoProto(fn, T, reverse(raw_size(A)))
+    vi = TensorValueInfoProto(fn, eltype(ti), reverse(raw_size(ti)))
     push!(ctx.values, vi)
 
     return fn
 end
 
-function create_input(A::ProbeArray{T}) where {T}
-    fn = add_input_value(A)
-    return ProbeArray{T}(fn, raw_size(A))
-end
-function create_input(A::ProbeNumber{T}) where {T}
-    fn = add_input_value(A)
-    return ProbeNumber{T}(fn)
-end
-
-function trace_function(f::Function, inputs::Union{AbstractArray{<:Number},Number}...)
-    return trace_function(f, template_to_probe.(inputs)...)
-end
-
-function trace_function(f::Function, inputs::Union{ProbeArray,ProbeNumber}...)
+function trace_function(f::Function, inputs::TypeInfo...)
     names = Set{String}()
     for input in inputs
-        fn = name(input)
+        fn = input.name
         if isempty(fn)
             continue
         end
@@ -64,7 +52,7 @@ function trace_function(f::Function, inputs::Union{ProbeArray,ProbeNumber}...)
     return graph
 end
 
-function trace_sub_function(f::Function, inputs::Union{ProbeArray,ProbeNumber}...)
+function trace_sub_function(f::Function, inputs::TypeInfo...)
     gn = get_graph_name("graph")
 
     return with_prefix(gn) do
@@ -72,11 +60,11 @@ function trace_sub_function(f::Function, inputs::Union{ProbeArray,ProbeNumber}..
     end
 end
 
-function trace_common(f::Function, inputs::Union{ProbeArray,ProbeNumber}...; graph_name)
+function trace_common(f::Function, inputs::TypeInfo...; graph_name)
     ctx = GraphContext()
 
     return with(GRAPH_CONTEXT => ctx) do
-        inputs = create_input.(inputs)
+        inputs = create_probe.(inputs)
         outputs = f(inputs...)
         outputs = astuple(outputs)
         outputs = probe(outputs)
@@ -125,8 +113,7 @@ Trace the function `f` called with the arguments `inputs...` and create an ONNX 
 The input arguments can be any `AbstractArray{<:Number}` or `Number`, provided the element
 type has a corresponding ONNX tensor data type. This is true for most Julia `Number`s. The
 arguments are only used to infer the element type and size. The values themselves are not
-used. Use `ProbeArray` or `ProbeNumber` to name the inputs or to provide symbolic
-dimensions.
+used. Alternative, the input arguments can be instances of `TypeInfo`.
 
 # Arguments
 See the [ONNX docs](https://onnx.ai/onnx/repo-docs/IR.html#models) and the
@@ -151,14 +138,17 @@ f(x, y) = x .+ y .- 3
 model = ONNXExport.trace(f, rand(Float32, 3, 4), rand(Float32, 3))
 ONNXExport.save("model.onnx", model)
 ```
+
+See also [`save`](@ref) and [`input`](@ref).
 """
 function trace(
     f::Function,
-    inputs::Union{AbstractArray{<:Number},Number}...;
+    inputs::Union{AbstractArray{<:Number},Number,TypeInfo}...;
     ir_version=10,
     opset_import=[OperatorSetIdProto("", 21)],
     kwargs...,
 )
+    inputs = type_info.(inputs)
     graph, _ = trace_function(f, inputs...)
     model = ModelProto(graph; ir_version=ir_version, opset_import=opset_import, kwargs...)
 

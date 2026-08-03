@@ -20,6 +20,7 @@ include("graph.jl")
 include("probe.jl")
 include("probearray.jl")
 include("probenumber.jl")
+include("typeinfo.jl")
 include("export.jl")
 include("broadcasting.jl")
 include("math.jl")
@@ -44,7 +45,8 @@ export NullProbe,
     BroadcastProbe,
     ProbeRNG,
     ProbeOrInteger,
-    ProbeOrIntegers
+    ProbeOrIntegers,
+    TypeInfo
 export raw_size, isprobe, probe
 export matmul_onnx, onnx_op, value_info
 
