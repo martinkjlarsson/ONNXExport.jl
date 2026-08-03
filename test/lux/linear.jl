@@ -1,5 +1,5 @@
 @testset "Dense" begin
-    @info "Dense"
+    @info "Lux - Dense"
 
     rng = Random.default_rng()
     Random.seed!(rng, 0)
@@ -22,7 +22,7 @@
 end
 
 @testset "Bilinear" begin
-    @info "Bilinear"
+    @info "Lux - Bilinear"
 
     rng = Random.default_rng()
     Random.seed!(rng, 0)
@@ -36,7 +36,7 @@ end
 end
 
 @testset "Scale" begin
-    @info "Scale"
+    @info "Lux - Scale"
 
     rng = Random.default_rng()
     Random.seed!(rng, 0)

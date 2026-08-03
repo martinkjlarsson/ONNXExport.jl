@@ -1,5 +1,5 @@
 @testset "Dropout" begin
-    @info "Dropout"
+    @info "Lux - Dropout"
 
     rng = Random.default_rng()
     Random.seed!(rng, 0)

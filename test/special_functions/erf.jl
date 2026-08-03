@@ -1,5 +1,5 @@
 @testset "ErrorFunctions" begin
-    @info "ErrorFunctions"
+    @info "SpecialFunctions - ErrorFunctions"
 
     f1(A, b) = erf.(A) .+ erf(b)
     A = rand(Float32, 2, 3)

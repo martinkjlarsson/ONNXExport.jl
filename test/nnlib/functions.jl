@@ -1,5 +1,5 @@
 @testset "Functions" begin
-    @info "Functions"
+    @info "NNlib - Functions"
 
     rng = Random.default_rng()
     Random.seed!(rng, 0)

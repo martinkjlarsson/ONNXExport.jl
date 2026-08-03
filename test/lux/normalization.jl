@@ -1,5 +1,5 @@
 @testset "Normalization" begin
-    @info "Normalization"
+    @info "Lux - Normalization"
 
     rng = Random.default_rng()
     Random.seed!(rng, 0)

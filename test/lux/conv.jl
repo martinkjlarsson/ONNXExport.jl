@@ -1,5 +1,5 @@
 @testset "Convolution" begin
-    @info "Convolution"
+    @info "Lux - Convolution"
 
     rng = Random.default_rng()
     Random.seed!(rng, 0)

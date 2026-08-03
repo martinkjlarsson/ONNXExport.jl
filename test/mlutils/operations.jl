@@ -1,5 +1,5 @@
 @testset "Operations" begin
-    @info "Operations"
+    @info "MLUtils - Operations"
 
     rng = Random.default_rng()
     Random.seed!(rng, 0)

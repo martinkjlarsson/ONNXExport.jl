@@ -1,5 +1,5 @@
 @testset "Activation" begin
-    @info "Activation"
+    @info "NNlib - Activation"
     act_funcs = [
         celu,
         elu,

@@ -1,5 +1,5 @@
 @testset "Containers" begin
-    @info "Containers"
+    @info "Lux - Containers"
 
     rng = Random.default_rng()
     Random.seed!(rng, 0)

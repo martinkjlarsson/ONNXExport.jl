@@ -1,5 +1,5 @@
 @testset "Padding" begin
-    @info "Padding"
+    @info "NNlib - Padding"
 
     rng = Random.default_rng()
     Random.seed!(rng, 0)

@@ -1,5 +1,5 @@
 @testset "Pooling" begin
-    @info "Pooling"
+    @info "Lux - Pooling"
 
     rng = Random.default_rng()
     Random.seed!(rng, 0)

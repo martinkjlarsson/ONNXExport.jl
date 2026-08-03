@@ -1,5 +1,5 @@
 @testset "Upsampling" begin
-    @info "Upsampling"
+    @info "NNlib - Upsampling"
 
     rng = Random.default_rng()
     Random.seed!(rng, 0)

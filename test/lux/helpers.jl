@@ -1,5 +1,5 @@
 @testset "Helpers" begin
-    @info "Helpers"
+    @info "Lux - Helpers"
 
     rng = Random.default_rng()
     Random.seed!(rng, 0)

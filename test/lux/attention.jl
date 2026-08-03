@@ -1,5 +1,5 @@
 @testset "Attention" begin
-    @info "Attention"
+    @info "Lux - Attention"
 
     rng = Random.default_rng()
     Random.seed!(rng, 0)
