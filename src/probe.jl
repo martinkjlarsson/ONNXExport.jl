@@ -85,3 +85,15 @@ const ExactlyOne{S,T} = Union{
     Tuple{S,Vararg{T}},Tuple{T,S,Vararg{T}},Tuple{T,T,S,Vararg{T}},Tuple{T,T,T,S,Vararg{T}}
 }
 const AtLeastOne{S,T} = ExactlyOne{S,Union{S,T}}
+
+"""
+    NullProbe()
+
+Construct a nameless probe used when an optional ONNX input is not provided. This is
+equivalent to `probe(nothing)`. Calling `name` on a `NullProbe` will always return an empty
+string.
+"""
+struct NullProbe end
+name(::NullProbe) = ""
+isprobe(::Type{NullProbe}) = true
+probe(::Nothing, ::String="") = NullProbe()

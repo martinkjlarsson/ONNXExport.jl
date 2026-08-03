@@ -34,7 +34,8 @@ include("array.jl")
 include("random.jl")
 
 @public save, trace
-export ProbeArray,
+export NullProbe,
+    ProbeArray,
     ProbeMatrix,
     ProbeVector,
     ProbeScalar,

@@ -1,4 +1,4 @@
-const AnyProbe{T} = Union{ProbeArray{T},ProbeNumber{T},BroadcastProbe{T}}
+const AnyProbe = Union{NullProbe,ProbeArray,ProbeNumber,BroadcastProbe}
 
 """
     onnx_op(

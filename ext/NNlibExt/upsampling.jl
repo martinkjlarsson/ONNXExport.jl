@@ -2,7 +2,7 @@ function NNlib.upsample_nearest(x::ProbeArray, scales::NTuple{S,<:Integer}) wher
     full_scales = ntuple(i -> i <= S ? Int(scales[i]) : 1, ndims(x))
     new_dims = ONNXExport.mul_dim.(raw_size(x), full_scales)
 
-    roi = ProbeArray{Float32}("")
+    roi = probe(nothing)
     scales_probe = probe(collect(Float32, reverse(full_scales)), "scales")
     attr=(mode="nearest",)
 
@@ -12,8 +12,8 @@ end
 function NNlib.upsample_nearest(x::ProbeArray; size::NTuple{S,<:Integer}) where {S}
     new_dims = ntuple(i -> i <= S ? Int(size[i]) : raw_size(x, i), ndims(x))
 
-    roi = ProbeArray{Float32}("")
-    scales = ProbeArray{Float32}("")
+    roi = probe(nothing)
+    scales = probe(nothing)
     sizes_probe = probe(collect(Int64, size), "sizes")
     attr=(axes=ndims(x) .- (1:S), mode="nearest")
 
@@ -32,7 +32,7 @@ function NNlib.upsample_linear(
     real_dims = ONNXExport.mul_dim.(raw_size(x), full_scales)
     new_dims = map(d -> d isa Symbol ? d : floor(Int, d), real_dims)
 
-    roi = ProbeArray{Float32}("")
+    roi = probe(nothing)
     scales_probe = probe(collect(Float32, reverse(full_scales)), "scales")
     ctm = align_corners ? "align_corners" : "half_pixel"
     attr=(coordinate_transformation_mode=ctm, mode="linear")
@@ -50,8 +50,8 @@ function NNlib.upsample_linear(
 
     new_dims = ntuple(i -> i <= S ? Int(size[i]) : raw_size(x, i), ndims(x))
 
-    roi = ProbeArray{Float32}("")
-    scales = ProbeArray{Float32}("")
+    roi = probe(nothing)
+    scales = probe(nothing)
     sizes_probe = probe(collect(Int64, size), "sizes")
     ctm = align_corners ? "align_corners" : "half_pixel"
     attr=(axes=ndims(x) .- (1:S), coordinate_transformation_mode=ctm, mode="linear")

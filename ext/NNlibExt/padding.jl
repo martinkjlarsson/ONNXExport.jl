@@ -48,7 +48,7 @@ function _pad(
 
     pads = probe(Int64[pad[1:2:end]..., pad[2:2:end]...], "pads")
     if isnothing(constant)
-        constant_value = ProbeArray{eltype(x)}("")
+        constant_value = probe(nothing)
     else
         constant_value = probe(eltype(x)(constant), "constant_value")
     end
