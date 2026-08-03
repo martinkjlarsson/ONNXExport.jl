@@ -217,6 +217,7 @@ The following ONNX operators are supported in some capacity:
 - [ ] BitmaskBiasDropout
 - [ ] BitmaskDropout
 - [ ] CDist
+- [ ] CausalConvWithState
 - [ ] ComplexMul
 - [ ] ComplexMulConj
 - [ ] ConvTransposeWithDynamicPads
@@ -251,12 +252,17 @@ The following ONNX operators are supported in some capacity:
 - [ ] GroupQueryAttention
 - [x] Inverse
 - [ ] Irfft
+- [ ] LinearAttention
 - [ ] LongformerAttention
+- [ ] MatMulBlockQuantizedFp4Weight
+- [ ] MatMulBlockQuantizedFp8Weight
 - [ ] MatMulBnb4
 - [ ] MatMulFpQ4
 - [ ] MatMulInteger16
 - [ ] MatMulIntegerToFloat
 - [ ] MatMulNBits
+- [ ] MatMulNBitsMlp
+- [ ] MatMulNBitsQkv
 - [ ] MaxpoolWithMask
 - [ ] MoE
 - [ ] MulInteger
