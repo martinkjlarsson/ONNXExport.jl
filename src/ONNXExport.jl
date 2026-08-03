@@ -43,8 +43,8 @@ export NullProbe,
     AbstractProbeNumber,
     BroadcastProbe,
     ProbeRNG,
-    ProbeInteger,
-    ProbeIntegers
+    ProbeOrInteger,
+    ProbeOrIntegers
 export raw_size, isprobe, probe
 export matmul_onnx, onnx_op, value_info
 

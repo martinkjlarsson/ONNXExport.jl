@@ -77,5 +77,5 @@ raw_dims(dims::Tuple) = raw_dim.(dims)
 raw_dim(dim::Int) = dim
 raw_dim(::ProbeNumber{<:Integer}) = dimension_name()
 
-const ProbeInteger = Union{ProbeNumber{<:Integer},Integer}
-const ProbeIntegers = AtLeastOne{ProbeNumber{<:Integer},Integer}
+const ProbeOrInteger = Union{ProbeNumber{<:Integer},Integer}
+const ProbeOrIntegers = AtLeastOne{ProbeNumber{<:Integer},Integer}

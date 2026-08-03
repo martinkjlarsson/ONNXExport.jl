@@ -139,7 +139,7 @@ end
 
 Base.PermutedDimsArray(A::ProbeArray, perm::NTuple{N,Int}) where {N} = permutedims(A, perm)
 
-Base.repeat(A::ProbeArray, counts...) = repeat(A, outer=counts)
+Base.repeat(A::ProbeArray, counts...) = repeat(A; outer=counts)
 Base.repeat(A::ProbeArray; inner=nothing, outer=nothing) = _repeat(A, inner, outer)
 _repeat(A::ProbeArray, ::Nothing, ::Nothing) = A
 function _repeat(A::ProbeArray, inner, ::Nothing)
