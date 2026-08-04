@@ -9,7 +9,7 @@
     @test y_onnx ≈ y
 
     # These types are likely not supported in ONNX Runtime. Only test model export.
-    for T in [BFloat16, MX_E4M3, MX_E5M2, MX_E8M0]
+    for T in [BFloat16, Float8_E4M3FN, Float8_E5M2, Float8_E8M0FNU]
         f2(A, B) = A * B + A
         A = rand(T, 3, 3)
         B = rand(T, 3, 3)

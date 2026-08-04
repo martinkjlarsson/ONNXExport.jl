@@ -2,36 +2,42 @@ module MicrofloatsExt
 
 using ONNXExport.ONNXHelper, Microfloats
 
-ONNXHelper.tensor_type(::Type{MX_E4M3}) = var"TensorProto.DataType".FLOAT8E4M3FN
-ONNXHelper.julia_type(::Val{var"TensorProto.DataType".FLOAT8E4M3FN}) = MX_E4M3
-ONNXHelper.tensor_to_field(array::AbstractArray{MX_E4M3}) = reinterpret(UInt8, vec(array))
+ONNXHelper.tensor_type(::Type{Float8_E4M3FN}) = var"TensorProto.DataType".FLOAT8E4M3FN
+ONNXHelper.julia_type(::Val{var"TensorProto.DataType".FLOAT8E4M3FN}) = Float8_E4M3FN
+function ONNXHelper.tensor_to_field(array::AbstractArray{Float8_E4M3FN})
+    return reinterpret(UInt8, vec(array))
+end
 
 function ONNXHelper.to_array_typed(
     ::Val{var"TensorProto.DataType".FLOAT8E4M3FN}, tensor::TensorProto
 )
-    vec_data = [reinterpret(MX_E4M3, UInt8(x)) for x in tensor.int32_data]
+    vec_data = [reinterpret(Float8_E4M3FN, UInt8(x)) for x in tensor.int32_data]
     return reshape(vec_data, reverse(tensor.dims)...)
 end
 
-ONNXHelper.tensor_type(::Type{MX_E5M2}) = var"TensorProto.DataType".FLOAT8E5M2
-ONNXHelper.julia_type(::Val{var"TensorProto.DataType".FLOAT8E5M2}) = MX_E5M2
-ONNXHelper.tensor_to_field(array::AbstractArray{MX_E5M2}) = reinterpret(UInt8, vec(array))
+ONNXHelper.tensor_type(::Type{Float8_E5M2}) = var"TensorProto.DataType".FLOAT8E5M2
+ONNXHelper.julia_type(::Val{var"TensorProto.DataType".FLOAT8E5M2}) = Float8_E5M2
+function ONNXHelper.tensor_to_field(array::AbstractArray{Float8_E5M2})
+    return reinterpret(UInt8, vec(array))
+end
 
 function ONNXHelper.to_array_typed(
     ::Val{var"TensorProto.DataType".FLOAT8E5M2}, tensor::TensorProto
 )
-    vec_data = [reinterpret(MX_E5M2, UInt8(x)) for x in tensor.int32_data]
+    vec_data = [reinterpret(Float8_E5M2, UInt8(x)) for x in tensor.int32_data]
     return reshape(vec_data, reverse(tensor.dims)...)
 end
 
-ONNXHelper.tensor_type(::Type{MX_E8M0}) = var"TensorProto.DataType".FLOAT8E8M0
-ONNXHelper.julia_type(::Val{var"TensorProto.DataType".FLOAT8E8M0}) = MX_E8M0
-ONNXHelper.tensor_to_field(array::AbstractArray{MX_E8M0}) = reinterpret(UInt8, vec(array))
+ONNXHelper.tensor_type(::Type{Float8_E8M0FNU}) = var"TensorProto.DataType".FLOAT8E8M0
+ONNXHelper.julia_type(::Val{var"TensorProto.DataType".FLOAT8E8M0}) = Float8_E8M0FNU
+function ONNXHelper.tensor_to_field(array::AbstractArray{Float8_E8M0FNU})
+    return reinterpret(UInt8, vec(array))
+end
 
 function ONNXHelper.to_array_typed(
     ::Val{var"TensorProto.DataType".FLOAT8E8M0}, tensor::TensorProto
 )
-    vec_data = [reinterpret(MX_E8M0, UInt8(x)) for x in tensor.int32_data]
+    vec_data = [reinterpret(Float8_E8M0FNU, UInt8(x)) for x in tensor.int32_data]
     return reshape(vec_data, reverse(tensor.dims)...)
 end
 
