@@ -1,6 +1,6 @@
 name = "ONNXExport"
 uuid = "9d33f818-c02d-4e4e-80e5-95f98363e87e"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Martin Larsson <martinkjlarsson@gmail.com>"]
 
 [workspace]
