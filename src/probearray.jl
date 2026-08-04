@@ -71,6 +71,12 @@ function Base.promote_rule(
     return promote_type(ProbeArray{S}, ProbeArray{T})
 end
 
+function Base.reinterpret(::Type{S}, A::ProbeArray{T}) where {S,T}
+    # TODO: Check opset version as this is only available from version 26.
+    @assert sizeof(S) == sizeof(T) "Types must have the same bit-width."
+    return onnx_op("BitCast", S, A; attr=(to=Int(tensor_type(S)),))
+end
+
 name(A::ProbeArray) = A.name
 raw_size(A::ProbeArray) = A.size
 isprobe(::Type{<:ProbeArray}) = true

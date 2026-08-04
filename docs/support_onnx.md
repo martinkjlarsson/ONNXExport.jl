@@ -16,7 +16,7 @@ The following ONNX operators are supported in some capacity:
 - [x] AveragePool
 - [x] BatchNormalization
 - [ ] Bernoulli
-- [ ] BitCast
+- [x] BitCast
 - [x] BitShift
 - [x] BitwiseAnd
 - [x] BitwiseNot

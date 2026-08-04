@@ -14,8 +14,15 @@
         A = rand(T, 3, 3)
         B = rand(T, 3, 3)
 
-        ONNXExport.trace(f2, A, B)
+        test_function(f2, A, B; evaluate=false)
     end
+
+    f3(A, b) = reinterpret(Int32, A) .+ reinterpret.(Int32, A) .+ reinterpret(Int32, b)
+    A = rand(Float32, 2, 3)
+    b = rand(Float32)
+
+    # We need opset 26 to test this in ONNX Runtime. Only test model export.
+    test_function(f3, A, b; evaluate=false)
 end
 
 @testset "Array" begin

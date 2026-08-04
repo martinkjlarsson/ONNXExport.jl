@@ -41,11 +41,18 @@ end
 (::Type{T})(x::BroadcastProbe) where {T<:Number} = convert(BroadcastProbe{T}, x)
 Base.AbstractFloat(x::BroadcastProbe{T}) where {T} = convert(BroadcastProbe{float(T)}, x)
 
-Base.eltype(::BroadcastProbe{T}) where {T} = T
+function Base.reinterpret(::Type{S}, A::BroadcastProbe{T}) where {S,T}
+    # TODO: Check opset version as this is only available from version 26.
+    @assert sizeof(S) == sizeof(T) "Types must have the same bit-width."
+    return onnx_op("BitCast", S, A; attr=(to=Int(tensor_type(S)),))
+end
 
 name(A::BroadcastProbe) = name(A.probe)
 raw_size(A::BroadcastProbe) = raw_size(A.probe)
 isprobe(::Type{<:BroadcastProbe}) = true
+
+Base.eltype(::BroadcastProbe{T}) where {T} = T
+Base.iterate(::BroadcastProbe) = unsupported(iterate)
 
 unwrap_broadcast(x) = x
 unwrap_broadcast(A::BroadcastProbe) = A.probe

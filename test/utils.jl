@@ -14,7 +14,7 @@ function prepare_output(scalar::AbstractArray{T,0}) where {T}
     return scalar[]
 end
 
-function test_function(f::Function, x...)
+function test_function(f::Function, x...; evaluate=true)
     # Evaluate function in Julia.
     y = f(x...)
 
@@ -23,6 +23,10 @@ function test_function(f::Function, x...)
     onnx_model = ONNXExport.trace(f, x...)
     ONNXExport.save(file_name, onnx_model)
     @info "Saved model for $f at $file_name"
+
+    if !evaluate
+        return nothing
+    end
 
     # Evaluate ONNX function.
     input_names = [vi.name for vi in onnx_model.graph.input]
@@ -41,7 +45,7 @@ function test_function(f::Function, x...)
     return y, y_onnx
 end
 
-function test_model(rng, model, x; test=false)
+function test_model(rng, model, x; test=false, evaluate=true)
     ps, st = Lux.setup(rng, model)
     if test
         st = Lux.testmode(st)
@@ -62,6 +66,10 @@ function test_model(rng, model, x; test=false)
     onnx_model = ONNXExport.trace(f, input...)
     ONNXExport.save(file_name, onnx_model)
     @info "Saved model at $file_name"
+
+    if !evaluate
+        return nothing
+    end
 
     # Evaluate ONNX model.
     input_names = [vi.name for vi in onnx_model.graph.input]

@@ -48,6 +48,12 @@ function Base.promote_rule(::Type{ProbeNumber{S}}, ::Type{ProbeNumber{T}}) where
     return ProbeNumber{promote_type(S, T)}
 end
 
+function Base.reinterpret(::Type{S}, x::ProbeNumber{T}) where {S,T}
+    # TODO: Check opset version as this is only available from version 26.
+    @assert sizeof(S) == sizeof(T) "Types must have the same bit-width."
+    return onnx_op("BitCast", S, x; attr=(to=Int(tensor_type(S)),))
+end
+
 name(p::ProbeNumber) = p.name
 raw_size(::ProbeNumber) = ()
 isprobe(::Type{<:ProbeNumber}) = true
