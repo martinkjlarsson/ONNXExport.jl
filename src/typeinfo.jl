@@ -24,7 +24,7 @@ end
 TypeInfo(dims::ProbeDims) = TypeInfo("", Float32, dims, false)
 TypeInfo(dims::ProbeDim...) = TypeInfo("", Float32, dims, isempty(dims))
 TypeInfo(T::Type, dims::ProbeDims) = TypeInfo("", T, dims, false)
-TypeInfo(T::Type, dims::ProbeDims...) = TypeInfo("", T, dims, isempty(dims))
+TypeInfo(T::Type, dims::ProbeDim...) = TypeInfo("", T, dims, isempty(dims))
 TypeInfo(name::String, dims::ProbeDims) = TypeInfo(name, Float32, dims, false)
 TypeInfo(name::String, dims::ProbeDim...) = TypeInfo(name, Float32, dims, isempty(dims))
 TypeInfo(name::String, T::Type, dims::ProbeDims) = TypeInfo(name, T, dims, false)
