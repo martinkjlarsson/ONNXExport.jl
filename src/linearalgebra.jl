@@ -77,7 +77,7 @@ function LinearAlgebra.norm(A::ProbeArray, p::Real=2)
     elseif p == Inf
         return _reduce("ReduceMax", A, :)
     elseif p == 0
-        return convert(ProbeNumber{eltype(A)}, count(!iszero, A))
+        return convert(ProbeNumber{float(eltype(A))}, count(!iszero, A))
     elseif p == -Inf
         return _reduce("ReduceMin", A, :)
     else
