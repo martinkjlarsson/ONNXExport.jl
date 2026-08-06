@@ -34,6 +34,7 @@ include("operators.jl")
 include("controlflow.jl")
 include("array.jl")
 include("random.jl")
+include("conv.jl")
 
 @public save, trace
 export NullProbe,

@@ -54,8 +54,8 @@
 - [x] NNlib.pad_zeros
 
 ## Convolution
-- [ ] NNlib.conv
-- [ ] NNlib.depthwiseconv
+- [x] NNlib.conv
+- [x] NNlib.depthwiseconv
 - [ ] NNlib.unfold
 - [ ] NNlib.fold
 
