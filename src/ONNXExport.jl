@@ -14,6 +14,7 @@ end
 include("ONNXHelper/src/ONNXHelper.jl")
 using .ONNXHelper
 
+include("util.jl")
 include("macros.jl")
 include("namespace.jl")
 include("graph.jl")

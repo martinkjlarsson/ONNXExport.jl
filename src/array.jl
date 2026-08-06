@@ -144,24 +144,15 @@ Base.repeat(A::ProbeArray; inner=nothing, outer=nothing) = _repeat(A, inner, out
 _repeat(A::ProbeArray, ::Nothing, ::Nothing) = A
 function _repeat(A::ProbeArray, inner, ::Nothing)
     n = max(ndims(A), length(inner))
-    return repeat_inner_outer(A, pad(inner, n), pad(nothing, n))
+    return repeat_inner_outer(A, pad_tuple(inner, n), pad_tuple(nothing, n))
 end
 function _repeat(A::ProbeArray, ::Nothing, outer)
     n = max(ndims(A), length(outer))
-    return repeat_outer(A, pad(outer, n))
+    return repeat_outer(A, pad_tuple(outer, n))
 end
 function _repeat(A::ProbeArray, inner, outer)
     n = max(ndims(A), length(inner), length(outer))
-    return repeat_inner_outer(A, pad(inner, n), pad(outer, n))
-end
-
-pad(::Nothing, n) = ntuple(Returns(1), n)
-pad(i::Int, n) = (i, ntuple(Returns(1), n - 1)...)
-pad(dims::Dims{N}, n) where {N} = (dims..., ntuple(Returns(1), n - N)...)
-pad(itr, n) = (itr..., ntuple(Returns(1), n - length(itr))...)
-
-function interleave(a::NTuple{N}, b::NTuple{N}) where {N}
-    return ntuple(i -> isodd(i) ? a[(i + 1) ÷ 2] : b[i ÷ 2], 2N)
+    return repeat_inner_outer(A, pad_tuple(inner, n), pad_tuple(outer, n))
 end
 
 const IntsOrProbeInts{N} = NTuple{N,Union{Int,ProbeNumber{<:Integer}}}
@@ -180,7 +171,7 @@ function repeat_inner_outer(
     A::ProbeArray, inner::IntsOrProbeInts{N}, outer::IntsOrProbeInts{N}
 ) where {N}
     B = unsqueeze(A, 1:2:(2 * ndims(A)))
-    B = repeat_outer(B, interleave(inner, outer))
+    B = repeat_outer(B, interleave_tuples(inner, outer))
     B = reshape(B, size(A) .* (inner .* outer))
     return B
 end

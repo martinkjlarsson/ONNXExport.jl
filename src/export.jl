@@ -3,9 +3,6 @@ function output_name(node_name)
     return node_name * "_output"
 end
 
-astuple(x::Tuple) = x
-astuple(x) = (x,)
-
 function create_probe(ti::TypeInfo)
     full_name = add_input_value(ti::TypeInfo)
     if isscalar(ti)
@@ -66,7 +63,7 @@ function trace_common(f::Function, inputs::TypeInfo...; graph_name)
     return with(GRAPH_CONTEXT => ctx) do
         inputs = create_probe.(inputs)
         outputs = f(inputs...)
-        outputs = astuple(outputs)
+        outputs = as_tuple(outputs)
         outputs = probe(outputs)
 
         for out in outputs
