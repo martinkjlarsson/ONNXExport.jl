@@ -114,7 +114,7 @@ Base.show(io::IO, ::MIME"text/plain", A::ProbeArray) = show(io, A)
 Base.iterate(::ProbeArray) = unsupported(iterate)
 Base.view(::ProbeArray, ::Vararg{Any,M}) where {M} = unsupported(view)
 
-probe(A::ProbeArray) = A
+probe(A::ProbeArray, ::String="") = A
 function probe(array::AbstractArray, name::String="data")
     @assert !isprobe(array) "Probe types should implement no-op probe methods"
     check_probe(eltype(array))

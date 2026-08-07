@@ -74,7 +74,7 @@ Base.BroadcastStyle(::Type{<:ProbeNumber}) = ProbeStyle()
 Base.BroadcastStyle(::ProbeStyle, ::Base.BroadcastStyle) = ProbeStyle()
 
 function Base.broadcasted(::ProbeStyle, f, args...)
-    args = probe.(args)
+    args = probe(args)
     pbs = wrap_broadcast(args)
     results = f(pbs...)
     return unwrap_broadcast(results)

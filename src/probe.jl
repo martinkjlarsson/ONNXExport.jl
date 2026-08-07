@@ -39,14 +39,19 @@ Convert `x` to a probe if possible.
 
 If `x` is a value that can be represented as an ONNX tensor, an ONNX initializer is created
 and a suitable probe value is returned. Optionally, a name can be given to the ONNX tensor.
-The name may be changed with prefixes or suffixes to ensure uniqueness. If `x` already is
-a probe or cannot be represented as an ONNX tensor, `x` is returned unchanged.
+The name may be changed with prefixes or suffixes to ensure uniqueness or may not be used at
+all. If `x` already is a probe or cannot be represented as an ONNX tensor, `x` is returned
+unchanged.
 """
 function probe(x, ::String="")
-    @warn "No probe method for type $(typeof(x)), returning unchanged value. To get rid of this warning, define probe(x::$(typeof(x)))."
+    @warn "No probe method for type $(typeof(x)), returning unchanged value. To get rid " *
+        "of this warning, define probe(x::$(typeof(x)), name::String=\"\")."
     return x
 end
-probe(t::Tuple) = probe.(t) # TODO: Is this used?
+
+probe(t::Tuple, ::String="") = probe.(t)
+probe(T::Type, ::String="") = T
+probe(x::Base.RefValue, ::String="") = Ref(probe(x[]))
 
 check_probe(x) = check_probe(typeof(x))
 function check_probe(::Type{T}) where {T}

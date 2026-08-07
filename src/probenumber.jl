@@ -62,7 +62,7 @@ isprobe(::Type{<:ProbeNumber}) = true
 Base.eltype(::ProbeNumber{T}) where {T} = T
 Base.iterate(::ProbeNumber) = unsupported(iterate)
 
-probe(scalar::ProbeNumber, name::String="data") = scalar
+probe(scalar::ProbeNumber, ::String="") = scalar
 function probe(scalar::Number, name::String="data")
     @assert !isprobe(scalar) "Probe types should implement no-op probe methods"
 

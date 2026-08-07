@@ -37,7 +37,8 @@ _randb(dims) = _randu(Bool, dims)
 function _random(dist::String, distlike::String, ::Type{T}, dims::Tuple) where {T}
     new_dims = map(d -> isprobe(d) ? dimension_name() : Int(d), dims)
     if !isa(new_dims, Dims)
-        shape = vcat(probe.(reverse(dims))...)
+        # One of dims is a probe, might as well convert all dims to probe before vcat.
+        shape = vcat(probe(reverse(dims))...)
         ref = onnx_op(
             "ConstantOfShape", T, new_dims, shape; attr=(value=TensorProto([zero(T)]),)
         )
