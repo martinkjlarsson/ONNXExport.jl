@@ -81,6 +81,9 @@ function div_dim(a::ProbeDim, b::ProbeDim)
     return dimension_name()
 end
 
+raw_dims(dims::Tuple) = raw_dim.(dims)
+raw_dim(dim::Number) = isprobe(dim) ? dimension_name() : dim
+
 const ExactlyOne{S,T} = Union{
     Tuple{S,Vararg{T}},Tuple{T,S,Vararg{T}},Tuple{T,T,S,Vararg{T}},Tuple{T,T,T,S,Vararg{T}}
 }

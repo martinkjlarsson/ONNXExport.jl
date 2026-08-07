@@ -78,10 +78,5 @@ function to_value_info(A::ProbeNumber)
     return TensorValueInfoProto(A.name, eltype(A), [])
 end
 
-# TODO: Move somewhere elese?
-raw_dims(dims::Tuple) = raw_dim.(dims)
-raw_dim(dim::Int) = dim
-raw_dim(::ProbeNumber{<:Integer}) = dimension_name()
-
 const ProbeOrInteger = Union{ProbeNumber{<:Integer},Integer}
 const ProbeOrIntegers = AtLeastOne{ProbeNumber{<:Integer},Integer}
