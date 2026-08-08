@@ -57,7 +57,7 @@
 - [x] NNlib.conv
 - [x] NNlib.depthwiseconv
 - [ ] NNlib.unfold
-- [ ] NNlib.fold
+- [x] NNlib.fold
 
 ## Upsampling
 - [x] NNlib.upsample_nearest

@@ -111,8 +111,16 @@ function _reshape(
         end
     end
 
-    shape = probe(vcat(reverse(reshape_dims)...))
+    shape = probe(vcat(reverse(reshape_dims)...), "shape")
     return onnx_op("Reshape", Tuple(new_dims), A, shape)
+end
+function reshape_like(A, B)
+    if raw_size(B) isa Dims
+        shape = probe(collect(Int64, reverse(raw_size(B))), "shape")
+    else
+        shape = onnx_op("Shape", Int64, (ndims(B),), B)
+    end
+    return onnx_op("Reshape", raw_size(B), A, shape)
 end
 
 Base.vec(x::ProbeScalar) = reshape(x, 1)

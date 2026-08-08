@@ -30,7 +30,7 @@ The following ONNX operators are supported in some capacity:
 - [x] Celu
 - [ ] CenterCropPad
 - [x] Clip
-- [ ] Col2Im
+- [x] Col2Im
 - [x] Compress
 - [x] Concat
 - [ ] ConcatFromSequence
