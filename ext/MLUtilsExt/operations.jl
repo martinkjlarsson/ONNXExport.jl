@@ -9,8 +9,8 @@ function MLUtils.chunk(x::ProbeArray, n::Int; dims::Int=ndims(x))
             size_first = cld(split_dim_size, n)
             size_rest = rem(split_dim_size, size_first)
         else
-            size_first = dimension_name()
-            size_rest = dimension_name()
+            size_first = ONNXExport.dimension_name()
+            size_rest = ONNXExport.dimension_name()
         end
 
         dims_first = ntuple(i -> i == dims ? size_first : raw_size(x, i), ndims(x))
@@ -65,7 +65,7 @@ function MLUtils.flatten(x::ProbeArray)
     sz1 = sz[1:(end - 1)]
     sz2 = sz[end]
 
-    new_dims = sz1 isa Dims ? (prod(sz1), sz2) : (dimension_name(), sz2)
+    new_dims = sz1 isa Dims ? (prod(sz1), sz2) : (ONNXExport.dimension_name(), sz2)
     return onnx_op("Flatten", new_dims, x)
 end
 

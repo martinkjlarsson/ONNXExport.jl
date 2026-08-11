@@ -13,6 +13,6 @@ function flatten(x)
     sz1 = sz[1:(end - 1)]
     sz2 = sz[end]
 
-    new_dims = sz1 isa Dims ? (prod(sz1), sz2) : (dimension_name(), sz2)
+    new_dims = sz1 isa Dims ? (prod(sz1), sz2) : (ONNXExport.dimension_name(), sz2)
     return onnx_op("Flatten", new_dims, x)
 end
