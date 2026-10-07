@@ -88,7 +88,6 @@ end
 # Binary operators.
 for (f, op_type) in [
     (:+, "Add")
-    (:div, "Div")
     (:*, "Mul")
     (:-, "Sub")
 ]
@@ -97,6 +96,23 @@ for (f, op_type) in [
             return onnx_op($op_type, A, B)
         end
     end
+end
+
+# TODO: Consider rounding mode.
+# div requires explicit promotion methods.
+function Base.div(A::AbstractProbeNumber{T1}, B::T2) where {T1<:Integer,T2<:Integer}
+    return div(promote(A, B)...)
+end
+function Base.div(A::T1, B::AbstractProbeNumber{T2}) where {T1<:Integer,T2<:Integer}
+    return div(promote(A, B)...)
+end
+function Base.div(
+    A::AbstractProbeNumber{T1}, B::AbstractProbeNumber{T2}
+) where {T1<:Integer,T2<:Integer}
+    return div(promote(A, B)...)
+end
+function Base.div(A::AbstractProbeNumber{T}, B::AbstractProbeNumber{T}) where {T<:Integer}
+    return onnx_op("Div", A, B)
 end
 
 function Base.:/(A::AbstractProbeNumber{T}, B::AbstractProbeNumber{T}) where {T}
