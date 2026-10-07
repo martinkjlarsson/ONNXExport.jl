@@ -1,8 +1,9 @@
 module NNlibExt
 
-using NNlib, ONNXExport
+using NNlib, ONNXExport, ONNXExport.ONNXHelper
 
 include("activation.jl")
+include("audio.jl")
 include("batched.jl")
 include("convolution.jl")
 include("functions.jl")

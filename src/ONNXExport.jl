@@ -35,8 +35,10 @@ include("controlflow.jl")
 include("array.jl")
 include("random.jl")
 include("conv.jl")
+include("audio.jl")
 
 @public save, trace
+@public stft
 export NullProbe,
     ProbeArray,
     ProbeMatrix,

@@ -1,4 +1,5 @@
 using BFloat16s
+using FFTW
 using LinearAlgebra
 using Logging
 using Lux
@@ -36,6 +37,7 @@ include("utils.jl")
     end
     @testset "NNlib" begin
         include("nnlib/activation.jl")
+        include("nnlib/audio.jl")
         include("nnlib/convolution.jl")
         include("nnlib/functions.jl")
         include("nnlib/padding.jl")

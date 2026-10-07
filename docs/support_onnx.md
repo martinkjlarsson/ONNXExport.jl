@@ -1,4 +1,4 @@
-# Supported ONNX operators
+# Supported ONNX Operators
 The following ONNX operators are supported in some capacity:
 - [x] Abs
 - [x] Acos
@@ -73,8 +73,8 @@ The following ONNX operators are supported in some capacity:
 - [x] GreaterOrEqual
 - [ ] GridSample
 - [x] GroupNormalization
-- [ ] HammingWindow
-- [ ] HannWindow
+- [x] HammingWindow
+- [x] HannWindow
 - [x] HardSigmoid
 - [x] HardSwish
 - [ ] Hardmax
@@ -152,7 +152,7 @@ The following ONNX operators are supported in some capacity:
 - [ ] RoiAlign
 - [ ] RotaryEmbedding
 - [x] Round
-- [ ] STFT
+- [x] STFT
 - [x] Scan
 - [ ] Scatter
 - [ ] ScatterElements

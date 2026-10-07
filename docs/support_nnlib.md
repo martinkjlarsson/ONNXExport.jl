@@ -1,4 +1,4 @@
-# Supported NNlib functions
+# Supported NNlib Functions
 
 ## Activation Functions
 - [x] NNlib.celu
@@ -93,3 +93,18 @@
 - [x] NNlib.glu
 - [ ] NNlib.within_gradient
 - [ ] NNlib.bias_act!
+
+## Audio
+### Window Functions
+- [x] NNlib.hann_window
+- [x] NNlib.hamming_window
+
+### Spectral
+- [x] NNlib.stft *(via the wrapper ONNXExport.stft)*
+- [ ] NNlib.istft
+- [x] NNlib.power_to_db
+- [x] NNlib.db_to_power
+
+### Spectrogram
+- [ ] NNlib.melscale_filterbanks
+- [ ] NNlib.spectrogram
