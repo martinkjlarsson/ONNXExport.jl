@@ -254,6 +254,12 @@ end
 
     y, y_onnx = test_function(f8, a, b)
     @test y_onnx ≈ y
+
+    f9(x) = log(x) + log2(x) + log10(x) + log1p(x)
+    x = 13.0f0
+
+    y, y_onnx = test_function(f9, x)
+    @test y_onnx ≈ y
 end
 
 @testset "Broadcasting" begin

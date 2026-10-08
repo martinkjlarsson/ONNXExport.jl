@@ -23,6 +23,10 @@ for (f, op_type) in [
     end
 end
 
+Base.log2(A::AbstractProbeNumber{T}) where {T} = log(float(A)) * float(T)(inv(log(2)))
+Base.log10(A::AbstractProbeNumber{T}) where {T} = log(float(A)) * float(T)(inv(log(10)))
+Base.log1p(A::AbstractProbeNumber{T}) where {T} = log(one(float(T)) + float(A))
+
 for (f, op_type) in [
     (:abs, "Abs")
     (:-, "Neg")
