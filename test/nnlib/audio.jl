@@ -61,4 +61,10 @@
 
     y, y_onnx = test_function(f7, x, n)
     @test y_onnx ≈ y
+
+    f8(x) = NNlib.power_to_db(x) + NNlib.db_to_power(x)
+    x = rand(rng, Float32, 3, 4)
+
+    y, y_onnx = test_function(f8, x)
+    @test y_onnx ≈ y
 end
