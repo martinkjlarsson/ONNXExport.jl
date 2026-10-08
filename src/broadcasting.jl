@@ -74,8 +74,9 @@ Base.BroadcastStyle(::Type{<:ProbeNumber}) = ProbeStyle()
 Base.BroadcastStyle(::ProbeStyle, ::Base.BroadcastStyle) = ProbeStyle()
 
 function Base.broadcasted(::ProbeStyle, f, args...)
-    args = probe(args)
-    pbs = wrap_broadcast(args)
+    args = Base.materialize.(args) # Convert any Base.Broadcast.Broadcasted to arrays.
+    args = probe(args)             # Convert all constants to probes.
+    pbs = wrap_broadcast(args)     # Wrap each ProbeArray in a BroadcastProbe.
     results = f(pbs...)
     return unwrap_broadcast(results)
 end
