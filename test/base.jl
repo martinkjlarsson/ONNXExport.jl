@@ -21,8 +21,8 @@
     A = rand(Float32, 2, 3)
     b = rand(Float32)
 
-    # We need opset 26 to test this in ONNX Runtime. Only test model export.
-    test_function(f3, A, b; evaluate=false)
+    y, y_onnx = test_function(f3, A, b; opset_version=26)
+    @test y_onnx ≈ y
 end
 
 @testset "Array" begin
@@ -65,11 +65,15 @@ end
 
     y, y_onnx = test_function(f5, A)
     @test y_onnx ≈ y
+    y, y_onnx = test_function(f5, A; opset_version=26)
+    @test y_onnx ≈ y
 
     f6(A) = cumsum(A) + 100 * cumprod(A)
     A = [1, 2, 3, 4, 5, 6, 7, 8]
 
     y, y_onnx = test_function(f6, A)
+    @test y_onnx ≈ y
+    y, y_onnx = test_function(f6, A; opset_version=26)
     @test y_onnx ≈ y
 
     f7(A) =

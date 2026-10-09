@@ -178,6 +178,12 @@ function matmul_shape(a, b)
 end
 
 function Base.inv(A::ProbeMatrix)
+    if !has_minimum_opset("com.microsoft", 1)
+        error(
+            "ONNX export of matrix inverse requires version 1 or later of the " *
+            "com.microsoft operator set.",
+        )
+    end
     return onnx_op("Inverse", A; domain="com.microsoft")
 end
 

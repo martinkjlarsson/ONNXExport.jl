@@ -21,7 +21,7 @@
     y, y_onnx = test_model(rng, model, A; test=true)
     @test y_onnx ≈ y
 
-    # TODO: Uncomment when ONNXRunTime issue is resolved.
+    # TODO: Uncomment when https://github.com/microsoft/onnxruntime/issues/29790 is fixed.
     # y, y_onnx = test_model(rng, model, A)
     # @test y_onnx ≈ y
 
@@ -102,5 +102,7 @@
     A = rand(rng, Float32, 2, 4, 3)
 
     y, y_onnx = test_model(rng, model, A)
+    @test y_onnx ≈ y
+    y, y_onnx = test_model(rng, model, A; opset_version=23)
     @test y_onnx ≈ y
 end

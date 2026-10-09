@@ -42,7 +42,10 @@ end
 Base.AbstractFloat(x::BroadcastProbe{T}) where {T} = convert(BroadcastProbe{float(T)}, x)
 
 function Base.reinterpret(::Type{S}, A::BroadcastProbe{T}) where {S,T}
-    # TODO: Check opset version as this is only available from version 26.
+    if !has_minimum_opset("", 26)
+        error("ONNX export of reinterpret requires opset version 26 or later.")
+    end
+
     @assert sizeof(S) == sizeof(T) "Types must have the same bit-width."
     return onnx_op("BitCast", S, A; attr=(to=Int(tensor_type(S)),))
 end

@@ -271,11 +271,10 @@ function Base.accumulate(
         axis = probe(ndims(A) - dims, "axis")
         return onnx_op("CumSum", A, axis)
     end
-    # TODO: CumProd requires opset 26. Add export options to choose implementation.
-    # if op == (*) && isone(init)
-    #     axis = probe(ndims(A) - dims, "axis")
-    #     return onnx_op("CumProd", A, axis)
-    # end
+    if has_minimum_opset("", 26) && op == (*) && isone(init)
+        axis = probe(ndims(A) - dims, "axis")
+        return onnx_op("CumProd", A, axis)
+    end
 
     slice_size = _selectdimsize(raw_size(A), dims)
     init_tensor = probe(fill(init, slice_size))

@@ -41,7 +41,7 @@ The following ONNX operators are supported in some capacity:
 - [ ] ConvTranspose
 - [x] Cos
 - [x] Cosh
-- [ ] CumProd
+- [x] CumProd
 - [x] CumSum
 - [ ] DFT
 - [ ] DeformConv
@@ -126,7 +126,7 @@ The following ONNX operators are supported in some capacity:
 - [ ] QLinearConv
 - [ ] QLinearMatMul
 - [ ] QuantizeLinear
-- [ ] RMSNormalization
+- [x] RMSNormalization
 - [ ] RNN
 - [x] RandomNormal
 - [x] RandomNormalLike

@@ -32,6 +32,8 @@
 
     y, y_onnx = test_function(f1, x)
     @test y_onnx ≈ y
+    y, y_onnx = test_function(f1, x; opset_version=24) # Swish requires version 24.
+    @test y_onnx ≈ y
 
     f2(x) = rrelu.(x)
     x = range(-10.0f0, 10.0f0, 21)

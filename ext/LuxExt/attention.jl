@@ -1,8 +1,3 @@
-# The Attention ONNX operator is not supported before opset 23,
-# so we use more primitive operators instead.
-
-# TODO: Provide options/config so we can check opset version and use Attention if available.
-
 # TODO: The @overload macro caused issues with incremental compilation.
 # @overload LuxLib.scaled_dot_product_attention _attention ProbeArray AbstractArray 3
 function LuxLib.scaled_dot_product_attention(
@@ -58,6 +53,10 @@ function _attention(
     @assert isnothing(bias) "bias is not supported for ONNX export"
     @assert isnothing(mask) "mask is not supported for ONNX export"
     @assert is_causal != true "(casual) mask is not supported for ONNX export"
+
+    if ONNXExport.has_minimum_opset("", 23)
+        # TODO: Use ONNX Attention operator.
+    end
 
     scale = scale === nothing ? sqrt(TQ(size(q, head_dim))) : TQ(scale)
     scale = inv(scale)

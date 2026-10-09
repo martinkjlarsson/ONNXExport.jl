@@ -173,24 +173,19 @@ end
 function (rms::RMSNorm)(x::ProbeArray, ps, st::NamedTuple)
     N = length(rms.normalized_shape)
 
-    # TODO: RMSNormalization requires opset 23. Add preference/option for opset.
-    # attr = (epsilon=rms.epsilon, axis=ndims(x) - N)
-
-    # if rms.affine isa True
-    #     scale = ps.scale
-    # else
-    #     scale = ones(eltype(x), rms.normalized_shape)
-    # end
-
-    # scale = probe(scale, "scale")
-    # y = onnx_op("RMSNormalization", raw_size(x), x, scale; attr=attr)
-
-    rms_val = sqrt.(mean(abs2, x; dims=1:N) .+ rms.epsilon)
-
-    if rms.affine isa True
-        y = x ./ rms_val .* ps.scale
+    if ONNXExport.has_minimum_opset("", 23)
+        attr = (epsilon=rms.epsilon, axis=ndims(x) - N)
+        scale = rms.affine isa True ? ps.scale : ones(eltype(x), rms.normalized_shape)
+        scale = probe(scale, "scale")
+        y = onnx_op("RMSNormalization", raw_size(x), x, scale; attr=attr)
     else
-        y = x ./ rms_val
+        rms_val = sqrt.(mean(abs2, x; dims=1:N) .+ rms.epsilon)
+
+        if rms.affine isa True
+            y = x ./ rms_val .* ps.scale
+        else
+            y = x ./ rms_val
+        end
     end
 
     return y, st

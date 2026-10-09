@@ -59,9 +59,11 @@ end
 NNlib.softsign(x::AbstractProbeNumber) = act_fun("Softsign", x)
 
 function NNlib.swish(x::AbstractProbeNumber)
-    # TODO: Check opset version >= 24.
-    # return act_fun("Swish", x)
-    return x * sigmoid(x)
+    if ONNXExport.has_minimum_opset("", 24)
+        return act_fun("Swish", x)
+    else
+        return x * sigmoid(x)
+    end
 end
 
 NNlib.hardswish(x::AbstractProbeNumber) = act_fun("HardSwish", x)
