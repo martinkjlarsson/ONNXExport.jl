@@ -14,13 +14,17 @@ function prepare_output(scalar::AbstractArray{T,0}) where {T}
     return scalar[]
 end
 
-function test_function(f::Function, x...; evaluate=true)
+function test_function(f::Function, x...; evaluate=true, opset_version=21)
     # Evaluate function in Julia.
     y = f(x...)
 
     # Save function to ONNX.
     file_name = tempname() * ".onnx"
-    onnx_model = ONNXExport.trace(f, x...)
+    opsets = [
+        ONNXExport.OperatorSetIdProto("", opset_version),
+        ONNXExport.OperatorSetIdProto("com.microsoft", 1),
+    ]
+    onnx_model = ONNXExport.trace(f, x...; opset_import=opsets)
     ONNXExport.save(file_name, onnx_model)
     @info "Saved model for $f at $file_name"
 
@@ -45,7 +49,7 @@ function test_function(f::Function, x...; evaluate=true)
     return y, y_onnx
 end
 
-function test_model(rng, model, x; test=false, evaluate=true)
+function test_model(rng, model, x; test=false, evaluate=true, opset_version=21)
     ps, st = Lux.setup(rng, model)
     if test
         st = Lux.testmode(st)
@@ -63,7 +67,11 @@ function test_model(rng, model, x; test=false, evaluate=true)
         input = (x,)
         f = x -> first(Lux.apply(model, x, ps, st))
     end
-    onnx_model = ONNXExport.trace(f, input...)
+    opsets = [
+        ONNXExport.OperatorSetIdProto("", opset_version),
+        ONNXExport.OperatorSetIdProto("com.microsoft", 1),
+    ]
+    onnx_model = ONNXExport.trace(f, input...; opset_import=opsets)
     ONNXExport.save(file_name, onnx_model)
     @info "Saved model at $file_name"
 

@@ -27,7 +27,7 @@ function add_input_value(ti::TypeInfo)
     return fn
 end
 
-function trace_function(f::Function, inputs::TypeInfo...)
+function trace_function(f::Function, inputs::TypeInfo...; opts::ExportOptions)
     names = Set{String}()
     for input in inputs
         fn = input.name
@@ -43,22 +43,24 @@ function trace_function(f::Function, inputs::TypeInfo...)
     ns = Namespace()
     return with(NAMESPACE => ns) do
         gn = get_graph_name("main_graph")
-        return trace_common(f, inputs...; graph_name=gn)
+        return trace_common(f, inputs...; graph_name=gn, opts=opts)
     end
 
     return graph
 end
 
-function trace_sub_function(f::Function, inputs::TypeInfo...)
+function trace_sub_function(
+    f::Function, inputs::TypeInfo...; opts::ExportOptions=GRAPH_CONTEXT[].opts
+)
     gn = get_graph_name("graph")
 
     return with_prefix(gn) do
-        return trace_common(f, inputs...; graph_name=gn)
+        return trace_common(f, inputs...; graph_name=gn, opts=opts)
     end
 end
 
-function trace_common(f::Function, inputs::TypeInfo...; graph_name)
-    ctx = GraphContext()
+function trace_common(f::Function, inputs::TypeInfo...; graph_name, opts)
+    ctx = GraphContext(opts)
 
     return with(GRAPH_CONTEXT => ctx) do
         inputs = create_probe.(inputs)
@@ -145,8 +147,10 @@ function trace(
     opset_import=[OperatorSetIdProto("", 21)],
     kwargs...,
 )
+    opts = ExportOptions(opset_import)
+
     inputs = type_info.(inputs)
-    graph, _ = trace_function(f, inputs...)
+    graph, _ = trace_function(f, inputs...; opts=opts)
     model = ModelProto(graph; ir_version=ir_version, opset_import=opset_import, kwargs...)
 
     ONNXHelper.optimize_dead_ops!(model)
