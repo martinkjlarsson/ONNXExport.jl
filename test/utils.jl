@@ -41,7 +41,7 @@ function test_function(f::Function, x...; evaluate=true, opset_version=21)
     output_dict = model(input_dict)
 
     if y isa Tuple
-        y_onnx = tuple(prepare_output(v) for v in values(output_dict))
+        y_onnx = tuple([prepare_output(v) for v in values(output_dict)]...)
     else
         y_onnx = prepare_output(first(values(output_dict)))
     end
@@ -87,7 +87,7 @@ function test_model(rng, model, x; test=false, evaluate=true, opset_version=21)
     output_dict = model(input_dict)
 
     if y isa Tuple
-        y_onnx = tuple(prepare_output(v) for v in values(output_dict))
+        y_onnx = tuple([prepare_output(v) for v in values(output_dict)]...)
     else
         y_onnx = prepare_output(first(values(output_dict)))
     end
