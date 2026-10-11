@@ -12,7 +12,7 @@ The following ONNX operators are supported in some capacity:
 - [x] Asinh
 - [x] Atan
 - [x] Atanh
-- [ ] Attention
+- [x] Attention
 - [x] AveragePool
 - [x] BatchNormalization
 - [ ] Bernoulli
