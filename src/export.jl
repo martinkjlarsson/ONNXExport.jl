@@ -1,6 +1,5 @@
-# TODO: This does not guarantee a unique name.
-function output_name(node_name)
-    return node_name * "_output"
+function output_name(op_type)
+    return op_type * "_output"
 end
 
 function create_probe(ti::TypeInfo)

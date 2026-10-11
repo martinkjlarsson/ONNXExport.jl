@@ -68,7 +68,7 @@ function matmul_onnx(A::ProbeArray{T}, B::ProbeArray{T}) where {T}
     nn = get_node_name(op_type)
 
     output_size = matmul_shape(raw_size(A), raw_size(B))
-    output = value_info(eltype(A), output_size, output_name(nn))
+    output = value_info(eltype(A), output_size, output_name(op_type))
 
     n = NodeProto(op_type, [name(B), name(A)], [name(output)]; name=nn)
     push!(ctx.nodes, n)
