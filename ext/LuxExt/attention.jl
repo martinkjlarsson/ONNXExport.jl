@@ -47,6 +47,13 @@ function apply_multiheadattention(mha::MultiHeadAttention, ps, st, q, k, v, mask
                 is_causal=mha.is_causal == true, # is_causal has type Union{Bool,Nothing}.
             )
 
+            q = probe(q)
+            k = probe(k)
+            v = probe(v)
+            mask = probe(mask)
+
+            # TODO: Verify dimensions of (q, k, v) and merge dims?
+
             x = value_info(eltype(v), (raw_size(v, 1), raw_size(q, 2), raw_size(q, 3)), "Y")
             present_key = value_info(eltype(v), (), "present_key")
             present_value = value_info(eltype(v), (), "present_value")
@@ -57,7 +64,7 @@ function apply_multiheadattention(mha::MultiHeadAttention, ps, st, q, k, v, mask
             )
             onnx_op(
                 "Attention",
-                (probe(q), probe(k), probe(v), probe(mask)),
+                (q, k, v, mask),
                 (x, present_key, present_value, attn_scores);
                 attr=attr,
             )
@@ -182,6 +189,13 @@ function _attention(
             attr = (qk_matmul_output_mode=3, is_causal=is_causal == true, scale=scale)
         end
 
+        q = probe(q)
+        k = probe(k)
+        v = probe(v)
+        mask = probe(mask)
+
+        # TODO: Verify dimensions of (q, k, v) and merge dims?
+
         x = value_info(
             eltype(v), (raw_size(v, 1), raw_size(q, 2), raw_size(q, 3), raw_size(q, 4)), "Y"
         )
@@ -194,7 +208,7 @@ function _attention(
         )
         onnx_op(
             "Attention",
-            (probe(q), probe(k), probe(v), probe(mask)),
+            (q, k, v, mask),
             (x, present_key, present_value, attn_scores);
             attr=attr,
         )
