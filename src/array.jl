@@ -42,7 +42,6 @@ function Base.reshape(A::ProbeArray, dims::Vararg{Union{Colon,Int64},N}) where {
 end
 Base.reshape(A::ProbeArray, dims::Vararg{Int64,N}) where {N} = _reshape(A, dims)
 
-# TODO: Detect no-op reshapes, e.g., reshape(A::Vector, sz)?
 function _reshape(A::ProbeArray, ::Tuple{})
     return onnx_op("Reshape", (), A, probe(Int64[], "shape"))
 end
@@ -111,8 +110,14 @@ function _reshape(
         end
     end
 
+    new_dims_tuple = Tuple(new_dims)
+    if new_dims_tuple == raw_size(A)
+        # Reshape operation is a no-op.
+        return A
+    end
+
     shape = probe(vcat(reverse(reshape_dims)...), "shape")
-    return onnx_op("Reshape", Tuple(new_dims), A, shape)
+    return onnx_op("Reshape", new_dims_tuple, A, shape)
 end
 function reshape_like(A, B)
     if raw_size(B) isa Dims
