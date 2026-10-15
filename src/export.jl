@@ -26,23 +26,15 @@ function add_input_value(ti::TypeInfo)
     return fn
 end
 
-function trace_function(f::Function, inputs::TypeInfo...; opts::ExportOptions)
-    names = Set{String}()
-    for input in inputs
-        fn = input.name
-        if isempty(fn)
-            continue
-        end
-        if fn ∈ names
-            error("Input argument names cannot repeat. \"$fn\" is used multiple times.")
-        end
-        push!(names, fn)
-    end
-
+function trace_function(
+    f::Function, inputs::TypeInfo...; opts::ExportOptions, output_names=nothing
+)
     ns = Namespace()
     return with(NAMESPACE => ns) do
         gn = get_graph_name("main_graph")
-        return trace_common(f, inputs...; graph_name=gn, opts=opts)
+        return trace_common(
+            f, inputs...; graph_name=gn, opts=opts, output_names=output_names
+        )
     end
 
     return graph
@@ -58,7 +50,11 @@ function trace_sub_function(
     end
 end
 
-function trace_common(f::Function, inputs::TypeInfo...; graph_name, opts)
+function trace_common(
+    f::Function, inputs::TypeInfo...; graph_name, opts, output_names=nothing
+)
+    verify_input_output_names(inputs, output_names)
+
     ctx = GraphContext(opts)
 
     return with(GRAPH_CONTEXT => ctx) do
@@ -70,7 +66,8 @@ function trace_common(f::Function, inputs::TypeInfo...; graph_name, opts)
         for out in outputs
             if !isprobe(out)
                 error(
-                    "The traced function returned an argument of type $(typeof(out)), which cannot be converted to an ONNX tensor.",
+                    "The traced function returned an argument of type $(typeof(out)), " *
+                    "which cannot be converted to an ONNX tensor.",
                 )
             end
         end
@@ -94,12 +91,56 @@ function trace_common(f::Function, inputs::TypeInfo...; graph_name, opts)
         )
 
         # Rename outputs.
-        for i in eachindex(ovi)
-            new = get_value_name("output")
-            rename_value!(graph, ovi[i].name, new)
+        if isnothing(output_names)
+            for i in eachindex(ovi)
+                new_name = get_value_name("output")
+                rename_value!(graph, ovi[i].name, new_name)
+            end
+        elseif length(output_names) == length(ovi)
+            for (i, new_name) in enumerate(output_names)
+                if has_value(new_name)
+                    throw(
+                        ArgumentError(
+                            "The output name \"$new_name\" already exists in the graph."
+                        ),
+                    )
+                end
+                rename_value!(graph, ovi[i].name, new_name)
+            end
+        else
+            throw(
+                ArgumentError(
+                    "The length of output_names must match the number of outputs. Got " *
+                    "$(length(output_names)) names but the model has $(length(ovi)) " *
+                    "outputs.",
+                ),
+            )
         end
 
         return graph, outputs
+    end
+end
+
+function verify_input_output_names(inputs, output_names) where {N}
+    input_names = Set{String}()
+    for input in inputs
+        fn = name(input)
+        if isempty(fn)
+            continue
+        end
+        if fn ∈ input_names
+            error("Input argument names cannot repeat. \"$fn\" is used multiple times.")
+        end
+        push!(input_names, fn)
+    end
+
+    if !isnothing(output_names)
+        if length(unique(output_names)) != length(output_names)
+            throw(ArgumentError("output_names cannot contain duplicate entries."))
+        end
+        if any(isempty.(output_names))
+            throw(ArgumentError("output_names cannot contain empty entires."))
+        end
     end
 end
 
@@ -111,14 +152,21 @@ Trace the function `f` called with the arguments `inputs...` and create an ONNX 
 The input arguments can be any `AbstractArray{<:Number}` or `Number`, provided the element
 type has a corresponding ONNX tensor data type. This is true for most Julia `Number`s. The
 arguments are only used to infer the element type and size. The values themselves are not
-used. Alternative, the input arguments can be instances of `TypeInfo`.
+used. Alternative, the input arguments can be instances of `TypeInfo`, which enables
+specifying symbolic dimensions (dimensions of unknown size) and providing input names.
 
 # Arguments
-See the [ONNX docs](https://onnx.ai/onnx/repo-docs/IR.html#models) and the
-[proto file](https://github.com/onnx/onnx/blob/main/onnx/onnx.proto3#L446) for a
-description of the arguments.
+- `output_names::Union{Nothing,NTuple{NO,String}}=nothing`: names to assign to the output
+  nodes of the graph. If `nothing`, the names default to "output1", "output2", etc.
+- `opset_version::Int=21`: the version of the default ai.onnx opset to target. Later
+  versions allow for newer ONNX operators and possibly better performance but may not be
+  supported by certain runtimes. This argument does nothing if `opset_import` is provided.
+
+Additional arguments passed to the created `ModelProto` (see the
+[ONNX docs](https://onnx.ai/onnx/repo-docs/IR.html#models) and the
+[proto file](https://github.com/onnx/onnx/blob/main/onnx/onnx.proto3#L446) for details):
 - `ir_version::Integer=10`
-- `opset_import::Vector{OperatorSetIdProto}=[OperatorSetIdProto("", 21)]`
+- `opset_import::Vector{OperatorSetIdProto}=[OperatorSetIdProto("", opset_version)]`
 - `producer_name::String=<set by ONNXHelper>`
 - `producer_version::String<set by ONNXHelper>`
 - `domain::String=""`
@@ -137,20 +185,40 @@ model = ONNXExport.trace(f, rand(Float32, 3, 4), rand(Float32, 3))
 ONNXExport.save("model.onnx", model)
 ```
 
-See also [`save`](@ref) and [`input`](@ref).
+See also [`save`](@ref).
 """
 function trace(
     f::Function,
     inputs::Union{AbstractArray{<:Number},Number,TypeInfo}...;
+    output_names::Union{Nothing,NTuple{NO,String}}=nothing,
+    opset_version::Int=21,
     ir_version=10,
-    opset_import=[OperatorSetIdProto("", 21)],
+    opset_import=[OperatorSetIdProto("", opset_version)],
+    producer_name=string(ONNXExport) * ".jl",
+    producer_version=string(pkgversion(ONNXExport)),
     kwargs...,
-)
+) where {NO}
     opts = ExportOptions(opset_import)
 
+    if !has_minimum_opset(opts, "", 21)
+        @warn "Targeting an opset version lower than 21 is untested and may result in an " *
+            "invalid model."
+    end
+    lastest_ir_version = Int(ONNXHelper.Version.IR_VERSION)
+    if ir_version > lastest_ir_version
+        throw(
+            ArgumentError(
+                "The requested IR version ($ir_version) is newer than the lastest " *
+                "supported version ($lastest_ir_version).",
+            ),
+        )
+    end
+
     inputs = type_info.(inputs)
-    graph, _ = trace_function(f, inputs...; opts=opts)
-    model = ModelProto(graph; ir_version=ir_version, opset_import=opset_import, kwargs...)
+    graph, _ = trace_function(f, inputs...; opts, output_names)
+    model = ModelProto(
+        graph; ir_version, opset_import, producer_name, producer_version, kwargs...
+    )
 
     ONNXHelper.optimize_dead_ops!(model)
 
