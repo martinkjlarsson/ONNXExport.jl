@@ -30,7 +30,7 @@
             4,
             2,
             sigmoid;
-            affine=true,
+            affine=OPSET_VERSION >= 21,
             init_bias=glorot_normal, # To avoid trivial initialization.
             init_scale=glorot_normal,
         ),

@@ -1,3 +1,5 @@
+const OPSET_VERSION = 21
+
 # ONNXRunTime permutes all dimensions so we must undo this.
 function prepare_input(A::AbstractArray)
     return PermutedDimsArray(A, ntuple(i -> ndims(A) + 1 - i, ndims(A)))
@@ -14,7 +16,7 @@ function prepare_output(scalar::AbstractArray{T,0}) where {T}
     return scalar[]
 end
 
-function test_function(f::Function, x...; evaluate=true, opset_version=21)
+function test_function(f::Function, x...; evaluate=true, opset_version=OPSET_VERSION)
     # Evaluate function in Julia.
     y = f(x...)
 
@@ -49,7 +51,7 @@ function test_function(f::Function, x...; evaluate=true, opset_version=21)
     return y, y_onnx
 end
 
-function test_model(rng, model, x; test=false, evaluate=true, opset_version=21)
+function test_model(rng, model, x; test=false, evaluate=true, opset_version=OPSET_VERSION)
     ps, st = Lux.setup(rng, model)
     if test
         st = Lux.testmode(st)

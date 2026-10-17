@@ -75,11 +75,25 @@ function (GN::GroupNorm)(x::ProbeArray, ps, st::NamedTuple)
     attr = (epsilon=GN.epsilon, num_groups=GN.groups)
 
     if GN.affine isa True
-        scale = ps.scale
-        bias = ps.bias
+        # Scale and bias has length GN.chs, but the ONNX operator requires length GN.groups
+        # prior to opset version 21.
+        if ONNXExport.has_minimum_opset("", 21)
+            scale = ps.scale
+            bias = ps.bias
+        else
+            error(
+                "ONNX export of GroupNorm with affine=true requires opset version 21 or " *
+                "later.",
+            )
+        end
     else
-        scale = ones(eltype(x), GN.chs)
-        bias = zeros(eltype(x), GN.chs)
+        if ONNXExport.has_minimum_opset("", 21)
+            scale = ones(eltype(x), GN.chs)
+            bias = zeros(eltype(x), GN.chs)
+        else
+            scale = ones(eltype(x), GN.groups)
+            bias = zeros(eltype(x), GN.groups)
+        end
     end
 
     scale = probe(scale, "scale")
