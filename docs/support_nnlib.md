@@ -79,7 +79,7 @@
 ## Gather and Scatter
 - [ ] NNlib.gather
 - [ ] NNlib.gather!
-- [ ] NNlib.scatter
+- [x] NNlib.scatter
 - [ ] NNlib.scatter!
 
 ## Sampling

@@ -41,6 +41,7 @@ include("utils.jl")
         include("nnlib/batched.jl")
         include("nnlib/convolution.jl")
         include("nnlib/functions.jl")
+        include("nnlib/gather_scatter.jl")
         include("nnlib/padding.jl")
         include("nnlib/upsampling.jl")
     end

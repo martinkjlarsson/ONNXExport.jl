@@ -154,9 +154,9 @@ The following ONNX operators are supported in some capacity:
 - [x] Round
 - [x] STFT
 - [x] Scan
-- [ ] Scatter
-- [ ] ScatterElements
-- [ ] ScatterND
+- [ ] Scatter *(deprecated and replaced with ScatterElements)*
+- [x] ScatterElements
+- [x] ScatterND
 - [x] Selu
 - [ ] SequenceAt
 - [ ] SequenceConstruct
