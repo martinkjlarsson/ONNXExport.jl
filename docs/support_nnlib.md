@@ -77,7 +77,7 @@
 - [x] NNlib.batched_vec
 
 ## Gather and Scatter
-- [ ] NNlib.gather
+- [x] NNlib.gather
 - [ ] NNlib.gather!
 - [x] NNlib.scatter
 - [ ] NNlib.scatter!

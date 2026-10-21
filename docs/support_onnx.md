@@ -62,8 +62,8 @@ The following ONNX operators are supported in some capacity:
 - [x] Floor
 - [ ] GRU
 - [x] Gather
-- [ ] GatherElements
-- [ ] GatherND
+- [x] GatherElements
+- [x] GatherND
 - [x] Gelu
 - [x] Gemm
 - [x] GlobalAveragePool
