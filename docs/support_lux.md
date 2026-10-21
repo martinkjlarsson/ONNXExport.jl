@@ -40,7 +40,7 @@ The following is a list of the supported and tested Lux layers. Several untested
 * Attention Layers
     - [x] MultiHeadAttention
 * Embedding Layers
-    - [ ] Embedding
+    - [x] Embedding
     - [ ] RotaryPositionalEmbedding
     - [ ] SinusoidalPositionalEmbedding
 * Functional API
