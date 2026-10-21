@@ -38,6 +38,7 @@ include("utils.jl")
     @testset "NNlib" begin
         include("nnlib/activation.jl")
         include("nnlib/audio.jl")
+        include("nnlib/batched.jl")
         include("nnlib/convolution.jl")
         include("nnlib/functions.jl")
         include("nnlib/padding.jl")

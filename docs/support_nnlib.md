@@ -72,9 +72,9 @@
 ## Batched Operations
 - [x] NNlib.batched_mul
 - [ ] NNlib.batched_mul!
-- [ ] NNlib.batched_adjoint
-- [ ] NNlib.batched_transpose
-- [ ] NNlib.batched_vec
+- [x] NNlib.batched_adjoint
+- [x] NNlib.batched_transpose
+- [x] NNlib.batched_vec
 
 ## Gather and Scatter
 - [ ] NNlib.gather
