@@ -5,7 +5,7 @@ function LuxLib.API.dropout(
     @assert dims === (:) "ONNX export of Dropout requires dims to be :"
 
     ratio = probe(p)
-    training_mode = probe(is_training(training))
+    training_mode = probe(Lux.LuxOps.istraining(training))
 
     output = value_info(eltype(x), raw_size(x), "dropout_output")
     mask = value_info(Bool, raw_size(x), "dropout_mask")

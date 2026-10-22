@@ -31,7 +31,7 @@ function apply_multiheadattention(mha::MultiHeadAttention, ps, st, q, k, v, mask
 
         # The Attention operator does not support dropout.
         has_dropout =
-            mha.attention_dropout isa Dropout && is_training(st.attention_dropout.training)
+            mha.attention_dropout isa Dropout && Lux.LuxOps.istraining(st.attention_dropout)
 
         if ONNXExport.has_minimum_opset("", 23) && !has_dropout
             if N != 3
@@ -161,7 +161,7 @@ function _attention(
     # The Attention operator does not support dropout.
     no_dropout =
         fdrop isa StatefulLuxLayer && (
-            fdrop.model isa Dropout && !is_training(fdrop.st.training) ||
+            fdrop.model isa Dropout && !Lux.LuxOps.istraining(fdrop.st) ||
             fdrop.model isa NoOpLayer
         ) || fdrop == identity
 
