@@ -41,10 +41,10 @@ The following is a list of the supported and tested Lux layers. Several untested
     - [x] MultiHeadAttention
 * Embedding Layers
     - [x] Embedding
-    - [ ] RotaryPositionalEmbedding
+    - [x] RotaryPositionalEmbedding
     - [ ] SinusoidalPositionalEmbedding
 * Functional API
-    - [ ] apply_rotary_embedding
+    - [x] apply_rotary_embedding
     - [ ] compute_rotary_embedding_params
 * Misc. Helper Layers
     - [x] FlattenLayer

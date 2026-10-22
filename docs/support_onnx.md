@@ -150,7 +150,7 @@ The following ONNX operators are supported in some capacity:
 - [x] Resize
 - [ ] ReverseSequence
 - [ ] RoiAlign
-- [ ] RotaryEmbedding
+- [x] RotaryEmbedding
 - [x] Round
 - [x] STFT
 - [x] Scan

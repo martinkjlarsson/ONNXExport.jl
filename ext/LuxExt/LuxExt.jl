@@ -9,6 +9,7 @@ is_training(::Nothing) = error("training is set to Nothing, which is not support
 include("attention.jl")
 include("conv.jl")
 include("dropout.jl")
+include("embedding.jl")
 include("helpers.jl")
 include("linear.jl")
 include("luxlib.jl")
