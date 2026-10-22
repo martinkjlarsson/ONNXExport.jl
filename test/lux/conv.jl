@@ -27,7 +27,42 @@
         use_bias=false,
         stride=(1, 2),
         dilation=(2, 1),
+        pad=(1, 2),
+        groups=2,
+        cross_correlation=false,
+    )
+
+    x = rand(rng, Float32, 12, 9, 4, 1)
+
+    y, y_onnx = test_model(rng, model, x)
+    @test y_onnx ≈ y
+
+    model = ConvTranspose(
+        (3, 2),
+        4 => 6,
+        relu;
+        use_bias=true,
+        stride=(2, 1),
+        dilation=(2, 1),
         pad=(1, 2, 3, 4),
+        outpad=(1, 0),
+        groups=2,
+        cross_correlation=true,
+    )
+
+    x = rand(rng, Float32, 12, 9, 4, 1)
+
+    y, y_onnx = test_model(rng, model, x)
+    @test y_onnx ≈ y
+
+    model = ConvTranspose(
+        (3, 2),
+        4 => 6;
+        use_bias=false,
+        stride=(2, 1),
+        dilation=(2, 1),
+        pad=(1, 2, 1, 2),
+        outpad=(1, 0),
         groups=2,
         cross_correlation=false,
     )

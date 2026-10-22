@@ -38,7 +38,7 @@ The following ONNX operators are supported in some capacity:
 - [x] ConstantOfShape
 - [x] Conv
 - [ ] ConvInteger
-- [ ] ConvTranspose
+- [x] ConvTranspose
 - [x] Cos
 - [x] Cosh
 - [x] CumProd

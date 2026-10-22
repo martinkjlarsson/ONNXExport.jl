@@ -11,7 +11,7 @@ The following is a list of the supported and tested Lux layers. Several untested
     - [x] AlternatePrecision
 * Convolutional Layers
     - [x] Conv
-    - [ ] ConvTranspose
+    - [x] ConvTranspose
 * Dropout Layers
     - [ ] AlphaDropout
     - [x] Dropout
