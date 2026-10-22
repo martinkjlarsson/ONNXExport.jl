@@ -30,6 +30,12 @@
     y, y_onnx = test_model(rng, model, (x, input_pos); opset_version=23)
     @test y_onnx ≈ y
 
+    model = SinusoidalPositionalEmbedding(8)
+
+    x = rand(rng, Float32, 8, 4, 16, 3)
+    y, y_onnx = test_model(rng, model, x)
+    @test y_onnx ≈ y
+
     cos_cache, sin_cache = compute_rotary_embedding_params(8, 64; base=10000)
     f1(x) = apply_rotary_embedding(x, cos_cache, sin_cache; seq_dim=4)
     x = rand(rng, Float32, 8, 3, 4, 16)

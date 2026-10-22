@@ -1,3 +1,12 @@
+function (spe::SinusoidalPositionalEmbedding)(x::ProbeArray, ps, st::NamedTuple)
+    return ONNXExport.with_prefix("SinusoidalPositionalEmbedding") do
+        y = ONNXExport.unsqueeze(match_eltype(spe, ps, st, x), 1)
+        y = y .* probe(st.sigmas, "sigmas")
+        z = vcat(sin.(y), cos.(y)) .* probe(spe.scale, "scale")
+        return z, st
+    end
+end
+
 function Lux.apply_rotary_embedding(
     x::ProbeArray{T,4},
     input_positions::AbstractVector{<:Integer},
@@ -17,23 +26,27 @@ function Lux.apply_rotary_embedding(
     else
         perm = (1, 2, 3, 4)
     end
-    if seq_dim != 2
-        @warn "ONNX export of apply_rotary_embedding with seq_dim != 2 requires " *
-            "additional permutations of the dimensions. Avoid this by setting seq_dim = 2."
-        x = permutedims(x, perm)
+
+    return ONNXExport.with_prefix("apply_rotary_embedding") do
+        if seq_dim != 2
+            @warn "ONNX export of apply_rotary_embedding with seq_dim != 2 requires " *
+                "additional permutations of the dimensions. Avoid this by setting " *
+                "seq_dim = 2."
+            x = permutedims(x, perm)
+        end
+
+        position_ids = repeat(Int64.(input_positions) .- one(Int64); outer=(1, size(x, 4)))
+
+        cos_cache = probe(cos_cache, "cos_cache")
+        sin_cache = probe(sin_cache, "sin_cache")
+        position_ids = probe(position_ids, "position_ids")
+
+        y = onnx_op("RotaryEmbedding", raw_size(x), x, cos_cache, sin_cache, position_ids)
+
+        if seq_dim != 2
+            y = permutedims(y, invperm(perm))
+        end
+
+        return y
     end
-
-    position_ids = repeat(Int64.(input_positions) .- one(Int64); outer=(1, size(x, 4)))
-
-    cos_cache = probe(cos_cache, "cos_cache")
-    sin_cache = probe(sin_cache, "sin_cache")
-    position_ids = probe(position_ids, "position_ids")
-
-    y = onnx_op("RotaryEmbedding", raw_size(x), x, cos_cache, sin_cache, position_ids)
-
-    if seq_dim != 2
-        y = permutedims(y, invperm(perm))
-    end
-
-    return y
 end

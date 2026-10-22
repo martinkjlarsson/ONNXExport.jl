@@ -42,7 +42,7 @@ The following is a list of the supported and tested Lux layers. Several untested
 * Embedding Layers
     - [x] Embedding
     - [x] RotaryPositionalEmbedding
-    - [ ] SinusoidalPositionalEmbedding
+    - [x] SinusoidalPositionalEmbedding
 * Functional API
     - [x] apply_rotary_embedding
     - [ ] compute_rotary_embedding_params
