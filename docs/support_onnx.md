@@ -71,7 +71,7 @@ The following ONNX operators are supported in some capacity:
 - [x] GlobalMaxPool
 - [x] Greater
 - [x] GreaterOrEqual
-- [ ] GridSample
+- [x] GridSample
 - [x] GroupNormalization
 - [x] HammingWindow
 - [x] HannWindow

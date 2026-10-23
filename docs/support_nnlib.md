@@ -83,7 +83,7 @@
 - [ ] NNlib.scatter!
 
 ## Sampling
-- [ ] NNlib.grid_sample
+- [x] NNlib.grid_sample
 
 ## Losses
 - [ ] NNlib.ctc_loss
