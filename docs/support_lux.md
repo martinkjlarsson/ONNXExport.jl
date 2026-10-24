@@ -1,5 +1,5 @@
 # Supported Lux layers
-The following is a list of the supported and tested Lux layers. Several untested layers may work, and tested layers may still break when using symbolic dimensions.
+The following is the supported and tested Lux layers. Tested layers may break when using symbolic dimensions.
 
 * Containers
     - [x] BranchLayer

@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/martinkjlarsson/ONNXExport.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/martinkjlarsson/ONNXExport.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
-**This package is under development and is not registered. Support is limited and likely unstable. Feel free to file issues.**
+**This package is under active development and is not registered. Feel free to file issues.**
 
 ---
 

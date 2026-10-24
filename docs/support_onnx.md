@@ -1,5 +1,5 @@
 # Supported ONNX Operators
-The following ONNX operators are supported in some capacity:
+The following ONNX operators are used somewhere for export:
 - [x] Abs
 - [x] Acos
 - [x] Acosh
@@ -120,7 +120,7 @@ The following ONNX operators are supported in some capacity:
 - [ ] OptionalGetElement
 - [ ] OptionalHasElement
 - [x] Or
-- [ ] PRelu
+- [x] PRelu
 - [x] Pad
 - [x] Pow
 - [ ] QLinearConv
