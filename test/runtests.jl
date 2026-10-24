@@ -44,6 +44,7 @@ include("utils.jl")
         include("nnlib/functions.jl")
         include("nnlib/gather_scatter.jl")
         include("nnlib/padding.jl")
+        include("nnlib/rotation.jl")
         include("nnlib/sampling.jl")
         include("nnlib/upsampling.jl")
     end

@@ -14,6 +14,11 @@ end
 function NNlib.grid_sample(
     input::ProbeArray{T,N}, grid::ProbeArray; padding_mode=:zeros
 ) where {T,N}
+    if eltype(grid) != T
+        @warn "ONNX export of NNlib.grid_sample with input and grid of different element " *
+            "types may not be supported by ONNX Runtime."
+    end
+
     iC = raw_size(input, N-1)
     iN = raw_size(input, N)
     output_size = raw_size(grid)[2:(end - 1)]

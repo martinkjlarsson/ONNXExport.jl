@@ -10,6 +10,7 @@ include("functions.jl")
 include("gather_scatter.jl")
 include("padding.jl")
 include("pooling.jl")
+include("rotation.jl")
 include("sampling.jl")
 include("upsampling.jl")
 

@@ -24,8 +24,8 @@
     @test y_onnx ≈ y
 
     f3(x, grid) = grid_sample(x, grid; padding_mode=:zeros)
-    x = rand(rng, Float32, 2, 3, 4, 2, 2)
-    grid = 1 .- 2 .* rand(rng, Float32, 3, 3, 1, 1, 2)
+    x = rand(rng, Float64, 2, 3, 4, 2, 2)
+    grid = 1 .- 2 .* rand(rng, Float64, 3, 3, 1, 1, 2)
 
     y, y_onnx = test_function(f3, x, grid)
     @test y_onnx ≈ y

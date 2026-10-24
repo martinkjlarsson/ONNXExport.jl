@@ -4,7 +4,7 @@ The following ONNX operators are supported in some capacity:
 - [x] Acos
 - [x] Acosh
 - [x] Add
-- [ ] AffineGrid
+- [x] AffineGrid
 - [x] And
 - [x] ArgMax
 - [x] ArgMin

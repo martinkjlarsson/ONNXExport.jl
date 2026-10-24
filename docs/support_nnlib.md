@@ -67,7 +67,7 @@
 - [x] NNlib.pixel_shuffle
 
 ## Rotation
-- [ ] NNlib.imrotate
+- [x] NNlib.imrotate
 
 ## Batched Operations
 - [x] NNlib.batched_mul
