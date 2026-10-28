@@ -232,7 +232,7 @@ function slice(
         return A
     end
 
-    dims = ntuple(i -> I[i] == (:) ? size(A, i) : length(I[i]), N)
+    dims = ntuple(i -> I[i] == (:) ? raw_size(A, i) : length(I[i]), N)
 
     starts = probe(starts, "starts")
     ends = probe(ends, "ends")
