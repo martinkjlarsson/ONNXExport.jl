@@ -58,7 +58,8 @@
     y, y_onnx = test_model(rng, model, A)
     @test y_onnx ≈ y
 
-    model = Chain(
+    model = Parallel(
+        vcat,
         LayerNorm(
             (8, 1),
             sigmoid;
@@ -68,6 +69,7 @@
             init_scale=glorot_normal,
         ),
         LayerNorm((8, 4); dims=1:2, affine=false),
+        LayerNorm(8; dims=nothing),
     )
     A = rand(rng, Float32, 8, 4, 3)
 

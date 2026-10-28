@@ -131,26 +131,31 @@ end
 
 function (l::LayerNorm)(x::ProbeArray, ps, st::NamedTuple)
     return ONNXExport.with_prefix("LayerNorm") do
-        last_dim = layernorm_dim(l.dims, ndims(x))
+        last_dim = layernorm_dim(l.dims, ndims(x), length(l.shape)+1)
         attr = (axis=ndims(x) - last_dim, epsilon=l.epsilon)
 
-        # Drop trailing singleton dimensions to avoid bug in ONNX runtime caused by the
-        # SkipLayerNormalization fusion optimization. This should be fixed after 1.24.2.
-        # See the issue https://github.com/microsoft/onnxruntime/issues/27455.
+        # Drop trailing singleton dimensions on scale and bias to avoid bug in ONNX Runtime
+        # caused by the SkipLayerNormalization fusion optimization. See the issue
+        # https://github.com/microsoft/onnxruntime/issues/27455. The fix in ONNX Runtime
+        # version 1.24.2 was to only run the fusion for 1D bias and scale tensors. We will
+        # keep droptrailing so that the fusion can be applied.
         function droptrailing(x)
-            while ndims(x) > 0 && size(x, ndims(x)) == 1
+            while ndims(x) > 1 && size(x, ndims(x)) == 1
                 x = dropdims(x; dims=ndims(x))
             end
             return x
         end
 
         if dynamic(l.affine)
-            c1 = prod(l.shape)
-            c2 = prod(size(x)[1:last_dim])
-            if c1 != c2
-                error(
-                    "ONNX LayerNormalization requires prod(shape) = length(x[dims]). Got prod($(l.shape)) = $c1 != $c2 = prod($(size(x)[1:last_dim])).",
-                )
+            if raw_size(x) isa Dims
+                c1 = prod(l.shape)
+                c2 = prod(raw_size(x)[1:last_dim])
+                if c1 != c2
+                    error(
+                        "ONNX LayerNormalization requires prod(shape) = length(x[dims]). " *
+                        "Got prod($(l.shape)) = $c1 != $c2 = prod($(size(x)[1:last_dim])).",
+                    )
+                end
             end
 
             scale = probe(droptrailing(ps.scale), "scale")
@@ -169,18 +174,21 @@ function (l::LayerNorm)(x::ProbeArray, ps, st::NamedTuple)
     end
 end
 
-layernorm_dim(::Colon, n) = n
-function layernorm_dim(dims::Integer, n)
-    dims != 1 && layernorm_dim(nothing, n)
+layernorm_dim(::Nothing, n, m) = n-m
+layernorm_dim(::Colon, n, _) = n
+function layernorm_dim(dims::Integer, _, _)
+    dims == 1 || layernorm_error(dims)
     return dims
 end
-function layernorm_dim(dims::AbstractUnitRange{<:Integer}, n)
-    first(dims) != 1 && layernorm_dim(nothing, n)
+function layernorm_dim(dims::AbstractUnitRange{<:Integer}, _, _)
+    first(dims) == 1 || layernorm_error(dims)
     return last(dims)
 end
-function layernorm_dim(::Any, _)
+layernorm_dim(dims, _, _) = layernorm_error(dims)
+function layernorm_error(dims)
     return error(
-        "The ONNX LayerNormalization operator only supports normalization over the first dimensions 1:i for some i in 1..ndims(x).",
+        "ONNX export of LayerNorm only supports normalization over the first dimensions, " *
+        "e.g., dims=1:i for some i in 1..ndims(x). Got dims=$dims.",
     )
 end
 
