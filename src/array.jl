@@ -210,15 +210,21 @@ end
 _vcat_forward(A...) = _cat(1, A...)
 _hcat_forward(A...) = _cat(2, A...)
 _cat_forward(A...; dims) = _cat(dims, A...)
-_cat(::Val{dims}, A...) where {dims} = _cat(dims, A...)
-_cat(dims, As...) = _cat(dims, promote(As...)...)
-function _cat(::Dims, ::ProbeArray{T}...) where {T}
+_cat(::Val{dims}, As...) where {dims} = _cat(dims, As...)
+function _cat(::Dims, ::Any...)
     return error("ONNX export does not support concatination over multiple dimensions")
 end
-function _cat(dims::Int, As::Union{ProbeArray{T},ProbeNumber{T}}...) where {T}
+function _cat(dims::Int, As...)
     # Ensure all tensors have the same dimensionality and include dims.
     N = max(maximum(ndims.(As)), dims)
     As = map(A -> ndims(A) == N ? A : unsqueeze(A, (ndims(A) + 1):N), As)
+
+    # We promote after unsqueezing to propagate constants.
+    As = promote(As...)
+
+    if length(As) == 1
+        return As[1] # Concat is a no-op.
+    end
 
     sum_dims = Tuple(raw_size(A, dims) for A in As)
     total = sum_dims isa Dims ? sum(sum_dims) : dimension_name()
