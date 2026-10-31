@@ -307,15 +307,21 @@ end
     f1(A) =
         sum(A) .+ sum(A; dims=1) .+ sum(abs, A; dims=[2]) .+ sum(abs2, A; dims=(1, 2)) .+
         count(>(0.5), A; dims=1:1)
-    A = rand(rng, 3, 4)
+    A = rand(rng, Float32, 3, 4)
+    B = Int8[1 2 3; 4 5 6]
 
     y, y_onnx = test_function(f1, A)
+    @test y_onnx ≈ y
+    y, y_onnx = test_function(f1, B)
     @test y_onnx ≈ y
 
     f2(A) = prod(A) .+ prod(A; dims=1)
     A = rand(rng, 3, 4)
+    B = Int8[1 2 3; 4 5 6]
 
     y, y_onnx = test_function(f2, A)
+    @test y_onnx ≈ y
+    y, y_onnx = test_function(f2, B)
     @test y_onnx ≈ y
 
     f3(A) = maximum(A) .+ maximum(A; dims=1) .+ minimum(A) .+ minimum(A; dims=2)
@@ -346,6 +352,28 @@ end
     A = [1 1 2; -1 -1 -1]
 
     y, y_onnx = test_function(f7, A)
+    @test y_onnx ≈ y
+
+    f8(A) = sum(A) + sum(abs, A) + sum(abs2, A) + prod(A)
+    A = Int8.(1:10)
+
+    y, y_onnx = test_function(f8, A)
+    @test y_onnx ≈ y
+
+    f9(A) =
+        mapreduce(abs, +, A) + reduce(+, A) + reduce(*, A) + reduce(max, A) + reduce(min, A)
+    A = Int32.(1:10)
+    B = rand(rng, Float32, 3, 4)
+
+    y, y_onnx = test_function(f9, A)
+    @test y_onnx ≈ y
+    y, y_onnx = test_function(f9, B)
+    @test y_onnx ≈ y
+
+    f10(A) = reduce(vcat, [A, A, A]) + mapreduce(transpose, hcat, [A, A, A])'
+    A = rand(rng, Float32, 3, 4)
+
+    y, y_onnx = test_function(f10, A)
     @test y_onnx ≈ y
 end
 

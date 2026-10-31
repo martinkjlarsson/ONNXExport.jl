@@ -33,14 +33,16 @@ function Base.argmin(f, v::ProbeVector; dims=:)
     return error("f argument is not supported for ONNX export")
 end
 
-Base.sum(A::ProbeArray; dims=:) = _reduce("ReduceSum", A, dims)
-Base.sum(f, A::ProbeArray; dims=:) = _reduce("ReduceSum", f.(A), dims)
-Base.sum(::typeof(abs), A::ProbeArray; dims=:) = _reduce("ReduceL1", A, dims)
+Base.sum(A::ProbeArray; dims=:) = _reduce("ReduceSum", widen_ints_sum(A), dims)
+Base.sum(f, A::ProbeArray; dims=:) = sum(f.(A); dims=dims)
+function Base.sum(::typeof(abs), A::ProbeArray; dims=:)
+    return _reduce("ReduceL1", widen_ints_sum(A), dims)
+end
 function Base.sum(::typeof(abs2), A::ProbeArray{<:Real}; dims=:)
-    return _reduce("ReduceSumSquare", A, dims)
+    return _reduce("ReduceSumSquare", widen_ints_sum(A), dims)
 end
 
-Base.prod(A::ProbeArray; dims=:) = _reduce("ReduceProd", A, dims)
+Base.prod(A::ProbeArray; dims=:) = _reduce("ReduceProd", widen_ints_prod(A), dims)
 Base.prod(f, A::ProbeArray; dims=:) = prod(f.(A); dims=dims)
 
 Base.any(A::ProbeArray{Bool}; dims=:) = _reduce("ReduceMax", A, dims)
@@ -55,6 +57,46 @@ function Base.count(A::ProbeArray{Bool}; dims=:)
 end
 function Base.count(f, A::ProbeArray; dims=:)
     return count(f.(A); dims=dims)
+end
+
+# Base.reduce delegates to mapreduce with f=identity.
+
+# We can splat the vector as performance is not a concern here. If the Julia compilation is
+# terribly slow the ONNX model will likely be as well.
+Base.reduce(::typeof(vcat), A::AbstractVector{<:ProbeArray}) = _cat(1, A...)
+Base.reduce(::typeof(hcat), A::AbstractVector{<:ProbeArray}) = _cat(2, A...)
+
+# TODO: Should we accept the init keyword argument but verify it is neutral?
+function Base.mapreduce(f, op, ::ProbeArray; kwargs...)
+    return error("ONNX export of mapreduce with f=$f and op=$op is not supported.")
+end
+Base.mapreduce(f, ::typeof(+), A::ProbeArray; dims=:) = _reduce("ReduceSum", f.(A), dims)
+function Base.mapreduce(::typeof(abs), ::typeof(+), A::ProbeArray; dims=:)
+    return _reduce("ReduceL1", A, dims)
+end
+function Base.mapreduce(::typeof(abs2), ::typeof(+), A::ProbeArray{<:Real}; dims=:)
+    return _reduce("ReduceSumSquare", A, dims)
+end
+function Base.mapreduce(f, ::typeof(*), A::ProbeArray; dims=:)
+    return _reduce("ReduceProd", f.(A), dims)
+end
+Base.mapreduce(f, ::typeof(min), A::ProbeArray; dims=:) = _reduce("ReduceMin", f.(A), dims)
+Base.mapreduce(f, ::typeof(max), A::ProbeArray; dims=:) = _reduce("ReduceMax", f.(A), dims)
+function Base.mapreduce(f, ::typeof(|), A::ProbeArray{Bool}; dims=:)
+    return _reduce("ReduceMax", f.(A), dims)
+end
+function Base.mapreduce(f, ::typeof(&), A::ProbeArray{Bool}; dims=:)
+    return _reduce("ReduceMin", f.(A), dims)
+end
+function Base.mapreduce(
+    f, ::typeof(vcat), A::AbstractVector{<:Union{ProbeArray,ProbeNumber}}
+)
+    return _cat(1, f.(A)...)
+end
+function Base.mapreduce(
+    f, ::typeof(hcat), A::AbstractVector{<:Union{ProbeArray,ProbeNumber}}
+)
+    return _cat(2, f.(A)...)
 end
 
 _reduce(op_type::String, A::ProbeArray, dims::Integer) = _reduce(op_type, A, (dims,))

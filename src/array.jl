@@ -314,20 +314,21 @@ function init_elem(::Type{T}, f) where {T}
 end
 
 Base.cumprod(A::ProbeVector) = cumprod(A; dims=1)
-Base.cumprod(A::ProbeArray; dims::Integer) = accumulate(*, conv_cum(A); dims=dims)
+Base.cumprod(A::ProbeArray; dims::Integer) = accumulate(*, widen_ints_prod(A); dims=dims)
 
 Base.cumsum(A::ProbeVector) = cumsum(A; dims=1)
-Base.cumsum(A::ProbeArray; dims::Integer) = accumulate(+, conv_cum(A); dims=dims)
+Base.cumsum(A::ProbeArray; dims::Integer) = accumulate(+, widen_ints_sum(A); dims=dims)
 
-function conv_cum(A)
-    et = eltype(A)
-    if et <: Signed && promote_type(et, Int) == Int
-        A = convert(ProbeArray{Int}, A)
-    elseif et <: Unsigned && promote_type(et, UInt) == UInt
-        A = convert(ProbeArray{UInt}, A)
-    end
-    return A
-end
+# In Base, the widened integer type is only for the accumulator. In ONNX, we have to cast
+# the whole array before processing.
+widen_ints_sum(A::ProbeArray{Bool}) = convert(ProbeArray{Int}, A)
+widen_ints_sum(A::ProbeArray{<:Base.BitSignedSmall}) = convert(ProbeArray{Int}, A)
+widen_ints_sum(A::ProbeArray{<:Base.BitUnsignedSmall}) = convert(ProbeArray{UInt}, A)
+widen_ints_sum(A::ProbeArray) = A
+
+widen_ints_prod(A::ProbeArray{<:Base.BitSignedSmall}) = convert(ProbeArray{Int}, A)
+widen_ints_prod(A::ProbeArray{<:Base.BitUnsignedSmall}) = convert(ProbeArray{UInt}, A)
+widen_ints_prod(A::ProbeArray) = A
 
 Base.dropdims(A::ProbeArray; dims) = _dropdims(A, dims)
 _dropdims(A::ProbeArray, dims::Integer) = dropdims(A; dims=(Int(dims),))
