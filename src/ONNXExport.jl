@@ -41,6 +41,7 @@ include("audio.jl")
 @public stft
 export NullProbe,
     ProbeArray,
+    ProbeVecOrMat,
     ProbeMatrix,
     ProbeVector,
     ProbeScalar,

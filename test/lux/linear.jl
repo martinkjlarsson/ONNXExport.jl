@@ -29,8 +29,18 @@ end
 
     model = Bilinear((8, 12) => 6, relu)
 
+    x1 = rand(rng, Float32, 8)
+    x2 = rand(rng, Float32, 12)
+    y, y_onnx = test_model(rng, model, (x1, x2))
+    @test y_onnx ≈ y
+
     x1 = rand(rng, Float32, 8, 4)
     x2 = rand(rng, Float32, 12, 4)
+    y, y_onnx = test_model(rng, model, (x1, x2))
+    @test y_onnx ≈ y
+
+    x1 = rand(rng, Float32, 8, 4, 2)
+    x2 = rand(rng, Float32, 12, 4, 2)
     y, y_onnx = test_model(rng, model, (x1, x2))
     @test y_onnx ≈ y
 end

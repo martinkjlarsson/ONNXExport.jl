@@ -1,3 +1,12 @@
+# These Embedding implementations are only needed to avoid asserts.
+function (e::Embedding)(x::NTuple{N,<:ProbeVector{T}}, ps, st::NamedTuple) where {N,T}
+    return Lux.NNlib.gather(ps.weight, x...), st
+end
+function (e::Embedding)(x::NTuple{N,<:ProbeArray{T}}, ps, st::NamedTuple) where {N,T}
+    y, stₙ = e(vec.(x), ps, st)
+    return reshape(y, :, size(first(x))...), stₙ
+end
+
 function (spe::SinusoidalPositionalEmbedding)(x::ProbeArray, ps, st::NamedTuple)
     return ONNXExport.with_prefix("SinusoidalPositionalEmbedding") do
         y = ONNXExport.unsqueeze(match_eltype(spe, ps, st, x), 1)
@@ -35,11 +44,12 @@ function Lux.apply_rotary_embedding(
             x = permutedims(x, perm)
         end
 
-        position_ids = repeat(Int64.(input_positions) .- one(Int64); outer=(1, size(x, 4)))
+        # We convert to probe before repeat in case size(x, 4) is a symbolic dimension.
+        position_ids = probe(Int64.(input_positions) .- one(Int64), "position_ids")
+        position_ids = repeat(position_ids; outer=(1, size(x, 4)))
 
         cos_cache = probe(cos_cache, "cos_cache")
         sin_cache = probe(sin_cache, "sin_cache")
-        position_ids = probe(position_ids, "position_ids")
 
         y = onnx_op("RotaryEmbedding", raw_size(x), x, cos_cache, sin_cache, position_ids)
 
