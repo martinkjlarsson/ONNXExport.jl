@@ -1,6 +1,7 @@
 # ONNXExport.jl
 
 [![Build Status](https://github.com/martinkjlarsson/ONNXExport.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/martinkjlarsson/ONNXExport.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/JuliaDiff/BlueStyle)
 
 **This package is under active development and is not registered. Feel free to file issues.**
 
@@ -56,7 +57,7 @@ The internal and external APIs are not yet stable. There are also several limita
 ONNXExport cannot convert any arbitrary Julia function into ONNX, partly because of limitations in ONNXExport, but also due to limitations in ONNX itself.
 
 ### Symbolic Dimensions
-ONNXExport supports symbolic dimensions, dimensions with unknown size at export, but this has not been fully tested and will likely fail for many functions.
+ONNXExport supports symbolic dimensions, dimensions with unknown size at export, but this has not been fully tested and will likely fail for many functions. In general, unknown batch size should work but CNNs with unknown width or height might not.
 
 ### Control Flow
 Due to the way ONNXExport traces Julia functions, it is not possible to capture certain control flow statements such as `if`, `for`, and `while`. These will likely result in the error `TypeError: non-boolean (ProbeNumber{Bool}) used in boolean context`. Try instead to use array operations or `ifelse`.
@@ -83,7 +84,15 @@ ONNXExport.save("model2.onnx", g, rand(Float32, 3, 4))
 Broadcasting support is limited to element-wise operations, e.g., `sin.(A)`, `relu.(Wx .+ b)`, and `ifelse.(A .< 0, 0, A)`. Nested broadcasting or broadcasting over slices will likely fail.
 
 ### Immutability
-ONNX tensors are immutable. Consequently, ONNXExport does not support mutating functions such as `setindex!`.
+ONNX tensors are immutable. Consequently, ONNXExport does not support mutating functions such as `setindex!`. Support for certain mutating functions could be made possible in the future. For example, a reoccurring pattern is:
+```julia
+function foo(x::AbstractArray)
+    y = similar(x)
+    bar!(y)
+    return y
+end
+```
+Currently, this would require a custom implementation of `foo(x::ProbeArray)`, while it might have been preferable to provide an implementation of `bar!(y::ProbeArray)` instead.
 
 ### Varargs Functions
 The tracing works by overloading commonly used functions with methods taking `ProbeArray` arguments instead of `AbstractArray`s. This poses problems for functions such as `cat`, which can accept an arbitrary number of arguments. The tracing might fail if none of the first few arguments are of type `ProbeArray`.
@@ -101,8 +110,25 @@ julia> size(reinterpret(reshape, Float32, rand(ComplexF32, 3, 4)))
 ### Strings
 ONNX supports UTF-8 encoded strings with operators such as [RegexFullMatch](https://onnx.ai/onnx/operators/onnx__RegexFullMatch.html), [StringConcat](https://onnx.ai/onnx/operators/onnx__StringConcat.html), and [StringNormalizer](https://onnx.ai/onnx/operators/onnx__StringNormalizer.html). However, ONNXExport does currently not support strings.
 
+### Sparse Arrays
+ONNX supports sparse arrays, but [SparseToDenseMatMul](https://github.com/microsoft/onnxruntime/blob/main/docs/ContribOperators.md#commicrosoftsparsetodensematmul) is the only operator using the type. Support for this in ONNXExport is put on hold until [this issue](https://github.com/microsoft/onnxruntime/issues/31730) is resolved.
+
 ### Large Models and External Data
 ONNX protobuf files are limited to 2GB in size. Larger models need to store tensor data externally alongside the ONNX file. This is currently not supported, and consequently, exported models are limited to 2GB.
+
+### Reductions, Saturation, and Overflow
+The ONNX specification does not describe how certain reduction operators should handle integer overflow. Correctness of ONNX export for `sum`, `prod`, `cumsum`, `cumprod`, and similar functions is not guaranteed if overflow happens.
+
+For example, the equivalent implementation of `sum` provided by the ONNX Runtime CPU execution provider is something akin to
+```julia
+function ort_sum(f, A::AbstractArray{T}) where {T}
+    s = sum(f ∘ Float64, A)
+    s >= typemax(T) && return typemax(T)
+    s <= typemin(T) && return typemin(T)
+    return T(s)
+end
+```
+which accumulates in a `Float64` and clamps the result to `[typemin(T), typemax(T)]` (saturation). However, other runtimes, compilers, and execution providers may behave differently. The Julia function `sum` accumulates integers in an `Int`/`UInt` but executes the function `f` before casting, resulting in `sum(abs, Int32[-2147483648]) == -2147483648` while `ort_sum(abs, Int32[-2147483648]) == 2147483647`.
 
 # Indexing in Julia and ONNX
 Julia uses [column-major order](https://en.wikipedia.org/wiki/Row-_and_column-major_order) (like Fortran and MATLAB), while ONNX uses row-major order (like C and Python/NumPy). In Julia, the leftmost index varies fastest, while in ONNX, the rightmost index varies fastest. To solve this discrepancy, we reverse the dimensions when writing Julia arrays as ONNX tensors. A Julia array of size `(row, column, batch)` is written to ONNX as a tensor of shape `(batch, column, row)`. Note that the data remains unchanged, e.g., `row` is the fastest varying dimension in both cases.
