@@ -1,20 +1,9 @@
 const OPSET_VERSION = 21
 
-# ONNXRunTime permutes all dimensions so we must undo this.
-function prepare_input(A::AbstractArray)
-    return PermutedDimsArray(A, ntuple(i -> ndims(A) + 1 - i, ndims(A)))
-end
-function prepare_input(scalar)
-    a = Array{typeof(scalar),0}(undef)
-    a[] = scalar
-    return a
-end
-function prepare_output(A::AbstractArray)
-    return permutedims(A, ntuple(i -> ndims(A) + 1 - i, ndims(A)))
-end
-function prepare_output(scalar::AbstractArray{T,0}) where {T}
-    return scalar[]
-end
+prepare_input(A::AbstractArray) = A
+prepare_input(scalar::Number) = fill(scalar)
+prepare_output(A::AbstractArray) = A
+prepare_output(scalar::AbstractArray{T,0}) where {T} = scalar[]
 
 function test_function(f::Function, x...; evaluate=true, opset_version=OPSET_VERSION)
     # Evaluate function in Julia.
@@ -38,8 +27,7 @@ function test_function(f::Function, x...; evaluate=true, opset_version=OPSET_VER
     input_names = [vi.name for vi in onnx_model.graph.input]
     input_dict = Dict(input_names[i] => prepare_input(x[i]) for i in eachindex(x))
 
-    path = ONNXRunTime.testdatapath(file_name)
-    model = load_inference(path)
+    model = load_inference(file_name; reverse_dims=false)
     output_dict = model(input_dict)
 
     if y isa Tuple
@@ -51,7 +39,21 @@ function test_function(f::Function, x...; evaluate=true, opset_version=OPSET_VER
     return y, y_onnx
 end
 
-function test_model(rng, model, x; test=false, evaluate=true, opset_version=OPSET_VERSION)
+"Replace the last dimension of multidimensional arrays with a symbolic dimension."
+function make_batched(A)
+    ndims(A) <= 1 && return A
+    return TypeInfo(eltype(A), size(A)[1:(end - 1)]..., :N)
+end
+
+function test_model(
+    rng,
+    model,
+    x;
+    test=false,
+    evaluate=true,
+    opset_version=OPSET_VERSION,
+    symbolic_batch=true,
+)
     ps, st = Lux.setup(rng, model)
     if test
         st = Lux.testmode(st)
@@ -69,11 +71,12 @@ function test_model(rng, model, x; test=false, evaluate=true, opset_version=OPSE
         input = (x,)
         f = x -> first(Lux.apply(model, x, ps, st))
     end
+    symbolic_input = symbolic_batch ? make_batched.(input) : input
     opsets = [
         ONNXExport.OperatorSetIdProto("", opset_version),
         ONNXExport.OperatorSetIdProto("com.microsoft", 1),
     ]
-    onnx_model = ONNXExport.trace(f, input...; opset_import=opsets)
+    onnx_model = ONNXExport.trace(f, symbolic_input...; opset_import=opsets)
     ONNXExport.save(file_name, onnx_model)
     @info "Saved model at $file_name"
 
@@ -85,7 +88,7 @@ function test_model(rng, model, x; test=false, evaluate=true, opset_version=OPSE
     input_names = [vi.name for vi in onnx_model.graph.input]
     input_dict = Dict(zip(input_names, prepare_input.(input)))
 
-    model = load_inference(file_name)
+    model = load_inference(file_name; reverse_dims=false)
     output_dict = model(input_dict)
 
     if y isa Tuple
