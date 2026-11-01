@@ -18,5 +18,24 @@ SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
+[compat]
+BFloat16s = "0.6.3"
+Boltz = "1.7.2"
+FFTW = "1.10.0"
+JLD2 = "0.6.7"
+LinearAlgebra = "1.10"
+Logging = "1.10"
+Lux = "1.31.5"
+MLUtils = "0.4.15"
+Metalhead = "0.9.8"
+Microfloats = "0.2.8"
+NNlib = "0.9.56"
+ONNXRunTime = "2.1.0"
+Pickle = "0.3.7"
+Random = "1.10"
+SpecialFunctions = "2.9.1"
+Statistics = "1.10"
+Test = "1.10"
+
 [sources]
 ONNXExport = {path = ".."}
